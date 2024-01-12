@@ -1,0 +1,17 @@
+[user]
+	name = Hector Castelli Zacharias
+	email = hector.zacharias@gmail.com
+[core]
+    # Use vscode as the git editor
+    editor = code --wait
+[fetch]
+    # Prune local references to remote branches that no longer exists, after fetching
+    prune = true
+[alias]
+    # git empty "this is an empty commit"
+    empty = "git commit --allow-empty"
+[init]
+    defaultBranch = main
+[status]
+    # Shows stash count when running git status
+    showStash = true
