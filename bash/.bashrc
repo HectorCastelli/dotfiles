@@ -1,13 +1,13 @@
 # shellcheck shell=bash
 
 # Getting a reference to the dotfiles repository
-DOTFILES_DIR="$HOME/dotfiles"
+export DOTFILES_DIR="$HOME/dotfiles"
 
 # SSH Agent
-source $DOTFILES_DIR/bash/ssh-agent.sh
+source "$DOTFILES_DIR/bash/ssh-agent.sh"
 
 # VSCode
-source $DOTFILES_DIR/bash/vscode.sh
+source "$DOTFILES_DIR/bash/vscode.sh"
 
 #  Aliases
 if [ -d "$DOTFILES_DIR/bash/aliases" ]; then

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-EDITOR="code"
+export EDITOR="code"
