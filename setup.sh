@@ -11,6 +11,7 @@ DOTFILES_DIR="$HOME/dotfiles"
 sh <(curl -L https://nixos.org/nix/install)
 
 # Setup sistem-wide packages with nix
+# TODO: Need to reload shell to use newly installed nix
 source "$DOTFILES_DIR/nix/global.sh"
 
 # Install starship prompt
