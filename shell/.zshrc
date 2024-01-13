@@ -1,7 +1,7 @@
 # ~/.zshrc
 
 export DOTFILES_DIR="$HOME/dotfiles"
-export DOTFILES_SHELL="$DOTILES_DIR/shell"
+export DOTFILES_SHELL="$DOTFILES_DIR/shell"
 
 source "$DOTFILES_SHELL/ssh-agent.sh"
 source "$DOTFILES_SHELL/vscode.sh"
