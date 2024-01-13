@@ -1,27 +1,22 @@
-#!/bin/bash
+#!/bin/zsh
 
-echo "Installing dotfiles"
-git clone https://github.com/HectorCastelli/dotfiles dotfiles
-
-
-# Getting a reference to the dotfiles repository
+echo "Fetching dotfiles"
+git clone https://github.com/HectorCastelli/dotfiles "$HOME/dotfiles"
 DOTFILES_DIR="$HOME/dotfiles"
 
-# Install nix
+echo "Setup zsh"
+ln -sf "$DOTFILES_DIR/shell/.zshrc" "$HOME/.zshrc"
+
+echo "Setup starship prompt"
+curl -sS https://starship.rs/install.sh | zsh
+ln -sf "$DOTFILES/.config" "$HOME/.config"
+
+echo "Setup nix"
 sh <(curl -L https://nixos.org/nix/install)
+zsh "$DOTFILES_DIR/nix/global.sh"
 
-# Setup sistem-wide packages with nix
-# TODO: Need to reload shell to use newly installed nix
-source "$DOTFILES_DIR/nix/global.sh"
+# Setup git
+ln -sf "$DOTFILES/.gitconfig" "$HOME/.gitconfig"
 
-# Install starship prompt
-curl -sS https://starship.rs/install.sh | sh
-
-# Install shell aliases
-
-# Create shell configs for common use-cases
-# rust
-# nodejs
-
-# Installing bash aliases
-ln -s "$DOTFILES_DIR/bash/.bashrc" "$HOME/.bashrc"
+echo "Restarting shell..."
+exec zsh

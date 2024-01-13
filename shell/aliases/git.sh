@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 alias g='git'
 alias ga='git add'
 alias gb='git branch'

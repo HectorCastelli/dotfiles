@@ -1,5 +1,8 @@
-#!/bin/bash
+#!/bin/zsh
 
-# TODO: setup packages
-# fzf, jq, yq, bat, vscode
-nix-env --install --attr nixpkgs.hello
+echo "Setting up global packages"
+nix-env --install --attr nixpkgs.jq
+nix-env --install --attr nixpkgs.yq
+nix-env --install --attr nixpkgs.vscode
+nix-env --install --attr nixpkgs.bat
+
