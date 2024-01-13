@@ -8,7 +8,7 @@ echo "Setup zsh"
 ln -sf "$DOTFILES_DIR/shell/.zshrc" "$HOME/.zshrc"
 
 echo "Setup starship prompt"
-curl -sS https://starship.rs/install.sh | zsh
+curl -sS https://starship.rs/install.sh | sh
 ln -sf "$DOTFILES/.config" "$HOME/.config"
 
 echo "Setup nix"
