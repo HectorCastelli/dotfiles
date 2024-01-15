@@ -11,7 +11,10 @@ check() {
 }
 
 install_fedora() {
-    sudo dnf install -y nix
+    curl -L https://nixos.org/nix/install -o nix-install.sh
+    # Has to be single-user due to https://github.com/NixOS/nix/issues/2374
+    sh nix-install.sh --no-daemon
+    rm nix-install.sh
 }
 
 install_macos() {
