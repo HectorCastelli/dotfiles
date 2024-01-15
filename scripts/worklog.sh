@@ -8,11 +8,13 @@ WORKLOG_FILE="$HOME/$(jq -r '.file' "$WORKLOG_CONFIG")"
 export WORKLOG_FILE
 
 # Fetch types from the JSON file
-types=()
-while IFS='' read -r line; do types+=("$line"); done < <(jq -r '.types[]' "$WORKLOG_CONFIG")
+extract_types() {
+    jq -r '.types[]' "$WORKLOG_CONFIG"
+}
 
 # Define the log command with completion
 worklog() {
+    types=$(extract_types)
     # If no arguments provided, show available types
     if [[ $# -eq 0 ]]; then
         echo "Error: Types are required: available types: ${types[*]}"
@@ -20,22 +22,28 @@ worklog() {
     fi
 
     local type="$1"
-    local message="$2"
+    local message=("${@:2}")
     local timestamp
     timestamp=$(date +%s)
 
-    printf "%s\t%s\t%s" "$timestamp" "$type" "$message" >> "$WORKLOG_FILE"
+    printf "%s\t%s\t%s\n" "$timestamp" "$type" "$message" >> "$WORKLOG_FILE"
 }
 
 # Define completion for the log command
 _worklog() {
-    _arguments '1: :->types' '2: :->message'
-    case $state in
-        types)
-            _describe -t types 'type' "${types[@]}"
+    local cur prev types
+    cur="${words[CURSOR]}"
+    prev="${words[PREV_CWORD]}"
+
+    case "${prev}" in
+        1)
+            types=$(extract_types)
+            _describe 'types' types
+            return
             ;;
-        message)
-            _default
+        *)
+            _files
+            return
             ;;
     esac
 }
