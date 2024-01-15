@@ -11,7 +11,8 @@
     # git empty "this is an empty commit"
     empty = "git commit --allow-empty"
     # Cleans up all local branches that have been merged in remote but are lingering in local
-    cleanup = '!git branch --merged | egrep -v "(^\*|master|main|dev)" | xargs git branch -d'
+    cleanup = "!f() { git branch --merged | egrep -v \"\(^\\*\|master\|main\|dev\)\" | xargs git branch -d; }; f"
+
 [init]
     defaultBranch = main
 [status]
