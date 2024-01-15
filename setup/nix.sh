@@ -10,7 +10,7 @@ check() {
     fi
 }
 
-install_fedora() {
+install_linux() {
     curl -L https://nixos.org/nix/install -o nix-install.sh
     # Has to be single-user due to https://github.com/NixOS/nix/issues/2374
     sh nix-install.sh --no-daemon
@@ -34,13 +34,7 @@ main() {
             install_macos
             ;;
         Linux)
-            # Check if it's Fedora
-            if [ -e /etc/fedora-release ]; then
-                install_fedora
-            else
-                echo "Unsupported Linux distribution. Please install manually."
-                exit 1
-            fi
+            install_linux
             ;;
         *)
             echo "Unsupported operating system. Please install manually."
