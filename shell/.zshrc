@@ -9,4 +9,6 @@ source "$DOTFILES_SHELL/vscode.sh"
 source "$DOTFILES_SHELL/aliases/git.sh"
 source "$DOTFILES_SHELL/aliases/dotfiles.sh"
 
+source "$DOTFILES_DIR/scripts/worklog.sh"
+
 eval "$(starship init zsh)"
