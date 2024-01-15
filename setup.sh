@@ -29,8 +29,11 @@ fetch_repo() {
 setup_links() {
     dotfiles="$1"
 
+    rm -rf "$HOME/.config"
     ln -sf "$dotfiles/.config" "$HOME/.config"
+    
     ln -sf "$dotfiles/shell/.zshrc" "$HOME/.zshrc"
+    
     ln -sf "$dotfiles/.gitconfig" "$HOME/.gitconfig"
 }
 
