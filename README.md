@@ -10,3 +10,9 @@ it on your command line.
 
 It will take all required actions, including copying this repository to a safe location
 so that  commands work as expected.
+
+```sh
+curl -L https://raw.githubusercontent.com/HectorCastelli/dotfiles/main/setup.sh -o setup.sh
+sh setup.sh
+rm setup.sh
+```

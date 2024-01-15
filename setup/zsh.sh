@@ -42,6 +42,10 @@ main() {
             exit 1
             ;;
     esac
+
+    # Change shell
+    echo "Changing default shell..."
+    chsh -s "$(which zsh)"
 }
 
 main
