@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 echo "Setting up global packages"
 nix-env --install --attr nixpkgs.jq

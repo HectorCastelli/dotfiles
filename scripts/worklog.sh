@@ -28,24 +28,3 @@ worklog() {
 
     printf "%s\t%s\t%s\n" "$timestamp" "$type" "$message" >> "$WORKLOG_FILE"
 }
-
-# Define completion for the log command
-_worklog() {
-    local cur prev types
-    cur="${words[CURSOR]}"
-    prev="${words[PREV_CWORD]}"
-
-    case "${prev}" in
-        1)
-            types=$(extract_types)
-            _describe 'types' types
-            return
-            ;;
-        *)
-            _files
-            return
-            ;;
-    esac
-}
-
-compdef _worklog worklog

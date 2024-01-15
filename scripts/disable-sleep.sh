@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 echo "This will disable sleep on a linux machine."
 echo "This affects the following systemd targets:
