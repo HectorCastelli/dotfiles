@@ -10,13 +10,6 @@ check() {
     fi
 }
 
-download_nix() {
-}
-
-cleanup_nix() {
-    rm nix-install.sh
-}
-
 install_fedora() {
     sudo dnf install -y nix
 }
