@@ -13,7 +13,7 @@ copy_new_files() {
         
         # Check if the target file already exists
         if [ ! -e "$target_file" ]; then
-            cp "$file" "$target_file"
+            cp -r "$file" "$target_file"
         else
             echo "Skipping existing file: $(basename "$file")"
         fi
