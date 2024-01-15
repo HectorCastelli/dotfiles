@@ -11,23 +11,20 @@ check() {
 }
 
 download_nix() {
-    curl -L https://nixos.org/nix/install -o nix-install.sh
 }
 
 cleanup_nix() {
     rm nix-install.sh
 }
 
-install_linux() {
-    download_nix
-    sh nix-install.sh --daemon
-    cleanup_nix
+install_fedora() {
+    sudo dnf install -y nix
 }
 
 install_macos() {
-    download_nix
+    curl -L https://nixos.org/nix/install -o nix-install.sh
     sh nix-install.sh
-    cleanup_nix
+    rm nix-install.sh
 }
 
 main() {
@@ -41,7 +38,13 @@ main() {
             install_macos
             ;;
         Linux)
-            install_linux
+            # Check if it's Fedora
+            if [ -e /etc/fedora-release ]; then
+                install_fedora
+            else
+                echo "Unsupported Linux distribution. Please install manually."
+                exit 1
+            fi
             ;;
         *)
             echo "Unsupported operating system. Please install manually."
