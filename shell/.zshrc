@@ -11,4 +11,7 @@ source "$DOTFILES_SHELL/aliases/dotfiles.sh"
 
 source "$DOTFILES_DIR/scripts/worklog.sh"
 
+source "$DOTFILES_DIR/shell/plugins/almostontop/almostontop.plugin.zsh"
+source "$DOTFILES_DIR/shell/plugins/zsh-alias-finder/zsh-alias-finder.plugin.zsh"
+
 eval "$(starship init zsh)"
