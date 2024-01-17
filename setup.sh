@@ -37,7 +37,7 @@ setup_links() {
     
     ln -sf "$dotfiles/shell/.zshrc" "$HOME/.zshrc"
     
-    ln -sf "$dotfiles/.gitconfig" "$HOME/.gitconfig"
+    ln -sf "$dotfiles/home/.gitconfig" "$HOME/.gitconfig"
 }
 
 main() {
