@@ -41,6 +41,9 @@ main() {
             exit 1
             ;;
     esac
+
+    echo "Enabling nix"
+    . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 }
 
 main
