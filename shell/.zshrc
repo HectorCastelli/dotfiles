@@ -14,4 +14,9 @@ source "$DOTFILES_DIR/scripts/worklog.sh"
 source "$DOTFILES_DIR/shell/plugins/almostontop/almostontop.plugin.zsh"
 source "$DOTFILES_DIR/shell/plugins/zsh-alias-finder/zsh-alias-finder.plugin.zsh"
 
+if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ];
+then
+    . "$HOME/.nix-profile/etc/profile.d/nix.sh";
+fi
+
 eval "$(starship init zsh)"
