@@ -23,7 +23,9 @@ copy_new_files() {
 fetch_repo() {
     dest="$HOME/dotfiles"
     git clone https://github.com/HectorCastelli/dotfiles "$dest"
-    cd "$dest" && git submodule update --init --recursive || echo "Failed to initialize submodules"
+    cd "$dest" || echo "Failed to clone repo"
+    git submodule update --init --recursive
+    cd "$HOME" || echo "Failed to return to \$HOME"
     echo "$dest"
 }
 
