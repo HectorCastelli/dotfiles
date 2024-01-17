@@ -23,9 +23,9 @@ copy_new_files() {
 fetch_repo() {
     dest="$HOME/dotfiles"
     git clone https://github.com/HectorCastelli/dotfiles "$dest"
-    cd "$dest" || echo "Failed to clone repo"
+    cd "$dest" || exit 1
     git submodule update --init --recursive
-    cd "$HOME" || echo "Failed to return to \$HOME"
+    cd "$HOME" || exit 1
     echo "$dest"
 }
 
