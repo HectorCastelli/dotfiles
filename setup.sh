@@ -22,10 +22,7 @@ copy_new_files() {
 
 fetch_repo() {
     dest="$HOME/dotfiles"
-    git clone https://github.com/HectorCastelli/dotfiles "$dest"
-    cd "$dest" || exit 1
-    git submodule update --init --recursive
-    cd "$HOME" || exit 1
+    git clone --recursive https://github.com/HectorCastelli/dotfiles
     echo "$dest"
 }
 
