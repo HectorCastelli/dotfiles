@@ -22,7 +22,7 @@ copy_new_files() {
 
 fetch_repo() {
     dest="$HOME/dotfiles"
-    git clone https://github.com/HectorCastelli/dotfiles "$dest"
+    git clone --recursive https://github.com/HectorCastelli/dotfiles "$dest"
     echo "$dest"
 }
 
