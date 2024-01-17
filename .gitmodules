@@ -1,0 +1,6 @@
+[submodule "shell/plugins/zsh-alias-finder"]
+	path = shell/plugins/zsh-alias-finder
+	url = https://github.com/akash329d/zsh-alias-finder
+[submodule "shell/plugins/almostontop"]
+	path = shell/plugins/almostontop
+	url = https://github.com/Valiev/almostontop.git
