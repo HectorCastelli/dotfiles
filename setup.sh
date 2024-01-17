@@ -46,6 +46,8 @@ main() {
     sh "$DOTFILES/setup/zsh.sh"
     sh "$DOTFILES/setup/starship.sh"
 
+    zsh "$DOTFILES/nix/global.sh"
+
     exec zsh
 }
 
