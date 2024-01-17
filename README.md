@@ -12,7 +12,7 @@ It will take all required actions, including copying this repository to a safe l
 so that  commands work as expected.
 
 ```sh
-curl -L https://raw.githubusercontent.com/HectorCastelli/dotfiles/main/setup.sh -o setup.sh
+git clone --recursive https://github.com/HectorCastelli/dotfiles
+cd dotfiles
 sh setup.sh
-rm setup.sh
 ```

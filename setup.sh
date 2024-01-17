@@ -20,12 +20,6 @@ copy_new_files() {
     done
 }
 
-fetch_repo() {
-    dest="$HOME/dotfiles"
-    git clone --recursive https://github.com/HectorCastelli/dotfiles
-    echo "$dest"
-}
-
 setup_links() {
     dotfiles="$1"
 
@@ -38,7 +32,7 @@ setup_links() {
 }
 
 main() {
-    DOTFILES=$(fetch_repo)
+    DOTFILES="$HOME/dotfiles"
     copy_new_files "$HOME/.config" "$DOTFILES/.config"
     setup_links "$DOTFILES"
 
