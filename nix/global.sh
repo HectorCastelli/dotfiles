@@ -3,13 +3,13 @@
 echo "Setting up global packages"
 
 packages=(
-  "jq"
-  "yq"
   "bat"
-  "tldr"
-  "lnav"
   "glow"
   "hyperfine"
+  "jq"
+  "lnav"
+  "tldr"
+  "yq"
 )
 
 for package in "${packages[@]}"; do
