@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 # Example usage
 # display_in_color "red" "This is red text!"
 # display_in_color "green" "This is green text!"
