@@ -7,6 +7,8 @@ packages=(
   "yq"
   "bat"
   "tldr"
+  "lnav"
+  "glow"
 )
 
 for package in "${packages[@]}"; do
