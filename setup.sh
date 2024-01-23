@@ -1,8 +1,13 @@
 #!/bin/sh
 
+# shellcheck source=scripts/ansi.sh
+. "$HOME/dotfiles/scripts/ansi.sh"
+
 copy_new_files() {
     source_dir="$1"
     target_dir="$2"
+
+    display_in_color "yellow" "Copying files from $source_dir into $target_dir"
 
     # Ensure target directory exists
     mkdir -p "$target_dir"
@@ -23,6 +28,8 @@ copy_new_files() {
 setup_links() {
     dotfiles="$1"
 
+    display_in_color "yellow" "Setting up symbolic links"
+
     rm -rf "$HOME/.config"
     ln -sf "$dotfiles/.config" "$HOME/.config"
     
@@ -31,14 +38,89 @@ setup_links() {
     ln -sf "$dotfiles/home/.gitconfig" "$HOME/.gitconfig"
 }
 
+setup_nix() {
+    if command -v nix >/dev/null 2>&1; then
+        display_in_color "green" "nix is already installed"
+        exit 0
+    else
+        display_in_color "yellow" "nix is not installed"
+        # Determine the operating system
+        case "$(uname -s)" in
+            Darwin)
+                curl -L https://nixos.org/nix/install -o nix-install.sh
+                sh nix-install.sh
+                rm nix-install.sh
+                ;;
+            Linux)
+                curl -L https://nixos.org/nix/install -o nix-install.sh
+                # Has to be single-user due to https://github.com/NixOS/nix/issues/2374
+                sh nix-install.sh --no-daemon
+                rm nix-install.sh
+                ;;
+            *)
+                echo "Unsupported operating system. Please install manually."
+                exit 1
+                ;;
+        esac
+
+        display_in_color "yellow" "Enabling nix"
+        . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+    fi
+}
+
+setup_zsh() {
+    if command -v zsh >/dev/null 2>&1; then
+        display_in_color "green" "zsh is already installed."
+        exit 0
+    else
+        display_in_color "yellow" "zsh is not installed."
+        # Determine the operating system
+        case "$(uname -s)" in
+            Darwin)
+                nix-env --install --attr nixpkgs.zsh
+                ;;
+            Linux)
+                # Check if it's Fedora
+                if [ -e /etc/fedora-release ]; then
+                    sudo dnf install -y zsh
+                else
+                    echo "Unsupported Linux distribution. Please install manually."
+                    exit 1
+                fi
+                ;;
+            *)
+                echo "Unsupported operating system. Please install manually."
+                exit 1
+                ;;
+        esac
+
+        # Change shell
+        display_in_color "yellow" "Changing default shell..."
+        chsh -s "$(command -v zsh)"
+    fi
+}
+
+setup_starship() {
+    if command -v starship >/dev/null 2>&1; then
+        display_in_color "green" "starship is already installed."
+        exit 0
+    else
+        display_in_color "yellow" "starship is not installed."
+        # Install starship
+        curl -sS https://starship.rs/install.sh | sh
+    fi
+}
+
 main() {
     DOTFILES="$HOME/dotfiles"
+    display_in_color green "Setting up dotfiles"
+
     copy_new_files "$HOME/.config" "$DOTFILES/.config"
     setup_links "$DOTFILES"
 
-    sh "$DOTFILES/setup/nix.sh"
-    sh "$DOTFILES/setup/zsh.sh"
-    sh "$DOTFILES/setup/starship.sh"
+    setup_nix
+    setup_zsh
+    setup_starship
 
     zsh "$DOTFILES/nix/global.sh"
 
