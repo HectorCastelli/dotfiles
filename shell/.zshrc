@@ -25,7 +25,7 @@ export DOTFILES_SHELL="$HOME/dotfiles/shell"
 source_recursive "$DOTFILES_DIR/shell"
 
 # Aliases
-source_recursive "$DOTFILES_DIR/aliases"
+source_recursive "$DOTFILES_DIR/shell/aliases"
 
 # Custom scripts
 source_recursive "$DOTFILES_DIR/scripts"
