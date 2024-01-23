@@ -58,7 +58,7 @@ setup_nix() {
                 rm nix-install.sh
                 ;;
             *)
-                echo "Unsupported operating system. Please install manually."
+                display_in_color "red" "Unsupported operating system. Please install manually."
                 exit 1
                 ;;
         esac
@@ -84,12 +84,12 @@ setup_zsh() {
                 if [ -e /etc/fedora-release ]; then
                     sudo dnf install -y zsh
                 else
-                    echo "Unsupported Linux distribution. Please install manually."
+                    display_in_color "red" "Unsupported Linux distribution. Please install manually."
                     exit 1
                 fi
                 ;;
             *)
-                echo "Unsupported operating system. Please install manually."
+                display_in_color "red" "Unsupported operating system. Please install manually."
                 exit 1
                 ;;
         esac
