@@ -9,6 +9,7 @@ packages=(
   "tldr"
   "lnav"
   "glow"
+  "hyperfine"
 )
 
 for package in "${packages[@]}"; do
