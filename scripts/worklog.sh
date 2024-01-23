@@ -26,5 +26,5 @@ worklog() {
     local timestamp
     timestamp=$(date +%s)
 
-    printf "%s\t%s\t%s\n" "$timestamp" "$type" "$message" >> "$WORKLOG_FILE"
+    printf "%s\t%s\t%s\n" "$timestamp" "$type" "$message" >>"$WORKLOG_FILE"
 }

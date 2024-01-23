@@ -12,7 +12,6 @@ packages=(
 )
 
 for package in "${packages[@]}"; do
-    echo "Installing $package"
-    nix-env --install --attr "nixpkgs.$package"
+  echo "Installing $package"
+  nix-env --install --attr "nixpkgs.$package"
 done
-

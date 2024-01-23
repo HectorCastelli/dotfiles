@@ -10,23 +10,23 @@ display_in_color() {
   RED='\033[0;31m'
   GREEN='\033[0;32m'
   YELLOW='\033[0;33m'
-  RESET='\033[0m'  # Reset ANSI escape code to default color
+  RESET='\033[0m' # Reset ANSI escape code to default color
 
   # Determine color based on the first argument
   case "$1" in
-    "red")
-      COLOR="$RED"
-      ;;
-    "green")
-      COLOR="$GREEN"
-      ;;
-    "yellow")
-      COLOR="$YELLOW"
-      ;;
-    *)
-      # Default to green if no valid color specified
-      COLOR="$GREEN"
-      ;;
+  "red")
+    COLOR="$RED"
+    ;;
+  "green")
+    COLOR="$GREEN"
+    ;;
+  "yellow")
+    COLOR="$YELLOW"
+    ;;
+  *)
+    # Default to green if no valid color specified
+    COLOR="$GREEN"
+    ;;
   esac
 
   # Print the input string in the specified color

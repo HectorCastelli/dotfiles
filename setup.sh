@@ -15,7 +15,7 @@ copy_new_files() {
     # Copy files from source to target without overwriting
     for file in "$source_dir"/*; do
         target_file="$target_dir/$(basename "$file")"
-        
+
         # Check if the target file already exists
         if [ ! -e "$target_file" ]; then
             cp -r "$file" "$target_file"
@@ -32,9 +32,9 @@ setup_links() {
 
     rm -rf "$HOME/.config"
     ln -sf "$dotfiles/.config" "$HOME/.config"
-    
+
     ln -sf "$dotfiles/shell/.zshrc" "$HOME/.zshrc"
-    
+
     ln -sf "$dotfiles/home/.gitconfig" "$HOME/.gitconfig"
 }
 
@@ -46,21 +46,21 @@ setup_nix() {
         display_in_color "yellow" "nix is not installed"
         # Determine the operating system
         case "$(uname -s)" in
-            Darwin)
-                curl -L https://nixos.org/nix/install -o nix-install.sh
-                sh nix-install.sh
-                rm nix-install.sh
-                ;;
-            Linux)
-                curl -L https://nixos.org/nix/install -o nix-install.sh
-                # Has to be single-user due to https://github.com/NixOS/nix/issues/2374
-                sh nix-install.sh --no-daemon
-                rm nix-install.sh
-                ;;
-            *)
-                display_in_color "red" "Unsupported operating system. Please install manually."
-                exit 1
-                ;;
+        Darwin)
+            curl -L https://nixos.org/nix/install -o nix-install.sh
+            sh nix-install.sh
+            rm nix-install.sh
+            ;;
+        Linux)
+            curl -L https://nixos.org/nix/install -o nix-install.sh
+            # Has to be single-user due to https://github.com/NixOS/nix/issues/2374
+            sh nix-install.sh --no-daemon
+            rm nix-install.sh
+            ;;
+        *)
+            display_in_color "red" "Unsupported operating system. Please install manually."
+            exit 1
+            ;;
         esac
 
         display_in_color "yellow" "Enabling nix"
@@ -76,22 +76,22 @@ setup_zsh() {
         display_in_color "yellow" "zsh is not installed."
         # Determine the operating system
         case "$(uname -s)" in
-            Darwin)
-                nix-env --install --attr nixpkgs.zsh
-                ;;
-            Linux)
-                # Check if it's Fedora
-                if [ -e /etc/fedora-release ]; then
-                    sudo dnf install -y zsh
-                else
-                    display_in_color "red" "Unsupported Linux distribution. Please install manually."
-                    exit 1
-                fi
-                ;;
-            *)
-                display_in_color "red" "Unsupported operating system. Please install manually."
+        Darwin)
+            nix-env --install --attr nixpkgs.zsh
+            ;;
+        Linux)
+            # Check if it's Fedora
+            if [ -e /etc/fedora-release ]; then
+                sudo dnf install -y zsh
+            else
+                display_in_color "red" "Unsupported Linux distribution. Please install manually."
                 exit 1
-                ;;
+            fi
+            ;;
+        *)
+            display_in_color "red" "Unsupported operating system. Please install manually."
+            exit 1
+            ;;
         esac
 
         # Change shell
