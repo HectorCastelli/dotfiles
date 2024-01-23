@@ -5,7 +5,6 @@ echo "Setting up global packages"
 packages=(
   "jq"
   "yq"
-  "vscode"
   "bat"
   "tldr"
 )
