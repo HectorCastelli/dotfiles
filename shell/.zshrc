@@ -7,12 +7,15 @@ source_recursive() {
     # Check if the directory exists
     if [ -d "$dir" ]; then
         # Find and source all .sh files in the directory and its subdirectories
-        find "$dir" -type f -name '*.sh' -exec source {} \;
+        for file in "$dir/*.sh"; do
+            if [ -f "$file" ]; then
+                source "$file"
+            fi
+        done
     else
         echo "Directory $dir does not exist."
     fi
 }
-
 
 # Global variables
 export DOTFILES_DIR="$HOME/dotfiles"
@@ -32,9 +35,8 @@ source "$DOTFILES_DIR/shell/plugins/almostontop/almostontop.plugin.zsh"
 source "$DOTFILES_DIR/shell/plugins/zsh-alias-finder/zsh-alias-finder.plugin.zsh"
 
 # Nix configuration
-if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ];
-then
-    . "$HOME/.nix-profile/etc/profile.d/nix.sh";
+if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+    . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 fi
 
 # Prompt initialization
