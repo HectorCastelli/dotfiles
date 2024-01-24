@@ -4,6 +4,7 @@ echo "Setting up global packages"
 
 packages=(
   "bat"
+  "bitwarden"
   "gh"
   "glow"
   "hyperfine"
