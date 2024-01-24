@@ -1,7 +1,5 @@
 {
-    "git.autofetch": true,
-    "git.confirmSync": false,
-    "git.enableSmartCommit": true,
+    "workbench.iconTheme": "seti",
     "editor.stickyScroll.enabled": true,
     "editor.unicodeHighlight.nonBasicASCII": false,
     "editor.fontFamily": "'Monaspace Neon', monospace",
@@ -10,15 +8,17 @@
         80,
         120
     ],
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "git.enableSmartCommit": true,
+    "git.mergeEditor": true,
+    "git.pruneOnFetch": true,
+    "git.rebaseWhenSync": true,
+    "githubPullRequests.pullBranch": "never",
+    "diffEditor.ignoreTrimWhitespace": false,
     "cSpell.userWords": [
         "Castelli",
         "discoverability",
         "disinformed"
-    ],
-    "githubPullRequests.pullBranch": "never",
-    "git.mergeEditor": true,
-    "git.pruneOnFetch": true,
-    "git.rebaseWhenSync": true,
-    "workbench.iconTheme": "seti",
-    "diffEditor.ignoreTrimWhitespace": false,
+    ]
 }
