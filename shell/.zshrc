@@ -17,10 +17,6 @@ source_recursive() {
     fi
 }
 
-# Global variables
-export DOTFILES_DIR="$HOME/dotfiles"
-export DOTFILES_SHELL="$HOME/dotfiles/shell"
-
 # Helper scripts
 source_recursive "$DOTFILES_DIR/shell"
 
