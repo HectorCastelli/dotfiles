@@ -133,6 +133,23 @@ setup_font() {
     esac
 }
 
+setup_applications() {
+    dir="$HOME/dotfiles/setup"
+
+    # Check if the directory exists
+    if [ -d "$dir" ]; then
+        # Find and source all .sh files in the directory and its subdirectories
+        for file in "$dir"/*.sh; do
+            if [ -f "$file" ]; then
+                # echo "Sourcing $file..."
+                . "$file"
+            fi
+        done
+    else
+        echo "Directory $dir does not exist."
+    fi
+}
+
 main() {
     DOTFILES="$HOME/dotfiles"
     display_in_color green "Setting up dotfiles"
@@ -146,6 +163,7 @@ main() {
     setup_starship
 
     zsh "$DOTFILES/nix/global.sh"
+    setup_applications
 
     exec zsh
 }

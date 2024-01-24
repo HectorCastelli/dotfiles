@@ -4,14 +4,12 @@ echo "Setting up global packages"
 
 packages=(
   "bat"
-  "bitwarden"
   "gh"
   "glow"
   "hyperfine"
   "jq"
   "lnav"
   "tldr"
-  "vscode"
   "yq"
 )
 
