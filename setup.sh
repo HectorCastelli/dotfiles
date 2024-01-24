@@ -140,7 +140,7 @@ setup_applications() {
         for file in "$dir"/*.sh; do
             if [ -f "$file" ]; then
                 # echo "Sourcing $file..."
-                . "$file"
+                sh "$file"
             fi
         done
     else

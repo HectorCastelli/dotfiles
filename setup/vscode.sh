@@ -1,10 +1,10 @@
 #!/bin/sh
 
-if command -v zsh >/dev/null 2>&1; then
-    display_in_color "green" "zsh is already installed."
+if command -v code >/dev/null 2>&1; then
+    display_in_color "green" "code is already installed."
     exit 0
 else
-    display_in_color "yellow" "zsh is not installed."
+    display_in_color "yellow" "code is not installed."
     # Determine the operating system
     case "$(uname -s)" in
     Darwin)
@@ -21,8 +21,4 @@ else
         exit 1
         ;;
     esac
-
-    # Change shell
-    display_in_color "yellow" "Changing default shell..."
-    chsh -s "$(command -v zsh)"
 fi
