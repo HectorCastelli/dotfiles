@@ -42,7 +42,6 @@ setup_links() {
 setup_nix() {
     if command -v nix >/dev/null 2>&1; then
         display_in_color "green" "nix is already installed"
-        exit 0
     else
         display_in_color "yellow" "nix is not installed"
         # Determine the operating system
@@ -72,7 +71,6 @@ setup_nix() {
 setup_zsh() {
     if command -v zsh >/dev/null 2>&1; then
         display_in_color "green" "zsh is already installed."
-        exit 0
     else
         display_in_color "yellow" "zsh is not installed."
         # Determine the operating system
@@ -104,7 +102,6 @@ setup_zsh() {
 setup_starship() {
     if command -v starship >/dev/null 2>&1; then
         display_in_color "green" "starship is already installed."
-        exit 0
     else
         display_in_color "yellow" "starship is not installed."
         # Install starship
@@ -119,12 +116,12 @@ setup_font() {
     Darwin)
         git clone https://github.com/githubnext/monaspace.git monaspace
         zsh ./monaspace/utils/install_macos.sh
-        rm -rf monaspace
+        # rm -rf monaspace
         ;;
     Linux)
         git clone https://github.com/githubnext/monaspace.git monaspace
         zsh ./monaspace/utils/install_linux.sh
-        rm -rf monaspace
+        # rm -rf monaspace
         ;;
     *)
         display_in_color "red" "Unsupported operating system. Please install manually."
