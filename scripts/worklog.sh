@@ -23,7 +23,7 @@ worklog() {
 
     _type="$1"
 
-    shift  # Shift to remove the first argument
+    shift # Shift to remove the first argument
     _message=""
     for arg in "$@"; do
         _message="$_message $arg"
