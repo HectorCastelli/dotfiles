@@ -6,6 +6,7 @@
 # Determine the operating system
 case "$(uname -s)" in
 Darwin)
+    # See https://github.com/NixOS/nix/issues/956#issuecomment-1367457122
     if [ -d ~/.nix-profile/Applications ]; then
         cd ~/.nix-profile/Applications || exit 1
 
