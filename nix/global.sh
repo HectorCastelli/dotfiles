@@ -4,6 +4,7 @@ echo "Setting up global packages"
 
 packages=(
   "bat"
+  "gh"
   "glow"
   "hyperfine"
   "jq"
