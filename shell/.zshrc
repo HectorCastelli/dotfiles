@@ -30,6 +30,7 @@ source_recursive "$DOTFILES_DIR/scripts"
 # ZSH Plugins
 source "$DOTFILES_DIR/shell/plugins/almostontop/almostontop.plugin.zsh"
 source "$DOTFILES_DIR/shell/plugins/zsh-alias-finder/zsh-alias-finder.plugin.zsh"
+source "$DOTFILES_DIR/shell/plugins/zsh-bd/bd.plugin.zsh"
 
 # Nix configuration
 if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
