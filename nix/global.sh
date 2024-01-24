@@ -9,7 +9,6 @@ packages=(
   "hyperfine"
   "jq"
   "lnav"
-  "monaspace"
   "tldr"
   "vscode"
   "yq"

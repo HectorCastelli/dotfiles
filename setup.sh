@@ -112,6 +112,27 @@ setup_starship() {
     fi
 }
 
+setup_font() {
+    display_in_color "yellow" "installing monaspace font"
+    # Determine the operating system
+    case "$(uname -s)" in
+    Darwin)
+        git clone https://github.com/githubnext/monaspace.git monaspace
+        zsh ./monaspace/utils/install_macos.sh
+        rm -rf monaspace
+        ;;
+    Linux)
+        git clone https://github.com/githubnext/monaspace.git monaspace
+        zsh ./monaspace/utils/install_linux.sh
+        rm -rf monaspace
+        ;;
+    *)
+        display_in_color "red" "Unsupported operating system. Please install manually."
+        exit 1
+        ;;
+    esac
+}
+
 main() {
     DOTFILES="$HOME/dotfiles"
     display_in_color green "Setting up dotfiles"
@@ -121,6 +142,7 @@ main() {
 
     setup_nix
     setup_zsh
+    setup_font
     setup_starship
 
     zsh "$DOTFILES/nix/global.sh"
