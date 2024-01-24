@@ -115,12 +115,12 @@ setup_font() {
     case "$(uname -s)" in
     Darwin)
         git clone https://github.com/githubnext/monaspace.git monaspace
-        zsh ./monaspace/utils/install_macos.sh
+        zsh "$HOME/dotfiles/monaspace/utils/install_macos.sh"
         # rm -rf monaspace
         ;;
     Linux)
         git clone https://github.com/githubnext/monaspace.git monaspace
-        zsh ./monaspace/utils/install_linux.sh
+        zsh "$HOME/dotfiles/monaspace/utils/install_linux.sh"
         # rm -rf monaspace
         ;;
     *)
