@@ -34,6 +34,7 @@ setup_links() {
     ln -sf "$dotfiles/.config" "$HOME/.config"
 
     ln -sf "$dotfiles/shell/.zshrc" "$HOME/.zshrc"
+    ln -sf "$dotfiles/shell/.zshenv" "$HOME/.zshenv"
 
     ln -sf "$dotfiles/home/.gitconfig" "$HOME/.gitconfig"
 }

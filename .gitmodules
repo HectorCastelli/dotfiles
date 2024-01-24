@@ -4,3 +4,6 @@
 [submodule "shell/plugins/almostontop"]
 	path = shell/plugins/almostontop
 	url = https://github.com/Valiev/almostontop.git
+[submodule "shell/plugins/zsh-bd"]
+	path = shell/plugins/zsh-bd
+	url = https://github.com/Tarrasch/zsh-bd.git
