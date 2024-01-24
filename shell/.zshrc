@@ -7,7 +7,7 @@ source_recursive() {
     # Check if the directory exists
     if [ -d "$dir" ]; then
         # Find and source all .sh files in the directory and its subdirectories
-        for file in "$dir/*.sh"; do
+        for file in "$dir"/*.sh; do
             if [ -f "$file" ]; then
                 echo "Sourcing $file..."
                 source "$file"
