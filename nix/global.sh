@@ -11,6 +11,7 @@ packages=(
   "lnav"
   "monaspace"
   "tldr"
+  "vscode"
   "yq"
 )
 
