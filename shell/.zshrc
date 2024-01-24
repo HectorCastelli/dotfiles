@@ -9,7 +9,7 @@ source_recursive() {
         # Find and source all .sh files in the directory and its subdirectories
         for file in "$dir/*.sh"; do
             if [ -f "$file" ]; then
-                source "$file"
+                . "$file"
             fi
         done
     else
