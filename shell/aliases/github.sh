@@ -1,7 +1,16 @@
 #!/bin/sh
 
+create_if_not_exists() {
+    _dir=$1
+    if [ ! -d "$_dir" ]; then
+        echo "Directory created: $_dir"
+        mkdir -p "$_dir"
+    fi
+}
+
 export GH="$HOME/github"
-if [ ! -d "$GH" ]; then
-    echo "Directory created: $GH"
-    mkdir -p "$GH"
-fi
+create_if_not_exists $GH
+
+export GHPD6="$GH/powerd6"
+create_if_not_exists $GHPD6
+
