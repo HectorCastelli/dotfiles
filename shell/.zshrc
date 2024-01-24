@@ -35,5 +35,11 @@ if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
     . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 fi
 
+# Auto-completions
+autoload -Uz compinit
+compinit
+zstyle ':completion:*' menu select # Use arrow keys to complete
+zstyle ':completion::complete:*' gain-privileges 1 # Complete even with sudo
+
 # Prompt initialization
 eval "$(starship init zsh)"
