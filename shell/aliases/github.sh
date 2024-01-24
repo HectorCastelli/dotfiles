@@ -14,3 +14,4 @@ create_if_not_exists $GH
 export GHPD6="$GH/powerd6"
 create_if_not_exists $GHPD6
 
+alias cdgh='cd $GH'
