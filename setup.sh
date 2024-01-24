@@ -115,13 +115,14 @@ setup_font() {
     case "$(uname -s)" in
     Darwin)
         git clone https://github.com/githubnext/monaspace.git monaspace
-        bash "$HOME/dotfiles/monaspace/util/install_macos.sh"
-        # rm -rf monaspace
+        sh -c 'cd "$HOME/dotfiles/monaspace/" && exec ./util/install_macos.sh'
+        rm -rf monaspace
         ;;
     Linux)
         git clone https://github.com/githubnext/monaspace.git monaspace
-        bash "$HOME/dotfiles/monaspace/util/install_linux.sh"
-        # rm -rf monaspace
+        mkdir -p "$HOME/.local/share/fonts"
+        sh -c 'cd "$HOME/dotfiles/monaspace/" && exec ./util/install_linux.sh'
+        rm -rf monaspace
         ;;
     *)
         display_in_color "red" "Unsupported operating system. Please install manually."
