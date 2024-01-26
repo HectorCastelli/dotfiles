@@ -3,8 +3,6 @@ use git2::Repository;
 use inquire::{validator::Validation, Text};
 
 mod nix;
-use paris::Logger;
-
 
 fn main() {
     println!("Starting dotfiles setup");
