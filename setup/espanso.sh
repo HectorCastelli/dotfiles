@@ -10,9 +10,6 @@ if command -v espanso >/dev/null 2>&1; then
     exit 0
 else
     case "$(uname -s)" in
-    Darwin)
-        nix-env --install --attr nixpkgs.espanso-wayland
-        ;;
     Linux)
         _session="$XDG_SESSION_TYPE"
         case "$_session" in
