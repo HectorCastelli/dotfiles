@@ -100,7 +100,7 @@ setup_starship() {
     success "starship was installed succesfully"
 }
 
-setup_font() {    
+setup_font() {
     info "Installing monaspace font"
     case "$(uname -s)" in
     Darwin)
@@ -124,7 +124,7 @@ setup_applications() {
         info "Installing $package"
         nix-env --install --attr "nixpkgs.$package"
         success "$package was installed succesfully"
-    done < "$HOME/dotfiles/setup/nixpkgs.list"
+    done <"$HOME/dotfiles/setup/nixpkgs.list"
 
     info "Setting up other applications"
     for file in "$HOME/dotfiles/setup"/*.sh; do
