@@ -56,7 +56,14 @@ setup_nix() {
         esac
 
         info "Enabling nix"
-        . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+        case "$(uname -s)" in
+        Darwin)
+            . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+            ;;
+        Linux)
+            . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+            ;;
+        esac
         if command -v nix >/dev/null 2>&1; then
             success "nix was enabled succesfully"
         else
