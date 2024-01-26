@@ -1,33 +1,13 @@
 #!/bin/sh
 
-# shellcheck source=scripts/ansi.sh
-. "$HOME/dotfiles/scripts/ansi.sh"
-
-copy_new_files() {
-    source_dir="$1"
-    target_dir="$2"
-
-    display_in_color "yellow" "Copying files from $source_dir into $target_dir"
-
-    # Ensure target directory exists
-    mkdir -p "$target_dir"
-
-    # Copy files from source to target without overwriting
-    for file in "$source_dir"/*; do
-        target_file="$target_dir/$(basename "$file")"
-
-        # Check if the target file already exists
-        if [ ! -e "$target_file" ]; then
-            cp -r "$file" "$target_file"
-        else
-            echo "Skipping existing file: $(basename "$file")"
-        fi
-    done
-}
+# shellcheck source=scripts/ansi_log.sh
+. "$HOME/dotfiles/scripts/ansi_log.sh"
 
 setup_links() {
     dotfiles="$1"
-
+    # TODO: Need to add functionality to check: does target exist? If so... are they the same?
+    # TODO: When they are different, prompt to overwrite
+    # TODO:
     display_in_color "yellow" "Setting up symbolic links"
 
     rm -rf "$HOME/.config"
@@ -149,21 +129,21 @@ setup_applications() {
 }
 
 main() {
+    info "Setting up dotfiles"
+
     DOTFILES="$HOME/dotfiles"
-    display_in_color green "Setting up dotfiles"
 
-    copy_new_files "$HOME/.config" "$DOTFILES/.config"
-    setup_links "$DOTFILES"
+    # setup_links "$DOTFILES"
 
-    setup_nix
-    setup_zsh
-    setup_font
-    setup_starship
+    # setup_nix
+    # setup_zsh
+    # setup_font
+    # setup_starship
 
-    zsh "$DOTFILES/nix/global.sh"
-    setup_applications
+    # zsh "$DOTFILES/nix/global.sh"
+    # setup_applications
 
-    exec zsh
+    # exec zsh
 }
 
 main
