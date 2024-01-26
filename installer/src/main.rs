@@ -1,18 +1,36 @@
 use std::path::{Path, PathBuf};
-
 use git2::Repository;
 use inquire::{validator::Validation, Text};
+
+mod nix;
+use paris::Logger;
+
 
 fn main() {
     println!("Starting dotfiles setup");
 
     let repository = close_repository();
-    todo!("setup symlinks to {:?}", repository);
-    todo!("setup nix");
+    setup_symlinks(&repository);
+    nix::install_nix();
     todo!("setup zsh");
     todo!("install global utilities");
     todo!("install GUI apps");
     todo!("setup terminal configuration");
+}
+
+fn setup_symlinks(repository: &PathBuf) {
+    println!("Setting up symbolic links");
+
+    // TODO: Move this to each application and manage individually
+
+    // rm -rf "$HOME/.config"
+    // ln -sf "$dotfiles/.config" "$HOME/.config"
+
+    // ln -sf "$dotfiles/shell/.zshrc" "$HOME/.zshrc"
+    // ln -sf "$dotfiles/shell/.zshenv" "$HOME/.zshenv"
+
+    // ln -sf "$dotfiles/home/.gitconfig" "$HOME/.gitconfig"
+
 }
 
 fn close_repository() -> PathBuf {
