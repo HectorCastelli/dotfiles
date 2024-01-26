@@ -11,7 +11,6 @@ it on your command line.
 It will take all required actions, including copying this repository to a safe location
 so that  commands work as expected.
 
-<!-- TODO: Update to get binary from release then execute it -->
 ```sh
 git clone --recursive https://github.com/HectorCastelli/dotfiles
 cd dotfiles
