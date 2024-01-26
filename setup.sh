@@ -115,20 +115,19 @@ setup_font() {
 }
 
 setup_applications() {
-    dir="$HOME/dotfiles/setup"
+    info "Setting up applications (nixpkgs)"
+    while IFS= read -r package; do
+        info "Installing $package"
+        nix-env --install --attr "nixpkgs.$package"
+    done < "$HOME/dotfiles/setup/nixpkgs.list"
 
-    # Check if the directory exists
-    if [ -d "$dir" ]; then
-        # Find and source all .sh files in the directory and its subdirectories
-        for file in "$dir"/*.sh; do
-            if [ -f "$file" ]; then
-                # echo "Sourcing $file..."
-                sh "$file"
-            fi
-        done
-    else
-        echo "Directory $dir does not exist."
-    fi
+    info "Setting up other applications"
+    for file in "$HOME/dotfiles/setup"/*.sh; do
+        if [ -f "$file" ]; then
+            info "Intalling from $file"
+            . "$file"
+        fi
+    done
 }
 
 main() {
@@ -144,8 +143,9 @@ main() {
 
     setup_font
 
+    setup_applications
+
     # zsh "$DOTFILES/nix/global.sh"
-    # setup_applications
 
     # exec zsh
 }
