@@ -97,23 +97,18 @@ setup_starship() {
     fi
 }
 
-setup_font() {
-    display_in_color "yellow" "installing monaspace font"
-    # Determine the operating system
+setup_font() {    
+    info "Installing monaspace font"
     case "$(uname -s)" in
     Darwin)
-        git clone https://github.com/githubnext/monaspace.git monaspace
-        sh -c 'cd "$HOME/dotfiles/monaspace/" && exec ./util/install_macos.sh'
-        rm -rf monaspace
+        sh -c 'cd "$HOME/dotfiles/fonts/monaspace/" && exec ./util/install_macos.sh'
         ;;
     Linux)
-        git clone https://github.com/githubnext/monaspace.git monaspace
         mkdir -p "$HOME/.local/share/fonts"
-        sh -c 'cd "$HOME/dotfiles/monaspace/" && exec ./util/install_linux.sh'
-        rm -rf monaspace
+        sh -c 'cd "$HOME/dotfiles/fonts/monaspace/" && exec ./util/install_linux.sh'
         ;;
     *)
-        display_in_color "red" "Unsupported operating system. Please install manually."
+        error "Unsupported operating system. Please install manually"
         exit 1
         ;;
     esac
@@ -147,7 +142,7 @@ main() {
 
     setup_shell
 
-    # setup_font
+    setup_font
 
     # zsh "$DOTFILES/nix/global.sh"
     # setup_applications
