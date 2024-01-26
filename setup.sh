@@ -42,11 +42,6 @@ setup_nix() {
     else
         curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
         
-        info "Addin nixpkgs channel"
-        nix-channel --add https://nixos.org/channels/nix-latest latest
-        nix-channel --add https://nixos.org/channels/nixos-23.11 nix_23_11
-        nix-channel --update
-
         info "Enabling nix"
         . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
         if command -v nix >/dev/null 2>&1; then
@@ -55,6 +50,11 @@ setup_nix() {
             error "Unable to execute nix after enabling it. Please retry the installation script from a new terminal session."
             exit 1
         fi
+
+        info "Addin nixpkgs channel"
+        nix-channel --add https://nixos.org/channels/nix-latest latest
+        nix-channel --add https://nixos.org/channels/nixos-23.11 nix_23_11
+        nix-channel --update
     fi
 }
 
