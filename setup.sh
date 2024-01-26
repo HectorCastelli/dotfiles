@@ -127,9 +127,9 @@ setup_applications() {
     done <"$HOME/dotfiles/setup/nixpkgs.list"
 
     info "Setting up applications (go packages)"
-    while IFS= read -r package; do
+    while IFS=$(printf '\n') read -r package; do
         info "Installing $package"
-        go install "$package"
+        go install "github.com/$package"
         success "$package was installed succesfully"
     done <"$HOME/dotfiles/setup/go.list"
 
