@@ -147,7 +147,7 @@ main() {
 
     DOTFILES="$HOME/dotfiles"
 
-    # setup_links "$DOTFILES"
+    setup_links "$DOTFILES"
 
     # setup_nix
     # setup_zsh
