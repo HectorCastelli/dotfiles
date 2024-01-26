@@ -15,5 +15,6 @@ so that  commands work as expected.
 ```sh
 git clone --recursive https://github.com/HectorCastelli/dotfiles
 cd dotfiles
+git checkout refactor
 sh setup.sh
 ```

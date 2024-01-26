@@ -59,7 +59,9 @@ setup_nix() {
 
         info "Enabling nix"
         . "$HOME/.nix-profile/etc/profile.d/nix.sh"
-        if ! command -v nix >/dev/null 2>&1; then
+        if command -v nix >/dev/null 2>&1; then
+            success "nix was enabled succesfully"
+        else
             error "Unable to execute nix after enabling it. Please retry the installation script from a new terminal session."
             exit 1
         fi
