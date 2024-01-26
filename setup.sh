@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# shellcheck source=scripts/ansi_log.sh
-. "$HOME/dotfiles/scripts/ansi_log.sh"
+# shellcheck source=shell/ansi_log.sh
+. "$HOME/dotfiles/shell/ansi_log.sh"
 
 setup_links() {
     dotfiles="$1"
