@@ -149,7 +149,9 @@ main() {
 
     setup_links "$DOTFILES"
 
-    # setup_nix
+    setup_nix
+
+    
     # setup_zsh
     # setup_font
     # setup_starship
