@@ -32,6 +32,7 @@ setup_links() {
             ln -sf "$file" "$HOME/$target"
         fi
     done
+    success "Symbolic links created"
 }
 
 setup_nix() {
@@ -85,6 +86,7 @@ setup_zsh() {
     fi
     info "Changing default shell to zsh"
     chsh -s "$(command -v zsh)"
+    success "zsh was installed succesfully"
 }
 
 setup_starship() {
@@ -95,6 +97,7 @@ setup_starship() {
         # Install starship
         curl -sS https://starship.rs/install.sh | sh
     fi
+    success "starship was installed succesfully"
 }
 
 setup_font() {    
@@ -112,6 +115,7 @@ setup_font() {
         exit 1
         ;;
     esac
+    success "monaspace font was installed succesfully"
 }
 
 setup_applications() {
@@ -119,6 +123,7 @@ setup_applications() {
     while IFS= read -r package; do
         info "Installing $package"
         nix-env --install --attr "nixpkgs.$package"
+        success "$package was installed succesfully"
     done < "$HOME/dotfiles/setup/nixpkgs.list"
 
     info "Setting up other applications"
@@ -126,6 +131,7 @@ setup_applications() {
         if [ -f "$file" ]; then
             info "Intalling from $file"
             . "$file"
+            success "$file was installed succesfully"
         fi
     done
 
