@@ -48,8 +48,16 @@ setup_nix() {
             ;;
         Linux)
             curl -L https://nixos.org/nix/install -o nix-install.sh
-            # Has to be single-user due to https://github.com/NixOS/nix/issues/2374
-            sh nix-install.sh --no-daemon
+
+            getenforce=$(PATH=$PATH:/sbin:/usr/sbin command -v getenforce)
+            if [ -n "$getenforce" ] && [ "$($getenforce)" = Enforcing ]; then
+                # Has to be single-user due to https://github.com/NixOS/nix/issues/2374
+                warn "Your linux installation uses SELinux which is incompatible with nix multi-user installation."
+                sh nix-install.sh --no-daemon
+            else
+                sh nix-install.sh
+            fi
+            
             rm nix-install.sh
             ;;
         *)
