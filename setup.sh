@@ -59,38 +59,22 @@ setup_nix() {
 
         info "Enabling nix"
         . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+        if ! command -v nix >/dev/null 2>&1; then
+            error "Unable to execute nix after enabling it. Please retry the installation script from a new terminal session."
+            exit 1
+        fi
     fi
 }
 
 setup_zsh() {
+    info "Setting up shell"
     if command -v zsh >/dev/null 2>&1; then
-        display_in_color "green" "zsh is already installed."
+        success "zsh is already installed"
     else
-        display_in_color "yellow" "zsh is not installed."
-        # Determine the operating system
-        case "$(uname -s)" in
-        Darwin)
-            nix-env --install --attr nixpkgs.zsh
-            ;;
-        Linux)
-            # Check if it's Fedora
-            if [ -e /etc/fedora-release ]; then
-                sudo dnf install -y zsh
-            else
-                display_in_color "red" "Unsupported Linux distribution. Please install manually."
-                exit 1
-            fi
-            ;;
-        *)
-            display_in_color "red" "Unsupported operating system. Please install manually."
-            exit 1
-            ;;
-        esac
-
-        # Change shell
-        display_in_color "yellow" "Changing default shell..."
-        chsh -s "$(command -v zsh)"
+        nix-env --install --attr nixpkgs.zsh
     fi
+    info "Changing default shell to zsh"
+    chsh -s "$(command -v zsh)"
 }
 
 setup_starship() {
@@ -151,7 +135,7 @@ main() {
 
     setup_nix
 
-    
+
     # setup_zsh
     # setup_font
     # setup_starship
