@@ -17,7 +17,7 @@ setup_links() {
         target_dir=$(get_relative_path "$(dirname "$file")" "$dotfiles_home")
         if [ -e "$HOME/$target" ]; then
             warn "File already exists."
-            read -rp "Do you want to overwrite it? (y/N)" answer </dev/tty
+            read -rp "Do you want to overwrite it? [y/N]" answer </dev/tty
             case $answer in
             [Yy]*)
                 rm "$HOME/$target"
