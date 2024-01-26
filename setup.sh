@@ -40,32 +40,20 @@ setup_nix() {
     if command -v nix >/dev/null 2>&1; then
         success "nix is already installed"
     else
-        case "$(uname -s)" in
-        Darwin)
-            curl -L https://nixos.org/nix/install -o nix-install.sh
-            sh nix-install.sh
-            rm nix-install.sh
-            ;;
-        Linux)
-            curl -L https://nixos.org/nix/install -o nix-install.sh
-            # Has to be single-user due to https://github.com/NixOS/nix/issues/2374
-            sh nix-install.sh --no-daemon
-            rm nix-install.sh
-            ;;
-        *)
-            error "Unsupported operating system. Please install manually."
-            exit 1
-            ;;
-        esac
-
+        curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
+        
         info "Enabling nix"
-        . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
         if command -v nix >/dev/null 2>&1; then
             success "nix was enabled succesfully"
         else
             error "Unable to execute nix after enabling it. Please retry the installation script from a new terminal session."
             exit 1
         fi
+
+        info "Addin nixpkgs channel"
+        nix-channel --add https://nixos.org/channels/nixos-23.11 nixpkgs
+        nix-channel --update
     fi
 }
 
@@ -75,9 +63,6 @@ setup_shell() {
 }
 
 setup_zsh() {
-    # TODO: This is a hack to ensure nix is available at this step... it should not be needed
-    . "$HOME/.nix-profile/etc/profile.d/nix.sh"
-
     info "Setting up shell"
     if command -v zsh >/dev/null 2>&1; then
         success "zsh is already installed"
@@ -85,6 +70,7 @@ setup_zsh() {
         nix-env --install --attr nixpkgs.zsh
     fi
     info "Changing default shell to zsh"
+    command -v zsh | sudo tee -a /etc/shells
     chsh -s "$(command -v zsh)"
     success "zsh was installed succesfully"
 }
