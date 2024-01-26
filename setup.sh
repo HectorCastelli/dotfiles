@@ -76,6 +76,7 @@ setup_shell() {
 setup_zsh() {
     # TODO: This is a hack to ensure nix is available at this step... it should not be needed
     . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+
     info "Setting up shell"
     if command -v zsh >/dev/null 2>&1; then
         success "zsh is already installed"
@@ -87,10 +88,10 @@ setup_zsh() {
 }
 
 setup_starship() {
+    info "Setting up starship prompt"
     if command -v starship >/dev/null 2>&1; then
-        display_in_color "green" "starship is already installed."
+        success "starship is already installed"
     else
-        display_in_color "yellow" "starship is not installed."
         # Install starship
         curl -sS https://starship.rs/install.sh | sh
     fi
