@@ -2,29 +2,43 @@
 
 # shellcheck source=shell/ansi_log.sh
 . "$HOME/dotfiles/shell/ansi_log.sh"
+# shellcheck source=shell/relative_path.sh
+. "$HOME/dotfiles/shell/relative_path.sh"
 
 setup_links() {
     dotfiles="$1"
-    # TODO: Need to add functionality to check: does target exist? If so... are they the same?
-    # TODO: When they are different, prompt to overwrite
-    # TODO:
-    display_in_color "yellow" "Setting up symbolic links"
+    dotfiles_home="$dotfiles/home"
 
-    rm -rf "$HOME/.config"
-    ln -sf "$dotfiles/.config" "$HOME/.config"
+    info "Setting up symbolic links"
 
-    ln -sf "$dotfiles/shell/.zshrc" "$HOME/.zshrc"
-    ln -sf "$dotfiles/shell/.zshenv" "$HOME/.zshenv"
-
-    ln -sf "$dotfiles/home/.gitconfig" "$HOME/.gitconfig"
+    find "$dotfiles_home" -type f | while read -r file; do
+        info "Linking $file"
+        target=$(get_relative_path "$file" "$dotfiles_home")
+        target_dir=$(get_relative_path "$(dirname "$file")" "$dotfiles_home")
+        if [ -e "$HOME/$target" ]; then
+            warn "File already exists. Do you want to overwrite it? (y/N)"
+            read -r answer
+            case $answer in
+            [Yy]*)
+                rm "$HOME/$target"
+                ln -sf "$file" "$HOME/$target"
+                ;;
+            *)
+                warn "Skipping file. This may cause failures."
+                ;;
+            esac
+        else
+            mkdir -p "$HOME/$target_dir"
+            ln -sf "$file" "$HOME/$target"
+        fi
+    done
 }
 
 setup_nix() {
+    info "Setting up nix"
     if command -v nix >/dev/null 2>&1; then
-        display_in_color "green" "nix is already installed"
+        success "nix is already installed"
     else
-        display_in_color "yellow" "nix is not installed"
-        # Determine the operating system
         case "$(uname -s)" in
         Darwin)
             curl -L https://nixos.org/nix/install -o nix-install.sh
@@ -38,12 +52,12 @@ setup_nix() {
             rm nix-install.sh
             ;;
         *)
-            display_in_color "red" "Unsupported operating system. Please install manually."
+            error "Unsupported operating system. Please install manually."
             exit 1
             ;;
         esac
 
-        display_in_color "yellow" "Enabling nix"
+        info "Enabling nix"
         . "$HOME/.nix-profile/etc/profile.d/nix.sh"
     fi
 }
