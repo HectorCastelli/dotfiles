@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/zsh
 
-# shellcheck source=../../shell/ansi_log.sh
+# shellcheck source=../shell/ansi_log.sh
 . "$HOME/dotfiles/shell/ansi_log.sh"
 
 case "$(uname -s)" in

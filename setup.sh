@@ -128,6 +128,12 @@ setup_applications() {
             . "$file"
         fi
     done
+
+    if [ "$(uname -s)" = "Darwin" ]; then
+        warn "Since you are running on MacOS, we need to setup links to the installed applications"
+        . "$HOME/dotfiles/scripts/manual_run/setup-nix-desktop.sh"
+    fi
+
 }
 
 main() {
@@ -145,7 +151,8 @@ main() {
 
     setup_applications
 
-    # exec zsh
+    success "Switching to newly installed session"
+    exec zsh
 }
 
 main

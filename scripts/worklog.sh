@@ -8,13 +8,13 @@ WORKLOG_FILE="$HOME/$(jq -r '.file' "$WORKLOG_CONFIG")"
 export WORKLOG_FILE
 
 # Fetch types from the JSON file
-extract_types() {
+_worklog_extract_types() {
     jq -r '.types[]' "$WORKLOG_CONFIG"
 }
 
 # Define the log command with completion
 worklog() {
-    types=$(extract_types)
+    types=$(_worklog_extract_types)
     # If no arguments provided, show available types
     if [ $# -eq 0 ]; then
         echo "Error: Types are required: available types: $types"
