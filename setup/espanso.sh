@@ -13,16 +13,16 @@ else
     Linux)
         _session="$XDG_SESSION_TYPE"
         case "$_session" in
-            wayland)
-                nix-env --install --attr nixpkgs.espanso-wayland
-                ;;
-            x11)
-                nix-env --install --attr nixpkgs.espanso
-                ;;
-            *)
-                display_in_color "red" "Unsupported session type: $session_type. Please install manually."
-                exit 1
-                ;;
+        wayland)
+            nix-env --install --attr nixpkgs.espanso-wayland
+            ;;
+        x11)
+            nix-env --install --attr nixpkgs.espanso
+            ;;
+        *)
+            display_in_color "red" "Unsupported session type: $session_type. Please install manually."
+            exit 1
+            ;;
         esac
         ;;
     *)
