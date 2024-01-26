@@ -40,30 +40,15 @@ setup_nix() {
     if command -v nix >/dev/null 2>&1; then
         success "nix is already installed"
     else
-        case "$(uname -s)" in
-        Darwin)
-            curl -L https://nixos.org/nix/install -o nix-install.sh
-            sh nix-install.sh
-            rm nix-install.sh
-            ;;
-        Linux)
-            curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
-            ;;
-        *)
-            error "Unsupported operating system. Please install manually."
-            exit 1
-            ;;
-        esac
+        curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
+        
+        info "Addin nixpkgs channel"
+        nix-channel --add https://nixos.org/channels/nix-latest latest
+        nix-channel --add https://nixos.org/channels/nixos-23.11 nix_23_11
+        nix-channel --update
 
         info "Enabling nix"
-        case "$(uname -s)" in
-        Darwin)
-            . "$HOME/.nix-profile/etc/profile.d/nix.sh"
-            ;;
-        Linux)
-            . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-            ;;
-        esac
+        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
         if command -v nix >/dev/null 2>&1; then
             success "nix was enabled succesfully"
         else
