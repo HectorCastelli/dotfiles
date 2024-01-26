@@ -47,18 +47,7 @@ setup_nix() {
             rm nix-install.sh
             ;;
         Linux)
-            curl -L https://nixos.org/nix/install -o nix-install.sh
-
-            getenforce=$(PATH=$PATH:/sbin:/usr/sbin command -v getenforce)
-            if [ -n "$getenforce" ] && [ "$($getenforce)" = Enforcing ]; then
-                # Has to be single-user due to https://github.com/NixOS/nix/issues/2374
-                warn "Your linux installation uses SELinux which is incompatible with nix multi-user installation."
-                sh nix-install.sh --no-daemon
-            else
-                sh nix-install.sh
-            fi
-            
-            rm nix-install.sh
+            curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
             ;;
         *)
             error "Unsupported operating system. Please install manually."
