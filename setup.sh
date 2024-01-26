@@ -68,7 +68,14 @@ setup_nix() {
     fi
 }
 
+setup_shell() {
+    setup_zsh
+    setup_starship
+}
+
 setup_zsh() {
+    # TODO: This is a hack to ensure nix is available at this step... it should not be needed
+    . "$HOME/.nix-profile/etc/profile.d/nix.sh"
     info "Setting up shell"
     if command -v zsh >/dev/null 2>&1; then
         success "zsh is already installed"
@@ -137,10 +144,9 @@ main() {
 
     setup_nix
 
+    setup_shell
 
-    # setup_zsh
     # setup_font
-    # setup_starship
 
     # zsh "$DOTFILES/nix/global.sh"
     # setup_applications
