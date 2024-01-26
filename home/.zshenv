@@ -8,3 +8,6 @@ export DOTFILES_SHELL="$HOME/dotfiles/shell"
 if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
     . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 fi
+
+# Golang
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
