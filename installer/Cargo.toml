@@ -1,5 +1,5 @@
 [package]
-name = "dotfiles/installer"
+name = "dotfiles-installer"
 version = "0.1.0"
 edition = "2021"
 
