@@ -1,0 +1,46 @@
+{
+    "boards": [],
+    "coauthors": [],
+    "prefixes": [
+        {
+            "title": "feat",
+            "description": "a new feature"
+        },
+        {
+            "title": "fix",
+            "description": "a bug fix"
+        },
+        {
+            "title": "docs",
+            "description": "documentation only changes"
+        },
+        {
+            "title": "style",
+            "description": "changes that do not affect the meaning of the code"
+        },
+        {
+            "title": "refactor",
+            "description": "a code change that neither fixes a bug nor adds a feature"
+        },
+        {
+            "title": "perf",
+            "description": "a code change that improves performance"
+        },
+        {
+            "title": "test",
+            "description": "adding missing tests or correcting existing tests"
+        },
+        {
+            "title": "chore",
+            "description": "changes to the build process or auxiliary tools and libraries"
+        },
+        {
+            "title": "revert",
+            "description": "reverts a previous commit"
+        },
+        {
+            "title": "ci",
+            "description": "changes to our CI configuration files and scripts"
+        }
+    ]
+}
