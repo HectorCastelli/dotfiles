@@ -79,9 +79,6 @@ setup_shell() {
 }
 
 setup_zsh() {
-    # TODO: This is a hack to ensure nix is available at this step... it should not be needed
-    . "$HOME/.nix-profile/etc/profile.d/nix.sh"
-
     info "Setting up shell"
     if command -v zsh >/dev/null 2>&1; then
         success "zsh is already installed"
