@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+# Golang
+export PATH="$PATH:$(go env GOROOT)/bin:$(go env GOPATH)/bin"
+
 # shellcheck source=shell/source_recursive.sh
 . "$HOME/dotfiles/shell/source_recursive.sh"
 
