@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/zsh
 
-# shellcheck source=../../shell/ansi_log.sh
+# shellcheck source=../shell/ansi_log.sh
 . "$HOME/dotfiles/shell/ansi_log.sh"
 
 case "$(uname -s)" in
@@ -23,11 +23,11 @@ Darwin)
     fi
     ;;
 Linux)
-    if [ -d "$HOME/.nix-profile/share" ]; then
+    if [ -d "$HOME/.nix-profile/share" ] ; then
         # set PATH so it includes user's private bin if it exists
         XDG_DATA_DIRS=$HOME/.nix-profile/share:$XDG_DATA_DIRS
     fi
-    if [ -d "/nix/var/nix/profiles/default/share" ]; then
+    if [ -d "/nix/var/nix/profiles/default/share" ] ; then
         # set PATH so it includes user's private bin if it exists
         XDG_DATA_DIRS=/nix/var/nix/profiles/default/share:$XDG_DATA_DIRS
     fi

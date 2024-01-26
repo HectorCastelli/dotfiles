@@ -7,3 +7,6 @@
 [submodule "shell/plugins/zsh-bd"]
 	path = shell/plugins/zsh-bd
 	url = https://github.com/Tarrasch/zsh-bd.git
+[submodule "fonts/monaspace"]
+	path = fonts/monaspace
+	url = https://github.com/githubnext/monaspace.git

@@ -1,22 +1,7 @@
-# ~/.zshrc
+#!/bin/zsh
 
-# Function to recursively source files from a specified directory
-source_recursive() {
-    local dir="$1"
-
-    # Check if the directory exists
-    if [ -d "$dir" ]; then
-        # Find and source all .sh files in the directory and its subdirectories
-        for file in "$dir"/*.sh; do
-            if [ -f "$file" ]; then
-                # echo "Sourcing $file..."
-                source "$file"
-            fi
-        done
-    else
-        echo "Directory $dir does not exist."
-    fi
-}
+# shellcheck source=shell/source_recursive.sh
+. "$HOME/dotfiles/shell/source_recursive.sh"
 
 # Helper scripts
 source_recursive "$DOTFILES_DIR/shell"
