@@ -52,8 +52,7 @@ setup_nix() {
         fi
 
         info "Addin nixpkgs channel"
-        nix-channel --add https://nixos.org/channels/nix-latest latest
-        nix-channel --add https://nixos.org/channels/nixos-23.11 nix_23_11
+        nix-channel --add https://nixos.org/channels/nixos-23.11 nixpkgs
         nix-channel --update
     fi
 }
