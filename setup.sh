@@ -126,6 +126,13 @@ setup_applications() {
         success "$package was installed succesfully"
     done <"$HOME/dotfiles/setup/nixpkgs.list"
 
+    info "Setting up applications (go packages)"
+    while IFS= read -r package; do
+        info "Installing $package"
+        go install "$package"
+        success "$package was installed succesfully"
+    done <"$HOME/dotfiles/setup/go.list"
+
     info "Setting up other applications"
     for file in "$HOME/dotfiles/setup"/*.sh; do
         if [ -f "$file" ]; then
