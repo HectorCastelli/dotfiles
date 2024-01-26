@@ -135,6 +135,32 @@ setup_applications() {
 
 }
 
+setup_identity() {
+    info "Setting up machine identity"
+    setup_gh 
+    setup_ssh
+}
+
+setup_gh() {
+    info "Setting up GitHub"
+    gh auth login
+    success "GitHub authenticated"
+}
+
+setup_ssh() {
+    info "Setting up SSH keys"
+
+    email="hector.zacharias@gmail.com"
+
+    ssh-keygen -t ed25519 -C "$email" -f ~/.ssh/github_authentication
+    gh ssh-key add ~/.ssh/github_authentication --title "$(hostname) authentication" --type authentication
+    success "Setup authentication key"
+
+    ssh-keygen -t ed25519 -C "$email" -f ~/.ssh/github_signing
+    gh ssh-key add ~/.ssh/github_signing --title "$(hostname) signing" --type signing
+    success "Setup signing key"
+}
+
 main() {
     info "Setting up dotfiles"
 
@@ -149,6 +175,8 @@ main() {
     setup_font
 
     setup_applications
+
+    setup_identity
 
     success "Switching to newly installed session"
     exec zsh

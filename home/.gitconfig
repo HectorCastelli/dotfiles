@@ -1,6 +1,7 @@
 [user]
 	name = Hector Castelli Zacharias
 	email = hector.zacharias@gmail.com
+	signingkey = ~/.ssh/github_signing.pub
 [core]
     # Use vscode as the git editor
     editor = code --wait
@@ -15,3 +16,5 @@
 [status]
     # Shows stash count when running git status
     showStash = true
+[gpg]
+	format = ssh
