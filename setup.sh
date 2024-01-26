@@ -145,8 +145,6 @@ main() {
 
     setup_applications
 
-    # zsh "$DOTFILES/nix/global.sh"
-
     # exec zsh
 }
 
