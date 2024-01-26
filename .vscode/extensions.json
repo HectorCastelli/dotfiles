@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "streetsidesoftware.code-spell-checker",
+        "tamasfe.even-better-toml",
+        "bbenoist.nix",
+        "rust-lang.rust-analyzer",
+        "foxundermoon.shell-format",
+        "timonwong.shellcheck"
+    ]
+}
