@@ -10,6 +10,7 @@ To install this, you should run the following snippet from a terminal:
 ```sh
 git clone --recursive https://github.com/HectorCastelli/dotfiles
 cd dotfiles
+git checkout add-espanso
 sh setup.sh
 ```
 
