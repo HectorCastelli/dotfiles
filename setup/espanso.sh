@@ -1,11 +1,14 @@
 #!/bin/sh
 
+# shellcheck source=../shell/ansi_log.sh
+. "$HOME/dotfiles/shell/ansi_log.sh"
+
+info "Installing espanso"
+
 if command -v espanso >/dev/null 2>&1; then
-    display_in_color "green" "espanso is already installed."
+    success "espanso is already installed."
     exit 0
 else
-    display_in_color "yellow" "espanso is not installed."
-    # Determine the operating system
     case "$(uname -s)" in
     Darwin)
         nix-env --install --attr nixpkgs.espanso-wayland
@@ -20,13 +23,19 @@ else
             nix-env --install --attr nixpkgs.espanso
             ;;
         *)
-            display_in_color "red" "Unsupported session type: $session_type. Please install manually."
+            error "Unsupported session type: $session_type. Please install manually."
+            open "https://espanso.org/install/"
+            warn "Press ENTER once installed and the setup will continue."
+            read -r _dummy
             exit 1
             ;;
         esac
         ;;
     *)
-        display_in_color "red" "Unsupported operating system. Please install manually."
+        error "Unsupported operating system. Please install manually."
+        open "https://espanso.org/install/"
+        warn "Press ENTER once installed and the setup will continue."
+        read -r _dummy
         exit 1
         ;;
     esac
