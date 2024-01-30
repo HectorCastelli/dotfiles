@@ -137,7 +137,7 @@ setup_applications() {
 
 setup_identity() {
     info "Setting up machine identity"
-    setup_gh 
+    setup_gh
     setup_ssh
 }
 
