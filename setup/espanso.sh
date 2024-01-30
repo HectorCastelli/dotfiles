@@ -27,6 +27,9 @@ else
             exit 1
             ;;
         esac
+        info "Starting up espanso service"
+        espanso service register
+        espanso start
         ;;
     *)
         error "Unsupported operating system. Please install manually."
