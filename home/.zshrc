@@ -3,17 +3,15 @@
 # Golang
 export PATH="$PATH:$(go env GOROOT)/bin:$(go env GOPATH)/bin"
 
-# shellcheck source=shell/source_recursive.sh
-. "$HOME/dotfiles/shell/source_recursive.sh"
+# shellcheck source=../bin/source_recursive.sh
+. "$HOME/dotfiles/bin/source_recursive.sh"
+source_recursive "$HOME/dotfiles/bin"
 
 # Helper scripts
 source_recursive "$DOTFILES_DIR/shell"
 
 # Aliases
 source_recursive "$DOTFILES_DIR/shell/aliases"
-
-# Custom scripts
-source_recursive "$DOTFILES_DIR/scripts"
 
 # ZSH Plugins
 source "$DOTFILES_DIR/shell/plugins/almostontop/almostontop.plugin.zsh"

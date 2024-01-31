@@ -8,3 +8,6 @@ export DOTFILES_SHELL="$HOME/dotfiles/shell"
 if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
     . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 fi
+
+# Add global scripts to path
+export PATH="$HOME/dotfiles/bin:$PATH"
