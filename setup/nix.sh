@@ -70,5 +70,19 @@ update_nix_desktop() {
                 osascript -e "tell app \"Finder\" to make new alias file at POSIX file \"$HOME/Applications\" to POSIX file \"$f\""
             done
         fi
+    elif is_linux; then
+        NIX_SHARE="$HOME/.nix-profile/share"
+        LOCAL_SHARE="$HOME/.local/share"
+        find "$NIX_SHARE" -type f | while read -r file; do
+            debug "Linking $file"
+            target=$(get_relative_path "$file" "$NIX_SHARE")
+            target_dir=$(get_relative_path "$(dirname "$file")" "$NIX_SHARE")
+            if [ -e "$LOCAL_SHARE/$target" ]; then
+                warn "File already exists"
+            else
+                mkdir -p "$LOCAL_SHARE/$target_dir"
+                ln -sf "$file" "$LOCAL_SHARE/$target"
+            fi
+        done
     fi
 }
