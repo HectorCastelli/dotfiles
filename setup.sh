@@ -19,6 +19,8 @@ install_home
 install_nix
 install_zsh
 
+install_ssh
+
 install_fonts
 
 install_with_nix "bat"
@@ -38,4 +40,5 @@ install_with_go "meteor" "stefanlogue/meteor@latest"
 
 install_app "bitwarden"
 install_app "espanso"
+install_app "gh-cli"
 install_app "gh-extensions"
