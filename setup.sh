@@ -32,8 +32,8 @@ install_with_nix "tldr"
 install_with_nix "vscode"
 install_with_nix "yq"
 
-# install_with_go "maykonlf/semver-cli/cmd/semver@latest"
-# install_with_go "sachaos/viddy@latest"
-# install_with_go "stefanlogue/meteor@latest"
+install_with_go "semver" "maykonlf/semver-cli/cmd/semver@latest"
+install_with_go "viddy" "sachaos/viddy@latest"
+install_with_go "meteor" "stefanlogue/meteor@latest"
 
 # install_app "bitwarden"
