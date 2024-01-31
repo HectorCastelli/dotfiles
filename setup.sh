@@ -41,7 +41,7 @@ setup_nix() {
         success "nix is already installed"
     else
         curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
-        
+
         info "Enabling nix"
         . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
         if command -v nix >/dev/null 2>&1; then
