@@ -17,7 +17,7 @@ install_zsh() {
 
         debug "Changing default shell to zsh"
         chsh -s "$(command -v zsh)"
-        
+
         install_starship
 
         if check_command "$COMMAND"; then
