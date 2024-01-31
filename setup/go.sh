@@ -4,7 +4,7 @@ install_with_go() {
     COMMAND=$1
     REPOSITORY=$2
 
-    if check_command "$COMMAND"; then
+    if check_command "go" "$COMMAND"; then
         success "Command $COMMAND installed correctly"
         return 0
     else
