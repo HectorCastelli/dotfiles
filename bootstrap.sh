@@ -17,15 +17,9 @@ cd dotfiles || {
     exit 1
 }
 
-# Add bin directory to the PATH or source the scripts
-if [ -d bin ]; then
-    export PATH="$PATH:$(pwd)/bin"
-else
-    echo "Warning: 'bin' directory not found in dotfiles repository."
-fi
-
 # Run setup.sh
 if [ -f setup.sh ]; then
+    # TODO: consider running it all as sudo to prevent password prompts
     ./setup.sh
 else
     echo "Error: 'setup.sh' not found in dotfiles repository. Exiting."
@@ -33,5 +27,3 @@ else
 fi
 
 echo "Dotfiles setup complete!"
-
-echo "0" > setup.status

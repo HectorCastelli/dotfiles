@@ -1,0 +1,11 @@
+#!/bin/sh
+
+check_command() {
+    for cmd in "$@"; do
+        if ! command -v "$cmd" >/dev/null 2>&1; then
+            error "Command $cmd not found"
+            return 1  # Command not found
+        fi
+    done
+    return 0  # All commands found
+}
