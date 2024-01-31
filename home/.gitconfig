@@ -18,3 +18,8 @@
     showStash = true
 [gpg]
 	format = ssh
+# Setup url aliases for remotes
+[url "https://github.com/"]
+insteadOf = gh:
+[url "https://gitlab.com/"]
+insteadOf = gl:
