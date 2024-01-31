@@ -40,9 +40,3 @@ else
         ;;
     esac
 fi
-
-if [ "$(uname -s)" = "Darwin" ]; then
-    info "Setting up configuration symlinks for MacOs"
-    rm -rf "$HOME/Library/Application Support/espanso"
-    ln -sf "$HOME/dotfiles/home/.config/espanso" "$HOME/Library/Application Support/espanso"
-fi
