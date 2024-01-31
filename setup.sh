@@ -5,11 +5,26 @@
 # shellcheck source=shell/relative_path.sh
 . "$HOME/dotfiles/shell/relative_path.sh"
 
+setup_macos_links() {
+    dotfiles="$1"
+
+    if [ "$(uname -s)" = "Darwin" ]; then
+        info "Linking to MacOS directories"
+        info "Espanso"
+        ln -sf "$dotfiles/home/.config/espanso" "$dotfiles/home/Library/Application Support/espanso"
+        info "Code"
+        ln -sf "$dotfiles/home/.config/Code" "$dotfiles/home/Library/Application Support/Code"
+        success "MacOS symbolic link hacks created"
+    fi
+}
+
 setup_links() {
     dotfiles="$1"
     dotfiles_home="$dotfiles/home"
 
     info "Setting up symbolic links"
+
+    setup_macos_links "$dotfiles"
 
     find "$dotfiles_home" -type f | while read -r file; do
         info "Linking $file"
@@ -51,7 +66,7 @@ setup_nix() {
             exit 1
         fi
 
-        info "Addin nixpkgs channel"
+        info "Adding nixpkgs channel"
         nix-channel --add https://nixos.org/channels/nixos-23.11 nixpkgs
         nix-channel --update
     fi
@@ -113,7 +128,7 @@ setup_applications() {
     done <"$HOME/dotfiles/setup/nixpkgs.list"
 
     info "Setting up applications (go packages)"
-    while IFS=$(printf '\n') read -r package; do
+    while IFS= read -r package; do
         info "Installing $package"
         go install "github.com/$package"
         success "$package was installed succesfully"
@@ -123,7 +138,7 @@ setup_applications() {
     for file in "$HOME/dotfiles/setup"/*.sh; do
         if [ -f "$file" ]; then
             info "Intalling from $file"
-            . "$file"
+            sh "$file"
             success "$file was installed succesfully"
         fi
     done
@@ -132,7 +147,6 @@ setup_applications() {
         warn "Since you are running on MacOS, we need to setup links to the installed applications"
         . "$HOME/dotfiles/scripts/manual_run/setup-nix-desktop.sh"
     fi
-
 }
 
 setup_identity() {
@@ -143,7 +157,7 @@ setup_identity() {
 
 setup_gh() {
     info "Setting up GitHub"
-    gh auth login
+    gh auth login --scopes admin:ssh_signing_key
     success "GitHub authenticated"
 }
 
@@ -152,13 +166,21 @@ setup_ssh() {
 
     email="hector.zacharias@gmail.com"
 
-    ssh-keygen -t ed25519 -C "$email" -f ~/.ssh/github_authentication
-    gh ssh-key add ~/.ssh/github_authentication --title "$(hostname) authentication" --type authentication
-    success "Setup authentication key"
+    if [ -e "$HOME/.ssh/github_authentication" ]; then
+        success "Authentication key is already setup"
+    else
+        ssh-keygen -t ed25519 -C "$email" -f "$HOME/.ssh/github_authentication"
+        gh ssh-key add ~/.ssh/github_authentication --title "$(hostname) authentication" --type authentication
+        success "Setup authentication key"
+    fi
 
-    ssh-keygen -t ed25519 -C "$email" -f ~/.ssh/github_signing
-    gh ssh-key add ~/.ssh/github_signing --title "$(hostname) signing" --type signing
-    success "Setup signing key"
+    if [ -e "$HOME/.ssh/github_authentication" ]; then
+        success "Signing key is already setup"
+    else
+        ssh-keygen -t ed25519 -C "$email" -f "$HOME/.ssh/github_signing"
+        gh ssh-key add ~/.ssh/github_signing --title "$(hostname) signing" --type signing
+        success "Setup signing key"
+    fi
 }
 
 main() {
