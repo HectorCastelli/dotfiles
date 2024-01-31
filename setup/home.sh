@@ -7,7 +7,7 @@ install_home() {
         install_home_macos
     fi
 
-    find "$(pwd)/home" -type f | while read -r file; do
+    find "$(pwd)/home" -type f,l | while read -r file; do
         debug "Linking $file"
         target=$(get_relative_path "$file" "$(pwd)/home")
         target_dir=$(get_relative_path "$(dirname "$file")" "$(pwd)/home")

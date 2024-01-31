@@ -71,9 +71,9 @@ update_nix_desktop() {
             done
         fi
     elif is_linux; then
-        NIX_SHARE="$HOME/.nix-profile/share"
-        LOCAL_SHARE="$HOME/.local/share"
-        find "$NIX_SHARE" -type f | while read -r file; do
+        NIX_SHARE="$HOME/.nix-profile/share/applications"
+        LOCAL_SHARE="$HOME/.local/share/applications"
+        find "$NIX_SHARE" -type f,l | while read -r file; do
             debug "Linking $file"
             target=$(get_relative_path "$file" "$NIX_SHARE")
             target_dir=$(get_relative_path "$(dirname "$file")" "$NIX_SHARE")
