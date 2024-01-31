@@ -128,7 +128,7 @@ setup_applications() {
     done <"$HOME/dotfiles/setup/nixpkgs.list"
 
     info "Setting up applications (go packages)"
-    while IFS=$(printf '\n') read -r package; do
+    while IFS= read -r package; do
         info "Installing $package"
         go install "github.com/$package"
         success "$package was installed succesfully"
@@ -138,7 +138,7 @@ setup_applications() {
     for file in "$HOME/dotfiles/setup"/*.sh; do
         if [ -f "$file" ]; then
             info "Intalling from $file"
-            . "$file"
+            sh "$file"
             success "$file was installed succesfully"
         fi
     done
@@ -147,7 +147,6 @@ setup_applications() {
         warn "Since you are running on MacOS, we need to setup links to the installed applications"
         . "$HOME/dotfiles/scripts/manual_run/setup-nix-desktop.sh"
     fi
-
 }
 
 setup_identity() {
