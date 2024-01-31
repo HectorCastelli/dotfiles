@@ -158,7 +158,7 @@ setup_identity() {
 
 setup_gh() {
     info "Setting up GitHub"
-    gh auth login
+    gh auth login --scopes admin:ssh_signing_key
     success "GitHub authenticated"
 }
 
@@ -167,13 +167,21 @@ setup_ssh() {
 
     email="hector.zacharias@gmail.com"
 
-    ssh-keygen -t ed25519 -C "$email" -f ~/.ssh/github_authentication
-    gh ssh-key add ~/.ssh/github_authentication --title "$(hostname) authentication" --type authentication
-    success "Setup authentication key"
+    if [ -e "$HOME/.ssh/github_authentication" ]; then
+        success "Authentication key is already setup"
+    else
+        ssh-keygen -t ed25519 -C "$email" -f "$HOME/.ssh/github_authentication"
+        gh ssh-key add ~/.ssh/github_authentication --title "$(hostname) authentication" --type authentication
+        success "Setup authentication key"
+    fi
 
-    ssh-keygen -t ed25519 -C "$email" -f ~/.ssh/github_signing
-    gh ssh-key add ~/.ssh/github_signing --title "$(hostname) signing" --type signing
-    success "Setup signing key"
+    if [ -e "$HOME/.ssh/github_authentication" ]; then
+        success "Signing key is already setup"
+    else
+        ssh-keygen -t ed25519 -C "$email" -f "$HOME/.ssh/github_signing"
+        gh ssh-key add ~/.ssh/github_signing --title "$(hostname) signing" --type signing
+        success "Setup signing key"
+    fi
 }
 
 main() {
