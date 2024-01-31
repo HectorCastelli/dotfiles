@@ -14,7 +14,7 @@ install_fonts_monaspace() {
     if is_linux; then
         debug "Initializing user font directory"
         mkdir -p "$HOME/.local/share/fonts"
-        sh -c "cd ./fonts/monaspace/util && chmod +x ./install_linux.sh && exec ./install_linux.sh"
+        sh -c "cd ./fonts/monaspace && chmod +x ./util/install_linux.sh && exec ./util/install_linux.sh"
     elif is_macos; then
         sh -c "cd ./fonts/monaspace/util && chmod +x ./install_macos.sh && exec ./install_macos.sh"
     else
