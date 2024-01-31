@@ -33,3 +33,5 @@ else
 fi
 
 echo "Dotfiles setup complete!"
+
+echo "0" > setup.status
