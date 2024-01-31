@@ -5,11 +5,26 @@
 # shellcheck source=shell/relative_path.sh
 . "$HOME/dotfiles/shell/relative_path.sh"
 
+setup_macos_links() {
+    dotfiles="$1"
+
+    if [ "$(uname -s)" = "Darwin" ]; then
+        info "Linking to MacOS directories"
+        info "Espanso"
+        ln -sf "$dotfiles/home/.config/espanso" "$dotfiles/home/Library/Application Support/espanso"
+        info "Code"
+        ln -sf "$dotfiles/home/.config/Code" "$dotfiles/home/Library/Application Support/Code"
+        success "MacOS symbolic link hacks created"
+    fi
+}
+
 setup_links() {
     dotfiles="$1"
     dotfiles_home="$dotfiles/home"
 
     info "Setting up symbolic links"
+
+    setup_macos_links "$dotfiles"
 
     find "$dotfiles_home" -type f | while read -r file; do
         info "Linking $file"
