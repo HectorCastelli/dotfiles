@@ -71,16 +71,15 @@ update_nix_desktop() {
             done
         fi
     elif is_linux; then
-        NIX_SHARE="$HOME/.nix-profile/share/applications"
+        NIX_SHARE="$HOME/.nix-profile/share/applications/"
         LOCAL_SHARE="$HOME/.local/share/applications"
         find "$NIX_SHARE" -type f,l | while read -r file; do
             debug "Linking $file"
-            target=$(get_relative_path "$file" "$NIX_SHARE")
-            target_dir=$(get_relative_path "$(dirname "$file")" "$NIX_SHARE")
+            target=$(basename "$file")
             if [ -e "$LOCAL_SHARE/$target" ]; then
                 warn "File already exists"
             else
-                mkdir -p "$LOCAL_SHARE/$target_dir"
+                mkdir -p "$LOCAL_SHARE"
                 ln -sf "$file" "$LOCAL_SHARE/$target"
             fi
         done
