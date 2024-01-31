@@ -26,5 +26,8 @@ compinit
 zstyle ':completion:*' menu select # Use arrow keys to complete
 zstyle ':completion::complete:*' gain-privileges 1 # Complete even with sudo
 
+# Setup pushd/popd helper
+setopt autopushd
+
 # Prompt initialization
 eval "$(starship init zsh)"
