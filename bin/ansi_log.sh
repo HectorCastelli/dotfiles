@@ -8,17 +8,17 @@ BLUE='\033[0;34m'
 RESET='\033[0m' # Reset to default color
 
 info() {
-  printf "${BLUE}? %s${RESET}\n" "$1"
+  printf "${BLUE}? %s${RESET}\n" "$1" >&1
 }
 
 success() {
-  printf "${GREEN}✓ %s${RESET}\n" "$1"
+  printf "${GREEN}✓ %s${RESET}\n" "$1" >&1
 }
 
 error() {
-  printf "${RED}✗ %s${RESET}\n" "$1"
+  printf "${RED}✗ %s${RESET}\n" "$1" >&2
 }
 
 warn() {
-  printf "${YELLOW}! %s${RESET}\n" "$1"
+  printf "${YELLOW}! %s${RESET}\n" "$1" >&2
 }
