@@ -36,4 +36,6 @@ install_with_go "semver" "maykonlf/semver-cli/cmd/semver@latest"
 install_with_go "viddy" "sachaos/viddy@latest"
 install_with_go "meteor" "stefanlogue/meteor@latest"
 
-# install_app "bitwarden"
+install_app "bitwarden"
+install_app "espanso"
+install_app "gh-extensions"
