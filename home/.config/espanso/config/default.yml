@@ -1,0 +1,9 @@
+# espanso configuration file: https://espanso.org/docs/configuration/options/
+
+# --- Auto-restart
+# auto-reload after a file change is detected.
+auto_restart: true
+
+# --- Search bar
+# which combination of keys trigger the display.
+search_shortcut: ALT+SPACE
