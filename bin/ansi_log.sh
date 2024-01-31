@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # ANSI escape codes for colors
 RED='\033[0;31m'
@@ -8,17 +8,17 @@ BLUE='\033[0;34m'
 RESET='\033[0m' # Reset to default color
 
 info() {
-  echo -e "${BLUE}? $1${RESET}"
+  printf "${BLUE}? %s${RESET}\n" "$1"
 }
 
 success() {
-  echo -e "${GREEN}✓ $1${RESET}"
+  printf "${GREEN}✓ %s${RESET}\n" "$1"
 }
 
 error() {
-  echo -e "${RED}✗ $1${RESET}"
+  printf "${RED}✗ %s${RESET}\n" "$1"
 }
 
 warn() {
-  echo -e "${YELLOW}! $1${RESET}"
+  printf "${YELLOW}! %s${RESET}\n" "$1"
 }
