@@ -9,13 +9,18 @@ if command -v espanso >/dev/null 2>&1; then
     success "espanso is already installed."
     exit 0
 else
-    open "https://espanso.org/install/"
-    warn "Press ENTER once installed and the setup will continue."
-    read -r _dummy
-
-    if [ "$(uname -s)" = "Linux" ]; then
+    case "$(uname -s)" in
+    Linux)
+        nix-env --install --attr nixpkgs.espanso
         info "Starting up espanso service"
         espanso service register
         espanso start
-    fi
+        ;;
+    *)
+        error "Unsupported operating system. Please install manually."
+        open "https://espanso.org/install/"
+        warn "Press ENTER once installed and the setup will continue."
+        read -r _dummy
+        ;;
+    esac
 fi
