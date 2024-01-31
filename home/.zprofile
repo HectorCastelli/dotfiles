@@ -1,8 +1,5 @@
 #!/bin/zsh
 
-# shellcheck source=../shell/ansi_log.sh
-. "$HOME/dotfiles/shell/ansi_log.sh"
-
 case "$(uname -s)" in
 Darwin)
     # See https://github.com/NixOS/nix/issues/956#issuecomment-1367457122

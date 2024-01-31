@@ -21,16 +21,16 @@ install_zsh
 
 install_fonts
 
-# install_with_nix "bat"
-# install_with_nix "gh"
-# install_with_nix "glow"
-# install_with_nix "go"
-# install_with_nix "hyperfine"
-# install_with_nix "jq"
-# install_with_nix "lnav"
-# install_with_nix "tldr"
-# install_with_nix "vscode"
-# install_with_nix "yq"
+install_with_nix "bat"
+install_with_nix "gh"
+install_with_nix "glow"
+install_with_nix "go"
+install_with_nix "hyperfine"
+install_with_nix "jq"
+install_with_nix "lnav"
+install_with_nix "tldr"
+install_with_nix "vscode"
+install_with_nix "yq"
 
 # install_with_go "maykonlf/semver-cli/cmd/semver@latest"
 # install_with_go "sachaos/viddy@latest"
