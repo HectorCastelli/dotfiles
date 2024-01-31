@@ -7,3 +7,7 @@ auto_restart: true
 # --- Search bar
 # which combination of keys trigger the display.
 search_shortcut: ALT+SPACE
+
+# Hack for installing on non-us locales: https://espanso.org/docs/install/linux/#final-steps
+keyboard_layout:
+  layout: "us"
