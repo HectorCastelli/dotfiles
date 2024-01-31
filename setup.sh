@@ -8,7 +8,7 @@
 
 info "Loading installers"
 
-source_recursive "./setup/installers"
+source_recursive "./setup"
 
 info "Pulling submodules"
 git submodule update --init --recursive
