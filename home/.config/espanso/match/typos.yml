@@ -1,0 +1,22 @@
+matches:
+  - trigger: :euro
+    replace: "\u20ac"
+  - trigger: :pound
+    replace: "\u00a3"
+    
+  - trigger: "ther"
+    replace: "there"
+    propagate_case: true
+    word: true
+  - trigger: "strenght"
+    replace: "strength"
+    propagate_case: true
+    word: true
+  - trigger: "tho"
+    replace: "though"
+    propagate_case: true
+    word: true
+  - trigger: "thru"
+    replace: "through"
+    propagate_case: true
+    word: true
