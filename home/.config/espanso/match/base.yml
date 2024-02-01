@@ -29,9 +29,9 @@ matches:
 
   # Symbols
   - trigger: :euro
-  replace: "\u20ac"
+    replace: "\u20ac"
   - trigger: :pound
-  replace: "\u00a3"
+    replace: "\u00a3"
 
   # Typo correction
   - trigger: "ther"
