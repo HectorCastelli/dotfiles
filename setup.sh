@@ -42,6 +42,7 @@ install_app "bitwarden"
 install_app "espanso"
 install_app "gh-cli"
 install_app "gh-extensions"
+install_app "meetingbar"
 
 success "Everything was installed"
 info "Please reboot your machine to ensure changes are loaded"
