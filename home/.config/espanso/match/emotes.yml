@@ -1,3 +1,7 @@
 matches:
   - trigger: ":shrug"
     replace: "¯\\_(ツ)_/¯"
+  - trigger: ":tableflip"
+    replace: "(╯°□°）╯︵ ┻━┻"
+  - trigger: ":tablefix"
+    replace: "┬─┬ノ( º _ ºノ)"

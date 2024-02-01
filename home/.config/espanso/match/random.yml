@@ -1,5 +1,5 @@
 matches:
-  - triggers: [".roll d2", ".r d2"]
+  - triggers: ":d2"
     word: true
     replace: "d2: {{output}}"
     vars:
@@ -9,7 +9,7 @@ matches:
           choices:
             - "1"
             - "2"
-  - triggers: [".roll d3", ".r d3"]
+  - triggers: ":d3"
     word: true
     replace: "d3: {{output}}"
     vars:
@@ -20,7 +20,7 @@ matches:
             - "1"
             - "2"
             - "3"
-  - triggers: [".roll d4", ".r d4"]
+  - triggers: ":d4"
     word: true
     replace: "d4: {{output}}"
     vars:
@@ -32,7 +32,7 @@ matches:
             - "2"
             - "3"
             - "4"
-  - triggers: [".roll d6", ".r d6"]
+  - triggers: ":d6"
     word: true
     replace: "d6: {{output}}"
     vars:
@@ -46,7 +46,7 @@ matches:
             - "4"
             - "5"
             - "6"
-  - triggers: [".roll d8", ".r d8"]
+  - triggers: ":d8"
     word: true
     replace: "d8: {{output}}"
     vars:
@@ -62,7 +62,7 @@ matches:
             - "6"
             - "7"
             - "8"
-  - triggers: [".roll d10", ".r d10"]
+  - triggers: ":d10"
     word: true
     replace: "d10: {{output}}"
     vars:
@@ -80,7 +80,7 @@ matches:
             - "8"
             - "9"
             - "10"
-  - triggers: [".roll d12", ".r d12"]
+  - triggers: ":d12"
     word: true
     replace: "d12: {{output}}"
     vars:
@@ -100,7 +100,7 @@ matches:
             - "10"
             - "11"
             - "12"
-  - triggers: [".roll d20", ".r d20"]
+  - triggers: ":d20"
     word: true
     replace: "d20: {{output}}"
     vars:
@@ -128,7 +128,7 @@ matches:
             - "18"
             - "19"
             - "20"
-  - triggers: [".roll d100", ".roll d00", ".r d100", ".r d00"]
+  - triggers: ":d100"
     word: true
     replace: "d100: {{output1}}{{output2}}"
     vars:
@@ -160,7 +160,7 @@ matches:
             - "8"
             - "9"
             - "0"
-  - triggers: [".roll d1000", ".roll d000",  ".r d1000", ".r d000"]
+  - triggers: ":d1000"
     word: true
     replace: "d1000: {{output1}}{{output2}}{{output3}}"
     vars:
