@@ -1,7 +1,8 @@
 matches:
-  - triggers: ":d2"
+  - trigger: ":d2"
     word: true
     replace: "d2: {{output}}"
+    label: "d2: ?"
     vars:
       - name: output
         type: random
@@ -9,9 +10,10 @@ matches:
           choices:
             - "1"
             - "2"
-  - triggers: ":d3"
+  - trigger: ":d3"
     word: true
     replace: "d3: {{output}}"
+    label: "d3: ?"
     vars:
       - name: output
         type: random
@@ -20,9 +22,10 @@ matches:
             - "1"
             - "2"
             - "3"
-  - triggers: ":d4"
+  - trigger: ":d4"
     word: true
     replace: "d4: {{output}}"
+    label: "d4: ?"
     vars:
       - name: output
         type: random
@@ -32,9 +35,10 @@ matches:
             - "2"
             - "3"
             - "4"
-  - triggers: ":d6"
+  - trigger: ":d6"
     word: true
     replace: "d6: {{output}}"
+    label: "d6: ?"
     vars:
       - name: output
         type: random
@@ -46,9 +50,10 @@ matches:
             - "4"
             - "5"
             - "6"
-  - triggers: ":d8"
+  - trigger: ":d8"
     word: true
     replace: "d8: {{output}}"
+    label: "d8: ?"
     vars:
       - name: output
         type: random
@@ -62,9 +67,10 @@ matches:
             - "6"
             - "7"
             - "8"
-  - triggers: ":d10"
+  - trigger: ":d10"
     word: true
     replace: "d10: {{output}}"
+    label: "d10: ?"
     vars:
       - name: output
         type: random
@@ -80,9 +86,10 @@ matches:
             - "8"
             - "9"
             - "10"
-  - triggers: ":d12"
+  - trigger: ":d12"
     word: true
     replace: "d12: {{output}}"
+    label: "d12: ?"
     vars:
       - name: output
         type: random
@@ -100,9 +107,10 @@ matches:
             - "10"
             - "11"
             - "12"
-  - triggers: ":d20"
+  - trigger: ":d20"
     word: true
     replace: "d20: {{output}}"
+    label: "d20: ?"
     vars:
       - name: output
         type: random
@@ -128,9 +136,10 @@ matches:
             - "18"
             - "19"
             - "20"
-  - triggers: ":d100"
+  - trigger: ":d100"
     word: true
     replace: "d100: {{output1}}{{output2}}"
+    label: "d100: ??"
     vars:
       - name: output1
         type: random
@@ -160,9 +169,10 @@ matches:
             - "8"
             - "9"
             - "0"
-  - triggers: ":d1000"
+  - trigger: ":d1000"
     word: true
     replace: "d1000: {{output1}}{{output2}}{{output3}}"
+    label: "d1000: ???"
     vars:
       - name: output1
         type: random

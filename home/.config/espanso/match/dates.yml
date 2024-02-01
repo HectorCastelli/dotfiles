@@ -6,7 +6,7 @@ matches:
         type: date
         params:
           format: "%H:%M"
-  - trigger:
+  - triggers:
       - ":date"
       - ":today"
     replace: "{{date}}"
