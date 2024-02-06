@@ -36,4 +36,5 @@ install_home_macos() {
     debug "Installing on macOS"
     ln -sf "$(pwd)/home/.config/espanso" "$(pwd)/home/Library/Application Support/espanso"
     ln -sf "$(pwd)/home/.config/Code" "$(pwd)/home/Library/Application Support/Code"
+    mkdir -p "$HOME/Library/Application Support"
 }
