@@ -32,7 +32,12 @@ install_nix() {
 
 install_with_nix() {
     COMMAND=$1
-    if check_command_nix "$COMMAND"; then
+    if [ -z "$2" ]; then
+        CHECK_COMMAND="$1"
+    else
+        CHECK_COMMAND="$2"
+    fi
+    if check_command_nix "$CHECK_COMMAND"; then
         success "Command $COMMAND installed correctly"
         return 0
     else
@@ -40,7 +45,7 @@ install_with_nix() {
 
         nix-env --install --attr "nixpkgs.$COMMAND"
 
-        if check_command_nix "$COMMAND"; then
+        if check_command_nix "$CHECK_COMMAND"; then
             success "Command $COMMAND installed correctly"
             update_nix_desktop
             return 0
