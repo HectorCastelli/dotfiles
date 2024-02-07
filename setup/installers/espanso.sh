@@ -32,19 +32,18 @@ install_espanso_linux() {
         error "Unsupported session type"
         exit 1
     fi
-    
+
     debug "Starting up espanso service"
     espanso service register
     espanso start
 
-
-        if check_command "$COMMAND"; then
-            success "Command $COMMAND installed correctly"
-            return 0
-        else
-            error "Command $COMMAND was not installed correctly"
-            exit 1
-        fi
+    if check_command "$COMMAND"; then
+        success "Command $COMMAND installed correctly"
+        return 0
+    else
+        error "Command $COMMAND was not installed correctly"
+        exit 1
+    fi
 }
 
 install_espanso_macos() {

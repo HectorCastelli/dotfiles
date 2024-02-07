@@ -22,13 +22,13 @@ install_bitwarden() {
 install_bitwarden_linux() {
     install_with_nix "bitwarden"
 
-        if check_command "$COMMAND"; then
-            success "Command $COMMAND installed correctly"
-            return 0
-        else
-            error "Command $COMMAND was not installed correctly"
-            exit 1
-        fi
+    if check_command "$COMMAND"; then
+        success "Command $COMMAND installed correctly"
+        return 0
+    else
+        error "Command $COMMAND was not installed correctly"
+        exit 1
+    fi
 }
 
 install_bitwarden_macos() {
