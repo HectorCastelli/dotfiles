@@ -10,6 +10,9 @@ info "Loading installers"
 
 source_recursive "./setup"
 
+info "Preparing script permissions"
+prepare_executables
+
 info "Pulling submodules"
 git submodule update --init --recursive
 
