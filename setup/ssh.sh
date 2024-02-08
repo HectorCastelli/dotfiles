@@ -13,7 +13,7 @@ install_ssh() {
         success "Setup authentication key"
     fi
 
-    if [ -e "$HOME/.ssh/github_authentication" ]; then
+    if [ -e "$HOME/.ssh/github_signing" ]; then
         success "Signing key is already setup"
     else
         ssh-keygen -t ed25519 -C "$email" -f "$HOME/.ssh/github_signing"
