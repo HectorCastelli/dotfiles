@@ -18,6 +18,8 @@
     showStash = true
 [gpg]
 	format = ssh
+[push]
+	autoSetupRemote = true
 # Setup url aliases for remotes
 [url "https://github.com/"]
 insteadOf = gh:
