@@ -25,3 +25,5 @@
 insteadOf = gh:
 [url "https://gitlab.com/"]
 insteadOf = gl:
+[includeIf "gitdir:~/axa/"]
+  path = ~/axa/.gitconfig
