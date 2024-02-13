@@ -19,6 +19,22 @@
     "cSpell.userWords": [
         "Castelli",
         "discoverability",
-        "disinformed"
-    ]
+        "disinformed",
+        "Bauta"
+    ],
+    "workbench.colorTheme": "GitHub Dark",
+    "powershell.powerShellAdditionalExePaths": {
+        "Powershell Core": "/Users/hcastelli/.nix-profile/bin/pwsh"
+    },
+    "redhat.telemetry.enabled": false,
+    "liveshare.guestApprovalRequired": true,
+    "liveshare.showInStatusBar": "whileCollaborating",
+    "cSpell.diagnosticLevel": "Hint",
+    "errorLens.delay": 1000,
+    "errorLens.enabledDiagnosticLevels": [
+        "error",
+        "warning"
+    ],
+    "errorLens.enabled": false,
+    "editor.formatOnSave": true,
 }
