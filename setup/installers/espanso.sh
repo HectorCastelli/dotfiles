@@ -9,9 +9,9 @@ install_espanso() {
         info "Installing $COMMAND"
 
         if is_linux; then
-            install_linux
+            install_espanso_linux
         elif is_macos; then
-            install_macos
+            install_espanso_macos
         else
             error "Unsupported operating system"
             exit 1

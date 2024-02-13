@@ -9,9 +9,9 @@ install_bitwarden() {
         info "Installing $COMMAND"
 
         if is_linux; then
-            install_linux
+            install_bitwarden_linux
         elif is_macos; then
-            install_macos
+            install_bitwarden_macos
         else
             error "Unsupported operating system"
             exit 1
