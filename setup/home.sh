@@ -11,8 +11,8 @@ install_home() {
         debug "Linking $file"
         target=$(get_relative_path "$file" "$(pwd)/home")
         target_dir=$(get_relative_path "$(dirname "$file")" "$(pwd)/home")
-        if [ -e "$HOME/$target" ]; then
-            warn "File already exists"
+        if [ -e "$HOME/$target" ] && ! [ -h "$HOME/$target" ]; then
+            warn "File already exists and is not a symbolic link"
             read -rp "Do you want to overwrite it? [y/N]" answer </dev/tty
             case $answer in
             [Yy]*)
