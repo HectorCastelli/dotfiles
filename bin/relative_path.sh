@@ -25,7 +25,7 @@ get_relative_path() {
   fi
 
   # Use parameter expansion to get the relative path
-  relative_path="${absolute_file_path#$absolute_reference_dir/}"
+  relative_path="${absolute_file_path#"$absolute_reference_dir"/}"
 
   echo "$relative_path"
 }
