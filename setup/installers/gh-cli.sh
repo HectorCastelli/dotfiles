@@ -2,8 +2,8 @@
 
 install_gh_cli() {
     info "Setting up GitHub"
-    gh auth login --host github.com --scopes admin:ssh_signing_key
-    gh auth refresh --host github.com --scopes admin:public_key 
+    gh auth login --hostname github.com --scopes admin:ssh_signing_key
+    gh auth refresh --hostname github.com --scopes admin:public_key
     success "GitHub authenticated"
 
     info "Adding machine to GitHub"
