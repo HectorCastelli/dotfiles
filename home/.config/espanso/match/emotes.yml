@@ -21,3 +21,5 @@ matches:
     replace: "🤞"
   - trigger: ":peace"
     replace: "✌️"
+  - trigger: ":sweat"
+    replace: "😅"
