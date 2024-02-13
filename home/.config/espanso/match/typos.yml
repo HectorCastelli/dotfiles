@@ -20,3 +20,7 @@ matches:
     replace: "through"
     propagate_case: true
     word: true
+  - trigger: "completly"
+    replace: "completely"
+    propagate_case: true
+    word: true
