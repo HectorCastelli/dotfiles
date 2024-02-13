@@ -26,7 +26,7 @@ install_ssh
 
 install_fonts
 
-install_with_nix "azure-cli" "az"
+install_with_nix "azure-cli"
 install_with_nix "bat"
 install_with_nix "coreutils"
 install_with_nix "gh"
