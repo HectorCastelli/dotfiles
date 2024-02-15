@@ -13,7 +13,8 @@ install_home() {
         debug "Linking $file to $HOME/$target"
         if [ -e "$HOME/$target" ] && ! [ -h "$HOME/$target" ]; then
             warn "File already exists and is not a symbolic link"
-            read -rp "Do you want to overwrite it? [y/N]" answer </dev/tty
+            warn "Do you want to overwrite it? [y/N]"
+            read -r answer </dev/tty
             case $answer in
             [Yy]*)
                 rm "$HOME/$target"
@@ -46,7 +47,8 @@ symbolic_link_recursively() {
         debug "Linking $file to $HOME/$target"
         if [ -e "$HOME/$target" ] && ! [ -h "$HOME/$target" ]; then
             warn "File already exists and is not a symbolic link"
-            read -rp "Do you want to overwrite it? [y/N]" answer </dev/tty
+            warn "Do you want to overwrite it? [y/N]"
+            read -r answer </dev/tty
             case $answer in
             [Yy]*)
                 rm "$to/$target"
