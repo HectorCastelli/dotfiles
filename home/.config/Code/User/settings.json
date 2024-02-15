@@ -35,5 +35,6 @@
   "errorLens.enabled": false,
   "editor.formatOnSave": true,
   "search.useIgnoreFiles": true,
-  "search.useGlobalIgnoreFiles": true
+  "search.useGlobalIgnoreFiles": true,
+  "codemetrics.basics.DecorationModeEnabled": false
 }
