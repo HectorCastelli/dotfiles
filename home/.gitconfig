@@ -1,29 +1,30 @@
 [user]
-	name = Hector Castelli Zacharias
-	email = hector.zacharias@gmail.com
-	signingkey = ~/.ssh/github_signing.pub
+name = Hector Castelli Zacharias
+email = hector.zacharias@gmail.com
+signingkey = ~/.ssh/github_signing.pub
 [core]
-    # Use vscode as the git editor
-    editor = code --wait
+# Use vscode as the git editor
+editor = code --wait
+excludesfile = ~/.gitignore
 [fetch]
-    # Prune local references to remote branches that no longer exists, after fetching
-    prune = true
+# Prune local references to remote branches that no longer exists, after fetching
+prune = true
 [alias]
-    # git empty "this is an empty commit"
-    empty = "git commit --allow-empty"
+# git empty "this is an empty commit"
+empty = "git commit --allow-empty"
 [init]
-    defaultBranch = main
+defaultBranch = main
 [status]
-    # Shows stash count when running git status
-    showStash = true
+# Shows stash count when running git status
+showStash = true
 [gpg]
-	format = ssh
+format = ssh
 [push]
-	autoSetupRemote = true
+autoSetupRemote = true
 # Setup url aliases for remotes
 [url "https://github.com/"]
 insteadOf = gh:
 [url "https://gitlab.com/"]
 insteadOf = gl:
 [includeIf "gitdir:~/axa/"]
-  path = ~/axa/.gitconfig
+path = ~/axa/.gitconfig

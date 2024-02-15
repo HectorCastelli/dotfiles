@@ -1,2 +1,8 @@
 [user]
-	email = hector.castelli.external@axa.com
+email = hector.castelli.external@axa.com
+[core]
+excludesfile = ~/axa/.gitignore
+[http]
+proxy = http://172.20.117.31:8080
+[https]
+proxy = http://172.20.117.31:8080
