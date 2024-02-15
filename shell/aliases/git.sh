@@ -11,6 +11,7 @@ alias gca='git commit --verbose --amend'
 alias gcm='git commit --verbose --message'
 alias gcnm='git commit --verbose --no-verify --message'
 gcl() {
+    gf --all
     info "Deleting local branches that no longer have a remote"
     git branch -vv | grep 'gone]' | awk '{print $1}' | xargs git branch -D
     info "Listing local branches that do not have a remote"
