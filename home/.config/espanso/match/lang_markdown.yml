@@ -1,5 +1,5 @@
 matches:
-  - trigger: ":az:collapse"
+  - trigger: ":md:collapse"
     replace: |-
       <details>
         <summary>Click to expand!</summary>
