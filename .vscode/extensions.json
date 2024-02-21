@@ -4,6 +4,7 @@
         "tamasfe.even-better-toml",
         "bbenoist.nix",
         "foxundermoon.shell-format",
-        "timonwong.shellcheck"
+        "timonwong.shellcheck",
+        "franneck94.workspace-formatter"
     ]
 }

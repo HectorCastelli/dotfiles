@@ -1,4 +1,9 @@
 {
+  "Workspace_Formatter.excludePattern": [
+    "package-lock.json",
+    "dist",
+    "node_modules"
+  ],
   "workbench.iconTheme": "seti",
   "editor.stickyScroll.enabled": true,
   "editor.unicodeHighlight.nonBasicASCII": false,

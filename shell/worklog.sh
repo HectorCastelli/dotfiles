@@ -31,5 +31,5 @@ worklog() {
 
     _timestamp=$(date +%s)
 
-    printf "%s\t%s\t%s\n" "$_timestamp" "$_type" "$_message" >> "$WORKLOG_FILE"
+    printf "%s\t%s\t%s\n" "$_timestamp" "$_type" "$_message" >>"$WORKLOG_FILE"
 }

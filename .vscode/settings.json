@@ -1,0 +1,7 @@
+{
+    "Workspace_Formatter.excludePattern": [
+        "node_modules/*",
+        "fonts/monaspace/**",
+        "shell/plugins/**"
+    ]
+}

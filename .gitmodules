@@ -1,12 +1,12 @@
 [submodule "shell/plugins/zsh-alias-finder"]
-	path = shell/plugins/zsh-alias-finder
-	url = https://github.com/akash329d/zsh-alias-finder
+path = shell/plugins/zsh-alias-finder
+url = https://github.com/akash329d/zsh-alias-finder
 [submodule "shell/plugins/almostontop"]
-	path = shell/plugins/almostontop
-	url = https://github.com/Valiev/almostontop.git
+path = shell/plugins/almostontop
+url = https://github.com/Valiev/almostontop.git
 [submodule "shell/plugins/zsh-bd"]
-	path = shell/plugins/zsh-bd
-	url = https://github.com/Tarrasch/zsh-bd.git
+path = shell/plugins/zsh-bd
+url = https://github.com/Tarrasch/zsh-bd.git
 [submodule "fonts/monaspace"]
-	path = fonts/monaspace
-	url = https://github.com/githubnext/monaspace.git
+path = fonts/monaspace
+url = https://github.com/githubnext/monaspace.git
