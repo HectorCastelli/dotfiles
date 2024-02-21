@@ -1,25 +1,37 @@
 matches:
   - trigger: ":shrug"
     replace: "¯\\_(ツ)_/¯"
+    word: true
   - trigger: ":tableflip"
     replace: "(╯°□°）╯︵ ┻━┻"
+    word: true
   - trigger: ":tablefix"
     replace: "┬─┬ノ( º _ ºノ)"
+    word: true
   - trigger: ":info"
     replace: "ℹ️"
+    word: true
   - trigger: ":warn"
     replace: "⚠️"
+    word: true
   - trigger: ":danger"
     replace: "☢️"
+    word: true
   - trigger: ":bomb"
     replace: "💣"
+    word: true
   - trigger: ":party"
     replace: "🎉"
+    word: true
   - trigger: ":check"
     replace: "✅"
+    word: true
   - trigger: ":hope"
     replace: "🤞"
+    word: true
   - trigger: ":peace"
     replace: "✌️"
+    word: true
   - trigger: ":sweat"
     replace: "😅"
+    word: true

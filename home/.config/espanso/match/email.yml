@@ -1,7 +1,10 @@
 matches:
   - trigger: "@gm"
     replace: "@gmail.com"
+    word: true
   - trigger: "@twks"
     replace: "@thoughtworks.com"
+    word: true
   - trigger: "@bi.es"
     replace: "@businessinsights.es"
+    word: true
