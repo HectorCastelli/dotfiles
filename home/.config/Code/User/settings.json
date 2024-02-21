@@ -4,7 +4,10 @@
   "editor.unicodeHighlight.nonBasicASCII": false,
   "editor.fontFamily": "'Monaspace Neon', monospace",
   "editor.fontLigatures": "'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'ss07', 'ss08', 'calt', 'dlig'",
-  "editor.rulers": [80, 120],
+  "editor.rulers": [
+    80,
+    120
+  ],
   "git.autofetch": true,
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
@@ -12,7 +15,6 @@
   "git.pruneOnFetch": true,
   "git.rebaseWhenSync": true,
   "githubPullRequests.pullBranch": "never",
-  "diffEditor.ignoreTrimWhitespace": false,
   "cSpell.userWords": [
     "Bauta",
     "bautajs",
@@ -31,10 +33,16 @@
   "liveshare.showInStatusBar": "whileCollaborating",
   "cSpell.diagnosticLevel": "Hint",
   "errorLens.delay": 1000,
-  "errorLens.enabledDiagnosticLevels": ["error", "warning"],
+  "errorLens.enabledDiagnosticLevels": [
+    "error",
+    "warning"
+  ],
   "errorLens.enabled": false,
   "editor.formatOnSave": true,
   "search.useIgnoreFiles": true,
   "search.useGlobalIgnoreFiles": true,
-  "codemetrics.basics.DecorationModeEnabled": false
+  "codemetrics.basics.DecorationModeEnabled": false,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "github.copilot.chat.localeOverride": "en",
+  "git.allowNoVerifyCommit": true
 }
