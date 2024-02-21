@@ -16,7 +16,6 @@ proxy_git_debug() {
 	echo "git https: $(git config --file "$HOME/axa/.gitconfig" --get https.proxy)"
 }
 
-
 proxy_npm_set() {
 	npm config set proxy $_axa_go_proxy
 	npm config set https-proxy $_axa_go_proxy
@@ -34,6 +33,21 @@ proxy_npm_debug() {
 	echo "npm noproxy: $(npm config get noproxy)"
 }
 
+_vscode_settings_file="$HOME/dotfiles/home/.config/Code/User/settings.json"
+proxy_vscode_set() {
+	jq '. += { "http.proxy": "http://user:pass@proxy.com:8080", "https.proxy": "http://user:pass@proxy.com:8080" } ' "$_vscode_settings_file" >"$_vscode_settings_file.new"
+	mv "$_vscode_settings_file.new" "$_vscode_settings_file"
+}
+proxy_vscode_clear() {
+	jq 'del(."http.proxy", ."https.proxy")' "$_vscode_settings_file" >"$_vscode_settings_file.new"
+	mv "$_vscode_settings_file.new" "$_vscode_settings_file"
+}
+proxy_vscode_debug() {
+	echo "VSCode proxy:"
+	echo "http: $(jq '.["http.proxy"]' "$_vscode_settings_file")"
+	echo "https: $(jq '.["https.proxy"]' "$_vscode_settings_file")"
+}
+
 proxy_set() {
 	export http_proxy=$_axa_go_proxy
 	export https_proxy=$_axa_go_proxy
@@ -47,6 +61,7 @@ proxy_set() {
 	export NO_PROXY="$_axa_go_proxy_exclusion"
 	proxy_git_set
 	proxy_npm_set
+	proxy_vscode_set
 	echo "Proxy set"
 }
 proxy_clear() {
@@ -62,6 +77,7 @@ proxy_clear() {
 	unset NO_PROXY
 	proxy_git_clear
 	proxy_npm_clear
+	proxy_vscode_clear
 	echo "Proxy cleared"
 }
 proxy_status() {
@@ -69,4 +85,5 @@ proxy_status() {
 	echo "no_proxy" $no_proxy
 	proxy_git_debug
 	proxy_npm_debug
+	proxy_vscode_debug
 }
