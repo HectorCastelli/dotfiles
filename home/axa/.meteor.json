@@ -1,0 +1,84 @@
+{
+    "showIntro": false,
+    "boards": [],
+    "coauthors": [
+        {
+            "name": "Alexandre Silva",
+            "email": "alexandre.silva.external@axa.com"
+        },
+        {
+            "name": "Aldo De Feo Martinez",
+            "email": "aldo.defeo@axa.com"
+        },
+        {
+            "name": "Francisco Manuel Herrero Perez",
+            "email": "francisco.herrero@axa.com"
+        },
+        {
+            "name": "Noé Achache",
+            "email": "noe.achache.external@axa.com"
+        },
+        {
+            "name": "Ricard Sole Espelt",
+            "email": "ricard.sole@axa.com"
+        },
+        {
+            "name": "Rodrigo Riveira",
+            "email": "rodrigo.rivera.external@axa.com"
+        },
+        {
+            "name": "Samy Beaumier",
+            "email": "samy.beaumier@axa.com"
+        },
+        {
+            "name": "Sara Chokayri",
+            "email": "sara.chokayri.external@axa.com"
+        },
+        {
+            "name": "Yaineris Sedeño Leyva",
+            "email": "syaineris.sedeno@axa.com"
+        }
+    ],
+    "prefixes": [
+        {
+            "type": "feat",
+            "description": "a new feature"
+        },
+        {
+            "type": "fix",
+            "description": "a bug fix"
+        },
+        {
+            "type": "docs",
+            "description": "documentation only changes"
+        },
+        {
+            "type": "style",
+            "description": "changes that do not affect the meaning of the code"
+        },
+        {
+            "type": "refactor",
+            "description": "a code change that neither fixes a bug nor adds a feature"
+        },
+        {
+            "type": "perf",
+            "description": "a code change that improves performance"
+        },
+        {
+            "type": "test",
+            "description": "adding missing tests or correcting existing tests"
+        },
+        {
+            "type": "chore",
+            "description": "changes to the build process or auxiliary tools and libraries"
+        },
+        {
+            "type": "revert",
+            "description": "reverts a previous commit"
+        },
+        {
+            "type": "ci",
+            "description": "changes to our CI configuration files and scripts"
+        }
+    ]
+}
