@@ -35,7 +35,7 @@ proxy_npm_debug() {
 
 _vscode_settings_file="$HOME/dotfiles/home/.config/Code/User/settings.json"
 proxy_vscode_set() {
-	jq '. += { "http.proxy": "http://user:pass@proxy.com:8080", "https.proxy": "http://user:pass@proxy.com:8080" } ' "$_vscode_settings_file" >"$_vscode_settings_file.new"
+	jq ". += { \"http.proxy\": \"$_axa_go_proxy\", \"https.proxy\": \"$_axa_go_proxy\" }" "$_vscode_settings_file" >"$_vscode_settings_file.new"
 	mv "$_vscode_settings_file.new" "$_vscode_settings_file"
 }
 proxy_vscode_clear() {
