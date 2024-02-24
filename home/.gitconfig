@@ -6,9 +6,19 @@ signingkey = ~/.ssh/github_signing.pub
 # Use vscode as the git editor
 editor = code --wait
 excludesfile = ~/.gitignore
+pager = bat
 [fetch]
 # Prune local references to remote branches that no longer exists, after fetching
 prune = true
+[pull]
+# Rebase instead of merge when pulling
+rebase = true
+[merge]
+conflictStyle = zdiff3
+[diff]
+algorithm = histogram
+submodule = log
+context = 8
 [alias]
 # git empty "this is an empty commit"
 empty = "git commit --allow-empty"
@@ -17,6 +27,10 @@ defaultBranch = main
 [status]
 # Shows stash count when running git status
 showStash = true
+# Show submodule summary when running git status
+submoduleSummary = true
+[submodule]
+recurse = true
 [gpg]
 format = ssh
 [push]
@@ -26,5 +40,6 @@ autoSetupRemote = true
 insteadOf = gh:
 [url "https://gitlab.com/"]
 insteadOf = gl:
+# Per-directory configuration
 [includeIf "gitdir:~/axa/"]
 path = ~/axa/.gitconfig
