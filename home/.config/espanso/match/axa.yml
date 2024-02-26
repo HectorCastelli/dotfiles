@@ -1,0 +1,4 @@
+matches:
+  - trigger: ":axa:gad"
+    replace: "B557BW"
+    word: true
