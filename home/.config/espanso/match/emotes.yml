@@ -26,6 +26,9 @@ matches:
   - trigger: ":check"
     replace: "✅"
     word: true
+  - trigger: ":cross"
+    replace: "❌"
+    word: true
   - trigger: ":hope"
     replace: "🤞"
     word: true
