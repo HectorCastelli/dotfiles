@@ -49,5 +49,6 @@
   "codemetrics.basics.DecorationModeEnabled": false,
   "diffEditor.ignoreTrimWhitespace": false,
   "github.copilot.chat.localeOverride": "en",
-  "git.allowNoVerifyCommit": true
+  "git.allowNoVerifyCommit": true,
+  "powershell.promptToUpdatePowerShell": false
 }
