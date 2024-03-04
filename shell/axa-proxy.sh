@@ -87,3 +87,15 @@ proxy_status() {
 	proxy_npm_debug
 	proxy_vscode_debug
 }
+
+proxy_autoload() {
+	output=$(/usr/sbin/scutil --nwi)
+
+	if [ "$(echo "$output" | grep 'REACH : flags 0x00000003 (Reachable,Transient Connection)')" ]; then
+		echo "🌍🔒 VPN connected"
+		proxy_set
+	else
+		echo "🌍🔓 VPN disconnected"
+		proxy_clear
+	fi
+}
