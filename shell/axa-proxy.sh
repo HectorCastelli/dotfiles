@@ -17,14 +17,14 @@ proxy_git_debug() {
 }
 
 proxy_npm_set() {
-	npm config set proxy $_axa_go_proxy
-	npm config set https-proxy $_axa_go_proxy
-	npm config set noproxy $_axa_go_proxy_exclusion
+	npm config set proxy "$_axa_go_proxy" --location user --workspaces=false
+	npm config set https-proxy "$_axa_go_proxy" --location user --workspaces=false
+	npm config set noproxy "$_axa_go_proxy_exclusion" --location user --workspaces=false
 }
 proxy_npm_clear() {
-	npm config rm proxy
-	npm config rm https-proxy
-	npm config rm noproxy
+	npm config rm proxy --location user --workspaces=false
+	npm config rm https-proxy --location user --workspaces=false
+	npm config rm noproxy --location user --workspaces=false
 }
 proxy_npm_debug() {
 	echo "NPM proxy:"
