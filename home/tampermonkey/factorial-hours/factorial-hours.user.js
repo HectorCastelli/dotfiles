@@ -12,6 +12,8 @@
 const weekendColor = 'rgb(250, 250, 250)';
 const currentDayColor = 'rgb(254, 248, 238)';
 
+const startDelay = 15000;
+
 const shifts = [
     ["09:00", "13:00"],
     ["14:00", "18:00"]
@@ -22,7 +24,7 @@ const shifts = [
     'use strict';
 
     console.log("Waiting...");
-    await new Promise(r => setTimeout(r, 15000));
+    await new Promise(r => setTimeout(r, startDelay));
 
     alert("Start shift helper");
 
