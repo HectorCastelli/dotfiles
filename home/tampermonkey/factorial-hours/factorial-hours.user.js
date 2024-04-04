@@ -1,12 +1,14 @@
 // ==UserScript==
-// @name         Factorial HR spanish hours
-// @version      2024-03-11
+// @name         Factorial HR Spanish hours
+// @version      1.1.0
 // @description  Automate the input of shifts in factorial
-// @author       You
+// @author       Hector Castelli Zacharias
 // @match        https://app.factorialhr.com/attendance/clock-in/*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @grant        none
 // @run-at       document-idle
+// @license      gpl-3.0
+// @namespace https://greasyfork.org/users/1280664
 // ==/UserScript==
 
 const weekendColor = 'rgb(250, 250, 250)';
