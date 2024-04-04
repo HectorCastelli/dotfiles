@@ -50,5 +50,6 @@
   "diffEditor.ignoreTrimWhitespace": false,
   "github.copilot.chat.localeOverride": "en",
   "git.allowNoVerifyCommit": true,
-  "powershell.promptToUpdatePowerShell": false
+  "powershell.promptToUpdatePowerShell": false,
+  "debug.javascript.autoAttachFilter": "smart"
 }
