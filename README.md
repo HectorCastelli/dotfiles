@@ -5,12 +5,7 @@ I use to be productive on my day-to-day.
 
 ## Installing
 
-To install this, you should run the following snippet from a terminal:
-
-`sh -c "$(curl -fsSL https://raw.githubusercontent.com/HectorCastelli/dotfiles/main/bootstrap.sh)"`
-
-Be warned, this will clone a bunch of submodules and might take a while on slower
-connections.
+To install this, you should clone this repository and run `./setup.sh` from within it.
 
 ## Structure:
 
