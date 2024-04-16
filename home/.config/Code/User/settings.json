@@ -23,11 +23,16 @@
   "cSpell.userWords": [
     "Bauta",
     "bautajs",
+    "camelcase",
     "Castelli",
+    "cmds",
     "discoverability",
     "disinformed",
     "fastify",
-    "LENGHT"
+    "LENGHT",
+    "openapi",
+    "powerd6",
+    "taskfile"
   ],
   "workbench.colorTheme": "GitHub Dark",
   "powershell.powerShellAdditionalExePaths": {
@@ -36,7 +41,7 @@
   "redhat.telemetry.enabled": false,
   "liveshare.guestApprovalRequired": true,
   "liveshare.showInStatusBar": "whileCollaborating",
-  "cSpell.diagnosticLevel": "Hint",
+  "cSpell.diagnosticLevel": "Warning",
   "errorLens.delay": 1000,
   "errorLens.enabledDiagnosticLevels": [
     "error",
@@ -51,5 +56,5 @@
   "github.copilot.chat.localeOverride": "en",
   "git.allowNoVerifyCommit": true,
   "powershell.promptToUpdatePowerShell": false,
-  "debug.javascript.autoAttachFilter": "smart"
+  "debug.javascript.autoAttachFilter": "disabled"
 }
