@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Factorial HR Spanish hours
-// @version      1.1.0
+// @version      1.2.0
 // @description  Automate the input of shifts in factorial
 // @author       Hector Castelli Zacharias
 // @match        https://app.factorialhr.com/attendance/clock-in/*
