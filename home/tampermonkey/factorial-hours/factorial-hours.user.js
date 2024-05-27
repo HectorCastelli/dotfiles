@@ -11,9 +11,6 @@
 // @namespace https://greasyfork.org/users/1280664
 // ==/UserScript==
 
-const weekendColor = 'rgb(250, 250, 250)';
-const currentDayColor = 'rgb(254, 248, 238)';
-
 const shifts = [
     ["09:00", "13:00"],
     ["14:00", "18:00"]
@@ -24,42 +21,43 @@ const shifts = [
     'use strict';
 
     console.log("Waiting...");
-    await new Promise(r => setTimeout(r, 15000));
+    await new Promise(r => setTimeout(r, 3000));
 
     alert("Start shift helper");
 
-    const inputTable = document.querySelector("#factorialRoot > div > div._110my71a > div > main > div > div > div > div.purg7v1.purg7vc9._15se5fi0.mn5ir72.mn5ir70.undefined > div > div.OdhHT > div.purg7v1.purg7vx.purg7vc9._15se5fio._15se5fi1._15se5fi1v > div > div > table > tbody");
-
-
     const urlData = document.URL.split("/");
-    const month = urlData.pop();
-    const year = urlData.pop();
-    let day = 0;
+    const month = Number(urlData.pop());
+    const year = Number(urlData.pop());
 
     const employeeId = await getEmployeeId();
     const shiftPeriod = await getShiftPeriodId(employeeId, month, year);
 
-    for (const row of inputTable.rows) {
-        day++;
-        console.info("Will try to fill hours", row, `${year}-${month.padStart(2, "0")}-${day.toString().padStart(2, "0")}`);
-        if (row.style.backgroundColor == weekendColor) {
-            console.info("Skipping. Row is a weekend", row);
+    const today = new Date();
+
+    let shiftDate = new Date();
+    shiftDate.setDate(1);
+
+    console.log("Starting to add shifts", shiftDate);
+
+    while (shiftDate.getMonth() === month - 1 && shiftDate.getDate() <= today.getDate()) {
+        if (shiftDate.getDay() === 0 || shiftDate.getDay() === 6) {
+            console.info("Skipping. Date is a weekend", shiftDate);
+            //Day + 1
+            shiftDate.setDate(shiftDate.getDate() + 1);
             continue;
         }
-        const shiftCell = row.cells[1].firstChild;
-        const cellChildCount = shiftCell.childNodes.length;
-        for (let i = cellChildCount; i < 3; i++) {
+
+        for (let i = 1; i <= 2; i++) {
             const shift = shifts[i - 1];
-            console.log("Adding shift", shift, day);
-            await addShift(shift[0], shift[1], shiftPeriod, day, month, year);
+            console.log("Adding shift", shift, shiftDate);
+            await addShift(shift[0], shift[1], shiftPeriod, shiftDate.getDate(), month, year);
         }
 
-        if (row.style.backgroundColor == currentDayColor) {
-            console.info("This was the the last available row. Finishing");
-            alert("Finished adding shifts until today");
-            break;
-        }
+        //Day + 1
+        shiftDate.setDate(shiftDate.getDate() + 1);
     }
+
+    alert("Finished adding shifts until today");
 })();
 
 
@@ -139,7 +137,7 @@ async function addShift(shiftStart, shiftEnd, shiftPeriod, day, month, year) {
         "location_type": null,
         "time_settings_break_configuration_id": null,
         "minutes": null,
-        "date": `${year}-${month.padStart(2, "0")}-${day.toString().padStart(2, "0")}`,
+        "date": `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`,
         "source": "desktop"
     };
 
