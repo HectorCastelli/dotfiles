@@ -17,7 +17,7 @@ install_nix() {
         . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 
         debug "Installing package channel"
-        nix-channel --add https://nixos.org/channels/nixos-23.11 nixpkgs
+        nix-channel --add https://nixos.org/channels/nixos-24.05 nixpkgs
         nix-channel --update
 
         if check_command "$COMMAND"; then
