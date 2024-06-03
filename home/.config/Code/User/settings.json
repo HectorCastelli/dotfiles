@@ -56,5 +56,6 @@
   "github.copilot.chat.localeOverride": "en",
   "git.allowNoVerifyCommit": true,
   "powershell.promptToUpdatePowerShell": false,
-  "debug.javascript.autoAttachFilter": "disabled"
+  "debug.javascript.autoAttachFilter": "disabled",
+  "typescript.updateImportsOnFileMove.enabled": "always"
 }
