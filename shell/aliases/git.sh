@@ -2,6 +2,8 @@
 
 alias g='git'
 alias ga='git add'
+# Add all files on the root of the repository
+alias ga!='git add $(git rev-parse --show-toplevel)'
 alias gb='git branch'
 alias gbD='git branch --delete'
 alias gco='git checkout'
