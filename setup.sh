@@ -27,6 +27,7 @@ install_ssh
 install_fonts
 
 install_with_nix "bat"
+install_with_nix "direnv"
 install_with_nix "gh"
 install_with_nix "glow"
 install_with_nix "go"

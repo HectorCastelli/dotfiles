@@ -70,6 +70,10 @@ symbol = ".NET "
 [directory]
 read_only = " ro"
 
+[direnv]
+disabled = false
+detect_files = [ '.envrc', '.env' ]
+
 [docker_context]
 symbol = "docker "
 
