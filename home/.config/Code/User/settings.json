@@ -57,5 +57,10 @@
   "git.allowNoVerifyCommit": true,
   "powershell.promptToUpdatePowerShell": false,
   "debug.javascript.autoAttachFilter": "disabled",
-  "typescript.updateImportsOnFileMove.enabled": "always"
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "liveshare.accessibility.soundsEnabled": false,
+  "liveshare.accessibility.voiceEnabled": false,
+  "liveshare.focusBehavior": "prompt",
+  "liveshare.languages.allowGuestCommandControl": true,
+  "liveshare.launcherClient": "visualStudioCode",
 }

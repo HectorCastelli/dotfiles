@@ -45,6 +45,7 @@ install_with_nix "yq"
 # Axa specific
 install_with_nix "azure-cli"
 install_with_nix "coreutils"
+install_with_nix "graphviz"
 install_with_nix "keepassxc"
 # install_with_nix "nodejs_18" "nodejs"
 install_with_nix "poetry"
