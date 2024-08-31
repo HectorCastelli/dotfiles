@@ -22,7 +22,7 @@ install_espanso() {
 install_espanso_linux() {
     if is_wayland; then
         warn "Wayland support is experimental and not very reliable"
-        install_with_nix "espanso-wayland"
+        install_with_nix "espanso-wayland" "espanso"
 
         debug "Adding permissions to monitor inputs"
         sudo setcap "cap_dac_override+p" "$(readlink "$(which espanso)")"
