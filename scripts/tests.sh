@@ -2,21 +2,15 @@
 set -eu
 
 # Global variables
-IMAGE_NAME="docker.io/fedora:latest"
+IMAGE_NAME="dotfiles-test"
 REPORT_FILE="${REPORT_FILE:-test_report.txt}"
 CURRENT_CONTAINER=""
-REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+REPO_DIR="$(git rev-parse --show-toplevel)"
 
-# Build the test image (optional - we can use base fedora image directly)
+# Build the test image
 build_image() {
 	printf "Building test image...\n"
-	if podman build -t "dotfiles-test" -f "$REPO_DIR/Containerfile" "$REPO_DIR"; then
-		IMAGE_NAME="dotfiles-test"
-		printf "Successfully built custom test image\n"
-	else
-		printf "Failed to build custom image, will use base fedora image\n"
-		IMAGE_NAME="docker.io/fedora:latest"
-	fi
+	podman build -t "$IMAGE_NAME" -f "$REPO_DIR/Containerfile" "$REPO_DIR"
 }
 
 # Start a new test container
@@ -69,6 +63,52 @@ assert() {
 	fi
 }
 
+# Run common tests that apply to all profiles
+run_common_tests() {
+	profile_name="$1"
+	profile_dir="$REPO_DIR/profiles/$profile_name"
+	
+	printf "\n--- Common Tests ---\n" | tee -a "$REPORT_FILE"
+	
+	# Test 1: Check for syntax errors in install script
+	if [ -f "$profile_dir/install.sh" ]; then
+		assert "Install script has no syntax errors" \
+			"sh -n /dotfiles/profiles/$profile_name/install.sh"
+	fi
+	
+	# Test 2: Check for syntax errors in uninstall script
+	if [ -f "$profile_dir/uninstall.sh" ]; then
+		assert "Uninstall script has no syntax errors" \
+			"sh -n /dotfiles/profiles/$profile_name/uninstall.sh"
+	fi
+	
+	# Test 3: Install script exits successfully
+	if [ -f "$profile_dir/install.sh" ]; then
+		assert "Install script exits successfully" \
+			"cd /dotfiles/profiles/$profile_name && sh install.sh"
+	fi
+	
+	# Test 4: Install script is idempotent (runs twice successfully)
+	if [ -f "$profile_dir/install.sh" ]; then
+		assert "Install script exits successfully on second run (idempotent)" \
+			"cd /dotfiles/profiles/$profile_name && sh install.sh"
+	fi
+	
+	# Test 5: Uninstall script exits successfully
+	if [ -f "$profile_dir/uninstall.sh" ]; then
+		assert "Uninstall script exits successfully" \
+			"cd /dotfiles/profiles/$profile_name && sh uninstall.sh"
+	fi
+	
+	# Test 6: Install then uninstall works
+	if [ -f "$profile_dir/install.sh" ] && [ -f "$profile_dir/uninstall.sh" ]; then
+		assert "Install script exits successfully (before uninstall test)" \
+			"cd /dotfiles/profiles/$profile_name && sh install.sh"
+		assert "Uninstall script exits successfully after install" \
+			"cd /dotfiles/profiles/$profile_name && sh uninstall.sh"
+	fi
+}
+
 # Run tests for a specific profile
 run_profile_tests() {
 	profile_name="$1"
@@ -79,11 +119,6 @@ run_profile_tests() {
 		return 1
 	fi
 	
-	if [ ! -f "$profile_dir/tests.sh" ]; then
-		printf "No tests.sh found for profile '%s', skipping\n" "$profile_name"
-		return 0
-	fi
-	
 	printf "\n========================================\n" | tee -a "$REPORT_FILE"
 	printf "Testing profile: %s\n" "$profile_name" | tee -a "$REPORT_FILE"
 	printf "========================================\n" | tee -a "$REPORT_FILE"
@@ -91,9 +126,16 @@ run_profile_tests() {
 	# Start a fresh container for this profile
 	start_container
 	
-	# Source the profile's test file and run tests
-	# shellcheck disable=SC1090
-	. "$profile_dir/tests.sh"
+	# Run common tests for all profiles
+	run_common_tests "$profile_name"
+	
+	# Run profile-specific tests if they exist
+	if [ -f "$profile_dir/tests.sh" ]; then
+		printf "\n--- Profile-Specific Tests ---\n" | tee -a "$REPORT_FILE"
+		# Source the profile's test file and run tests
+		# shellcheck disable=SC1090
+		. "$profile_dir/tests.sh"
+	fi
 	
 	# Clean up after tests
 	cleanup_container
@@ -105,8 +147,8 @@ run_tests() {
 	printf "Test Report - %s\n" "$(date)" > "$REPORT_FILE"
 	printf "========================================\n\n" >> "$REPORT_FILE"
 	
-	# Try to build the image, but don't fail if it doesn't work
-	build_image || printf "Continuing with base image...\n"
+	# Build the image
+	build_image
 	
 	if [ $# -eq 0 ]; then
 		# Run tests for all profiles

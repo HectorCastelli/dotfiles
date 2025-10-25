@@ -1,7 +1,18 @@
 FROM docker.io/fedora:latest
 
-# Note: This Containerfile is minimal as the base Fedora image includes
-# most necessary tools (bash, coreutils, etc.)
-# The repository will be mounted at /dotfiles during container runtime
+# Install prerequisites as specified in scripts/get.sh
+RUN dnf install -y \
+    git \
+    curl \
+    bash \
+    which \
+    util-linux-core \
+    && dnf clean all
+
+# Copy get.sh to verify installation
+COPY scripts/get.sh /tmp/get.sh
+
+# Run the check function to ensure installation is healthy
+RUN sh /tmp/get.sh check
 
 WORKDIR /dotfiles

@@ -128,12 +128,6 @@ To run tests for a specific profile:
 sh scripts/tests.sh <profile-name>
 ```
 
-For example:
-
-```shell
-sh scripts/tests.sh 0
-```
-
 ### Test Requirements
 
 - `podman` must be installed on your system
