@@ -75,12 +75,11 @@ You may use the `--upgrade` flag to keep the choices from your previous installa
 
 ### Uninstall a profile
 
-The [profile uninstaller script](./scripts/profile-uninstall.sh) is used to interact and remove existing profiles.
+The [profile script](./scripts/profiles.sh) offers an uninstall command that is used to interact and remove existing profiles.
 
 It works in the following manner:
 
 1. Lists all installed profiles
-   1. If invoked with a profile name, it assumes only that profile should be removed
 2. Prompts the user for which profiles they would like to uninstall
 3. Executed the uninstallation script of each selected profile
 4. Executed the installation script again, to generate a new final state. This ensures that the final state is expected and that no leftover files are kept.
@@ -93,7 +92,7 @@ This is a destructive operation, and we recommend you first uninstall all option
 
 ### Creating profiles
 
-The [profile creation script](./scripts/profile-create.sh) creates a new blank profile in the project.
+The [profile script](./scripts/profiles.sh) offers the `create` command that creates a new blank profile in the project.
 
 This is a good starting point to ensure you 
 
