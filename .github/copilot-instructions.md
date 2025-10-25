@@ -13,7 +13,46 @@ This repo is a minimal, hackable dotfiles manager implemented as a set of shell 
   - `uninstall.sh` — undo what the profile installed.
   - `prompt.sh` — (optional) request interactive inputs required by `install.sh`.
   - `home/` — a directory whose files are symlinked into $HOME; treat it as the canonical declaration of desired home files.
-  - Use /usr/bin/env bash for the shebang and include at least `set -u` (the template shows this pattern).
+   - `uninstall.sh` — undo what the profile installed.
+   - `prompt.sh` — (optional) request interactive inputs required by `install.sh`.
+   - `home/` — a directory whose files are symlinked into $HOME; treat it as the canonical declaration of desired home files.
+
+  Script template (required for new scripts)
+   - All new scripts should follow the format used in `scripts/_template.sh` so they are consistent and safe when sourced or executed.
+   - Required characteristics:
+     - Use the POSIX-friendly interpreter shebang: `#!/usr/bin/env sh`.
+     - Use strict flags at the top: `set -eu` (error on unset variables and exit on errors).
+     - Prefer named functions for actions, e.g. `function1()` and `function2()`.
+     - Implement a simple `case "${1:-}"` dispatcher so the script can be sourced without side-effects. The default case should do nothing.
+
+  Example minimal template (follow this shape exactly):
+
+  ```shell
+  #!/usr/bin/env sh
+  set -eu
+
+  function1() {
+    echo "func1"
+  }
+
+  function2() {
+    echo "func2"
+  }
+
+  case "${1:-}" in
+  function1)
+    function1
+    ;;
+  function2)
+    function2
+    ;;
+  *)
+    # script was sourced, so we do nothing.
+    ;;
+  esac
+  ```
+
+   - Rationale: this pattern makes scripts safe to source (no side effects by default), explicit about actions (named functions), and robust in CI by failing fast on errors or unset variables.
 
 ## Integration points & external dependencies
 
