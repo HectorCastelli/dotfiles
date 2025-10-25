@@ -13,12 +13,19 @@ The files inside the target are then [symlinked](https://rm-rf.es/diferencias-en
 To use this project, execute the [following script](./scripts/get.sh) in a terminal:
 
 ```shell
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/HectorCastelli/dotfiles/HEAD/scripts/get.sh)"
+curl -fsSL https://raw.githubusercontent.com/HectorCastelli/dotfiles/HEAD/scripts/get.sh | sh -s -- install
 ```
 
 You must have `sh` and `curl` available for this to work.
 
 The script itself will check for any other tools that are required for the first-time setup, and initialize [an installation](#install).
+
+### Custom installation locations
+
+You may install the project in a different location, or from a different repository by using the following environment variables:
+
+- `DOTFILES_DIR`: where the repository will be initialized into. Defaults to `$HOME/dotfiles`
+- `DOTFILES_REPO`: the repository with dotfiles that should be cloned. Defaults to `https://github.com/HectorCastelli/dotfiles.git`
 
 ## Structure
 
