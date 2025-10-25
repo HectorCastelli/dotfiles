@@ -66,8 +66,8 @@ The [general installation script](./scripts/install.sh) takes care of setting up
 
 It works in the following manner:
 
-1. Install the mandatory profile `0`
-2. Allow you to choose which profiles you´d like
+1. Install the mandatory profiles
+2. Allow you to choose which other profiles you´d like
    1. If any profile has inputs that are needed, you will be prompted for them accordingly
 3. Generate a new version of the "target" directory with the an installation script and the final home directory state
 4. If there are changes, they will be shown to you

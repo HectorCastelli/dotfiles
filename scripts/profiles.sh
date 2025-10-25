@@ -45,29 +45,29 @@ create() {
 	esac
 }
 
-list() {
-	mandatory_names=""
-	nonmandatory_names=""
-
+list_mandatory() {
 	for d in "$PROFILES_DIR"/*; do
 		[ -d "$d" ] || continue
 		base=$(basename "$d")
 		[ "$base" = "_template" ] && continue
 		if [ -f "$d/.mandatory" ]; then
-			mandatory_names="${mandatory_names}${base}\n"
-		else
-			nonmandatory_names="${nonmandatory_names}${base}\n"
+			printf '%s\n' "$base"
 		fi
-	done
+	done | sort
+}
 
+list() {
 	# Print mandatory profiles first (sorted), then the rest (sorted)
-	if [ -n "$mandatory_names" ]; then
-		printf '%b' "$mandatory_names" | sort | sed 's/$/ */'
-	fi
+	list_mandatory
 
-	if [ -n "$nonmandatory_names" ]; then
-		printf '%b' "$nonmandatory_names" | sort
-	fi
+	for d in "$PROFILES_DIR"/*; do
+		[ -d "$d" ] || continue
+		base=$(basename "$d")
+		[ "$base" = "_template" ] && continue
+		if [ ! -f "$d/.mandatory" ]; then
+			printf '%s\n' "$base"
+		fi
+	done | sort
 }
 
 case "${1:-}" in
@@ -77,6 +77,9 @@ create)
 list)
 	list
 	;;
+list_mandatory)
+	list_mandatory
+	;;
 help)
 	USAGE="Usage:
 $(basename "$0") <command>
@@ -84,6 +87,7 @@ $(basename "$0") <command>
 Available commands:
 	create	Create a new profile
 	list	List all profiles
+	list_mandatory	List all mandatory profiles
 	help	Show this help message"
 
 	printf "%s\n" "$USAGE"
