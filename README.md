@@ -102,10 +102,87 @@ This is a destructive operation, and we recommend you first uninstall all option
 
 The [profile script](./scripts/profiles.sh) offers the `create` command that creates a new blank profile in the project.
 
-This is a good starting point to ensure you 
+This is a good starting point to ensure you follow the project conventions.
 
 #### Mandatory profiles
 
 If you´d like to mark a profile as mandatory, add a file named `.mandatory` to it's directory.
 
 This way, you will not be prompted to install it, and the profile will only be uninstalled with the [`--all` flag](#uninstalling-everything).
+
+## Testing
+
+The project includes a testing framework for profiles using Podman containers based on Fedora.
+
+### Running Tests
+
+To run tests for all profiles:
+
+```shell
+sh scripts/tests.sh
+```
+
+To run tests for a specific profile:
+
+```shell
+sh scripts/tests.sh run_tests <profile-name>
+```
+
+For example:
+
+```shell
+sh scripts/tests.sh run_tests 0
+```
+
+### Test Requirements
+
+- `podman` must be installed on your system
+- Tests run in isolated Fedora containers
+- Each test creates a fresh container and cleans up after completion
+- Test results are saved to `test_report.txt` in human-readable format
+
+### Writing Tests for Profiles
+
+Each profile can have a `tests.sh` file that defines test cases. The test file should:
+
+1. Define test functions that use the `assert` utility
+2. Call the test functions to execute them
+
+The `assert` function takes a description and a command:
+
+```shell
+assert "Description of what is being tested" "command to run"
+```
+
+Example test file structure:
+
+```shell
+#!/usr/bin/env sh
+set -eu
+
+test_install_once() {
+    assert "Install script exits successfully on first run" \
+        "cd /dotfiles/profiles/myprofile && sh install.sh"
+}
+
+test_install_idempotent() {
+    assert "Install script exits successfully on first run" \
+        "cd /dotfiles/profiles/myprofile && sh install.sh"
+    assert "Install script exits successfully on second run (idempotent)" \
+        "cd /dotfiles/profiles/myprofile && sh install.sh"
+}
+
+test_install_uninstall() {
+    assert "Install script exits successfully" \
+        "cd /dotfiles/profiles/myprofile && sh install.sh"
+    assert "Uninstall script exits successfully" \
+        "cd /dotfiles/profiles/myprofile && sh uninstall.sh"
+}
+
+# Run all tests
+test_install_once
+test_install_idempotent
+test_install_uninstall
+```
+
+The template profile at `profiles/_template/tests.sh` provides a starting point for new profile tests.

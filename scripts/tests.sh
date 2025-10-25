@@ -2,15 +2,21 @@
 set -eu
 
 # Global variables
-IMAGE_NAME="dotfiles-test"
+IMAGE_NAME="docker.io/fedora:latest"
 REPORT_FILE="${REPORT_FILE:-test_report.txt}"
 CURRENT_CONTAINER=""
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
-# Build the test image
+# Build the test image (optional - we can use base fedora image directly)
 build_image() {
 	printf "Building test image...\n"
-	podman build -t "$IMAGE_NAME" -f "$REPO_DIR/Containerfile" "$REPO_DIR"
+	if podman build -t "dotfiles-test" -f "$REPO_DIR/Containerfile" "$REPO_DIR"; then
+		IMAGE_NAME="dotfiles-test"
+		printf "Successfully built custom test image\n"
+	else
+		printf "Failed to build custom image, will use base fedora image\n"
+		IMAGE_NAME="docker.io/fedora:latest"
+	fi
 }
 
 # Start a new test container
@@ -99,8 +105,8 @@ run_tests() {
 	printf "Test Report - %s\n" "$(date)" > "$REPORT_FILE"
 	printf "========================================\n\n" >> "$REPORT_FILE"
 	
-	# Build the image first
-	build_image
+	# Try to build the image, but don't fail if it doesn't work
+	build_image || printf "Continuing with base image...\n"
 	
 	if [ $# -eq 0 ]; then
 		# Run tests for all profiles

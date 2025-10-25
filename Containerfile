@@ -1,14 +1,7 @@
-FROM fedora:latest
+FROM docker.io/fedora:latest
 
-# Install basic prerequisites
-RUN dnf install -y \
-    git \
-    curl \
-    bash \
-    coreutils \
-    && dnf clean all
-
-# Create a directory for mounting the repository
-RUN mkdir -p /dotfiles
+# Note: This Containerfile is minimal as the base Fedora image includes
+# most necessary tools (bash, coreutils, etc.)
+# The repository will be mounted at /dotfiles during container runtime
 
 WORKDIR /dotfiles
