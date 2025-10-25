@@ -125,13 +125,13 @@ sh scripts/tests.sh
 To run tests for a specific profile:
 
 ```shell
-sh scripts/tests.sh run_tests <profile-name>
+sh scripts/tests.sh <profile-name>
 ```
 
 For example:
 
 ```shell
-sh scripts/tests.sh run_tests 0
+sh scripts/tests.sh 0
 ```
 
 ### Test Requirements
