@@ -1,0 +1,30 @@
+#!/usr/bin/env sh
+set -u
+
+# Install homebrew
+# Must use bash for homebrew installation
+NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# Load brew into the current shell session
+if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+if [ -x /opt/homebrew/bin/brew ]; then
+	eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# Install zsh
+brew install zsh
+# Switch the user default shell to zsh
+chsh -s "$(which zsh)"
+
+# Install starship prompt
+brew install starship
+
+# Install basic utilities
+if [ "$(uname)" = "Darwin" ]; then
+	brew install coreutils # This ensures GNU utils like `ls`, `cat`, etc. are available on macOS
+fi
+brew install unzip
+
+# Install monaspace font (patched with NerdFonts glyphs)
+brew install --cask font-monaspace-nf

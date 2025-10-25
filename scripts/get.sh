@@ -1,27 +1,27 @@
 #!/usr/bin/env sh
 set -eu
 
+check_dependencies() {
+	required_commands="git curl sh bash which chsh"
+
+	for cmd in $required_commands; do
+		if ! command -v "$cmd" >/dev/null 2>&1; then
+			printf "Error: required command '%s' is not installed.\n" "$cmd"
+			return 1
+		fi
+	done
+
+	return 0
+}
+
 install() {
 	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
 	DOTFILES_REPO=${DOTFILES_REPO:-"https://github.com/HectorCastelli/dotfiles.git"}
 
 	printf "Checking mandatory dependencies...\n"
-	missing_commands=""
-
-	for cmd in curl sh git; do
-		if ! command -v "$cmd" >/dev/null 2>&1; then
-			if [ -z "$missing_commands" ]; then
-				missing_commands="$cmd"
-			else
-				missing_commands="$missing_commands $cmd"
-			fi
-		fi
-	done
-
-	if [ -n "$missing_commands" ]; then
-		printf "Error: required commands missing: %s\n" "$missing_commands"
-		printf "Please install the missing command(s) and try again.\n"
-		exit 1
+	if ! check_dependencies; then
+		printf "Error: missing required dependencies.\n"
+		return 1
 	fi
 
 	printf "Target directory: %s\n" "$DOTFILES_DIR"
@@ -55,12 +55,16 @@ case "${1:-}" in
 install)
 	install
 	;;
+check)
+	check_dependencies
+	;;
 help)
 	USAGE="Usage:
 $(basename "$0") <command>
 
 Available commands:
 	install	Installs the dotfiles repository
+	check	Checks for required dependencies
 	help	Show this help message"
 
 	printf "%s\n" "$USAGE"
