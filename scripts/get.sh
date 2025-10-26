@@ -29,7 +29,7 @@ install() {
 	if [ -e "$DOTFILES_DIR" ]; then
 		printf "Error: target '%s' already exists.\n" "$DOTFILES_DIR"
 		printf "If you intended to update an existing clone, run:\n  git -C %s pull\n" "$DOTFILES_DIR"
-		exit 1
+		return 2
 	fi
 
 	printf "Cloning %s into %s ...\n" "$DOTFILES_REPO" "$DOTFILES_DIR"
@@ -38,7 +38,7 @@ install() {
 		printf "Clone successful.\n"
 	else
 		printf "Error: git clone failed.\n"
-		return 2
+		return 3
 	fi
 
 	printf "Running installation script...\n"
@@ -47,7 +47,7 @@ install() {
 		return 0
 	else
 		printf "Error: installation script failed.\n"
-		return 3
+		return 4
 	fi
 }
 

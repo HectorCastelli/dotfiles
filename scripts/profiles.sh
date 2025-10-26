@@ -8,24 +8,24 @@ create() {
 	printf "Profile name: "
 	if ! IFS= read -r name; then
 		printf 'Failed to read profile name\n' >&2
-		exit 1
+		return 1
 	fi
 	# sanitize
 	name=$(printf '%s' "$name" | tr -d '\r\n')
 	if [ -z "$name" ]; then
 		printf 'No profile name provided\n' >&2
-		exit 1
+		return 2
 	fi
 
 	target="$PROFILES_DIR/$name"
 	if [ -e "$target" ]; then
 		printf 'Profile "%s" already exists\n' "$name" >&2
-		exit 1
+		return 3
 	fi
 
 	if [ ! -d "$PROFILES_DIR/_template" ]; then
 		printf 'Template profile not found at %s/_template\n' "$PROFILES_DIR" >&2
-		exit 1
+		return 4
 	fi
 
 	cp -R "$PROFILES_DIR/_template" "$target"

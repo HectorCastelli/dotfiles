@@ -24,6 +24,7 @@ This repo is a minimal, hackable dotfiles manager implemented as a set of shell 
      - Use strict flags at the top: `set -eu` (error on unset variables and exit on errors).
      - Prefer named functions for actions, e.g. `function1()` and `function2()`.
      - Implement a simple `case "${1:-}"` dispatcher so the script can be sourced without side-effects. The default case should do nothing.
+     - When exiting due to an error, use distinct non-zero exit codes for different error conditions.
 
   Example minimal template (follow this shape exactly):
 
