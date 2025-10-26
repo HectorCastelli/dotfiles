@@ -87,37 +87,37 @@ run_common_tests() {
 	# Test 1: Check for syntax errors in install script
 	if [ -f "$profile_dir/install.sh" ]; then
 		run_test_case "Install script has no syntax errors" \
-			"sh -n /dotfiles/profiles/$profile_name/install.sh"
+			"sh -n /dotfiles/profiles/$profile_name/install.sh" || true
 	fi
 
 	# Test 2: Check for syntax errors in uninstall script
 	if [ -f "$profile_dir/uninstall.sh" ]; then
 		run_test_case "Uninstall script has no syntax errors" \
-			"sh -n /dotfiles/profiles/$profile_name/uninstall.sh"
+			"sh -n /dotfiles/profiles/$profile_name/uninstall.sh" || true
 	fi
 
 	# Test 3: Install script exits successfully
 	if [ -f "$profile_dir/install.sh" ]; then
 		run_test_case "Install script exits successfully" \
-			"cd /dotfiles/profiles/$profile_name && sh install.sh"
+			"cd /dotfiles/profiles/$profile_name && sh install.sh" || true
 	fi
 
 	# Test 4: Install script is idempotent (runs twice successfully)
 	if [ -f "$profile_dir/install.sh" ]; then
 		run_test_case "Install script exits successfully on second run (idempotent)" \
-			"cd /dotfiles/profiles/$profile_name && sh install.sh && sh install.sh"
+			"cd /dotfiles/profiles/$profile_name && sh install.sh && sh install.sh" || true
 	fi
 
 	# Test 5: Uninstall script exits successfully
 	if [ -f "$profile_dir/uninstall.sh" ]; then
 		run_test_case "Uninstall script exits successfully" \
-			"cd /dotfiles/profiles/$profile_name && sh uninstall.sh"
+			"cd /dotfiles/profiles/$profile_name && sh uninstall.sh" || true
 	fi
 
 	# Test 6: Install then uninstall works
 	if [ -f "$profile_dir/install.sh" ] && [ -f "$profile_dir/uninstall.sh" ]; then
 		run_test_case "Uninstall script exits successfully after an install" \
-			"cd /dotfiles/profiles/$profile_name && sh install.sh && sh uninstall.sh"
+			"cd /dotfiles/profiles/$profile_name && sh install.sh && sh uninstall.sh" || true
 	fi
 }
 
@@ -138,14 +138,14 @@ run_profile_tests() {
 	} | tee -a "$REPORT_FILE"
 
 	# Run common tests for all profiles
-	run_common_tests "$profile_name"
+	run_common_tests "$profile_name" || true
 
 	# Run profile-specific tests if they exist
 	if [ -f "$profile_dir/tests.sh" ]; then
 		printf "\n--- Profile-Specific Tests ---\n" | tee -a "$REPORT_FILE"
 		# Source the profile's test file and run tests
 		# shellcheck disable=SC1090
-		. "$profile_dir/tests.sh"
+		. "$profile_dir/tests.sh" || true
 	fi
 }
 
@@ -167,12 +167,12 @@ run_tests() {
 				if [ "$profile_name" = "_template" ]; then
 					continue
 				fi
-				run_profile_tests "$profile_name"
+				run_profile_tests "$profile_name" || true
 			fi
 		done
 	else
 		# Run tests for specified profile
-		run_profile_tests "$1"
+		run_profile_tests "$1" || true
 	fi
 
 	printf "\n========================================\n" | tee -a "$REPORT_FILE"
