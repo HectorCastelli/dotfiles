@@ -99,6 +99,34 @@ install_profile() {
 	fi
 }
 
+uninstall_profile() {
+	profile="${1:-}"
+	if [ -z "$profile" ]; then
+		echo "Error: profile name required." >&2
+		return 1
+	fi
+
+	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
+	TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
+	profiles_file="$TARGET_DIR/.dotfiles_profiles"
+
+	# Clean target_dir contents except .dotfiles_profiles and .git
+	find "$TARGET_DIR" -mindepth 1 ! -name ".dotfiles_profiles" ! -name ".git" -exec rm -rf {} +
+
+	# Remove profile from .dotfiles_profiles
+	if [ -f "$profiles_file" ]; then
+		grep -vxF "$profile" "$profiles_file" >"$profiles_file.tmp" && mv "$profiles_file.tmp" "$profiles_file"
+	fi
+
+	# Re-install all remaining profiles
+	if [ -f "$profiles_file" ]; then
+		while read -r p; do
+			[ -n "$p" ] && install_profile "$p"
+		done <"$profiles_file"
+	fi
+}
+
+
 case "${1:-}" in
 initialize)
 	initialize
@@ -116,6 +144,10 @@ install_profile)
 	shift
 	install_profile "$@"
 	;;
+uninstall_profile)
+	shift
+	uninstall_profile "$@"
+	;;
 help)
 	USAGE="Usage:
 $(basename "$0") <command>
@@ -126,6 +158,7 @@ Available commands:
     save		Save the current state of the target directory as a commit
 	discard		Discard uncommitted changes in the target directory
     install_profile	Install a profile into the target directory
+	uninstall_profile	Uninstall a profile from the target directory
     help		Show this help message"
 
 	printf "%s\n" "$USAGE"
