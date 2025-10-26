@@ -50,6 +50,7 @@ They have the following structure:
     - `uninstall.sh`: The uninstallation script, executed in case the user wants to remove a profile
     - `prompt.sh`: An optional script that will ask the user for inputs that are required for the installation script
       - `answers.env`: A file that stores the previous answers to this profile's prompt
+    - `test.sh`: A file that contains tests to validate that the profile can be installed as
     - `home/`: A directory that will be maped to the user's `$HOME` directory
         - `*`: Any files inside are symlinked to the correct destination
 
