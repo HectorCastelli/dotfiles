@@ -1,6 +1,16 @@
 #!/usr/bin/env sh
 set -eu
 
+# Detect container runtime (prefer podman, fallback to docker)
+if command -v podman >/dev/null 2>&1; then
+	CONTAINER_RUNTIME="podman"
+elif command -v docker >/dev/null 2>&1; then
+	CONTAINER_RUNTIME="docker"
+else
+	printf "Error: Neither podman nor docker is installed\n" >&2
+	exit 1
+fi
+
 # Global variables
 IMAGE_NAME="dotfiles-test"
 REPORT_FILE="${REPORT_FILE:-test_report.txt}"
@@ -9,13 +19,13 @@ REPO_DIR="$(git rev-parse --show-toplevel)"
 
 # Build the test image
 build_image() {
-	printf "Building test image...\n"
-	podman build -t "$IMAGE_NAME" -f "$REPO_DIR/Containerfile" "$REPO_DIR"
+	printf "Building test image with %s...\n" "$CONTAINER_RUNTIME"
+	"$CONTAINER_RUNTIME" build -t "$IMAGE_NAME" -f "$REPO_DIR/Containerfile" "$REPO_DIR"
 }
 
 # Start a new test container
 start_container() {
-	CURRENT_CONTAINER=$(podman run -d \
+	CURRENT_CONTAINER=$("$CONTAINER_RUNTIME" run -d \
 		-v "$REPO_DIR:/dotfiles:ro" \
 		"$IMAGE_NAME" \
 		sleep infinity)
@@ -26,7 +36,7 @@ start_container() {
 cleanup_container() {
 	if [ -n "$CURRENT_CONTAINER" ]; then
 		printf "Cleaning up container: %s\n" "$CURRENT_CONTAINER"
-		podman rm -f "$CURRENT_CONTAINER" >/dev/null 2>&1 || true
+		"$CONTAINER_RUNTIME" rm -f "$CURRENT_CONTAINER" >/dev/null 2>&1 || true
 		CURRENT_CONTAINER=""
 	fi
 }
@@ -42,7 +52,7 @@ assert() {
 	printf "Command: %s\n" "$command" | tee -a "$REPORT_FILE"
 	
 	# Run the command in the container and capture output and exit code
-	if output=$(podman exec "$CURRENT_CONTAINER" sh -c "$command" 2>&1); then
+	if output=$("$CONTAINER_RUNTIME" exec "$CURRENT_CONTAINER" sh -c "$command" 2>&1); then
 		exit_code=0
 	else
 		exit_code=$?
