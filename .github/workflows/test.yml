@@ -30,4 +30,4 @@ jobs:
         with:
           name: test-report
           path: test_report.txt
-          retention-days: 30
+          retention-days: 6
