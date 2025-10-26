@@ -4,7 +4,7 @@ A [dotfiles](https://wiki.archlinux.org/title/Dotfiles) manager optimized for ha
 
 Instead of bringing it's own set of languages and standards, it is merely a collection of clever shell scripts and files.
 
-It applies changes to your home directory by keeping it's own virtual "target" (a [bare `git` repository](https://githowto.com/bare_repositories)) and manipulating it. This allows us to keep track of changes whenever actions are taken and quickly rollback to a previous state.
+It applies changes to your home directory by keeping it's own virtual "target" (a `git` repository) and manipulating it. This allows us to keep track of changes whenever actions are taken and quickly rollback to a previous state.
 
 The files inside the target are then [symlinked](https://rm-rf.es/diferencias-entre-soft-symbolic-y-hard-links/) to the appropriate locations, ensuring your machine works as expected.
 
