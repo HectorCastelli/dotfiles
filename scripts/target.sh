@@ -126,6 +126,54 @@ uninstall_profile() {
 	fi
 }
 
+apply() {
+	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
+	TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
+	TARGET_HOME="$TARGET_DIR/home"
+
+	# Run install.sh from target dir if it exists
+	if [ -f "$TARGET_DIR/install.sh" ]; then
+		sh "$TARGET_DIR/install.sh"
+	fi
+
+	# Recursively symlink files/dirs from target_dir/home into $HOME
+	find "$TARGET_HOME" -mindepth 1 | while read -r src; do
+		rel_path="${src#"$TARGET_HOME"/}"
+		dest="$HOME/$rel_path"
+
+		# Ensure parent directory exists
+		dest_dir="$(dirname "$dest")"
+		mkdir -p "$dest_dir"
+
+		if [ -e "$dest" ] || [ -L "$dest" ]; then
+			# If already a symlink to the correct target, skip
+			if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
+				continue
+			fi
+
+			# If it's a symlink to somewhere else, or a file/dir, prompt
+			echo "File '$dest' already exists."
+			if [ -L "$dest" ]; then
+				target="$(readlink "$dest")"
+				if [ "$target" = "$src" ]; then
+					continue
+				fi
+				echo "It is a symlink to '$target'."
+			fi
+			printf "Delete and replace with symlink to '%s'? [y/N]: " "$src"
+			read -r ans
+			case "$ans" in
+			y | Y) rm -rf "$dest" ;;
+			*)
+				echo "Skipping '$dest'."
+				continue
+				;;
+			esac
+		fi
+
+		ln -s "$src" "$dest"
+	done
+}
 
 case "${1:-}" in
 initialize)
@@ -148,6 +196,9 @@ uninstall_profile)
 	shift
 	uninstall_profile "$@"
 	;;
+apply)
+	apply
+	;;
 help)
 	USAGE="Usage:
 $(basename "$0") <command>
@@ -159,6 +210,7 @@ Available commands:
 	discard		Discard uncommitted changes in the target directory
     install_profile	Install a profile into the target directory
 	uninstall_profile	Uninstall a profile from the target directory
+	apply		Apply the target directory to the home directory
     help		Show this help message"
 
 	printf "%s\n" "$USAGE"
