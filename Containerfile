@@ -1,4 +1,4 @@
-FROM docker.io/fedora:latest
+FROM registry.fedoraproject.org/fedora:latest
 
 # Install prerequisites as specified in scripts/get.sh
 RUN dnf install -y \
@@ -6,8 +6,9 @@ RUN dnf install -y \
     curl \
     bash \
     which \
-    util-linux-core \
-    && dnf clean all
+    util-linux-core
+
+RUN dnf clean all
 
 # Copy get.sh to verify installation
 COPY scripts/get.sh /tmp/get.sh
