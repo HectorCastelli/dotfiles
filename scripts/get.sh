@@ -41,14 +41,55 @@ install() {
 		return 3
 	fi
 
-	printf "Running installation script...\n"
-	if sh "$DOTFILES_DIR/scripts/install.sh"; then
-		printf "Installation script completed successfully.\n"
-		return 0
+	printf "Initializing target directory...\n"
+	if sh "$DOTFILES_DIR/scripts/target.sh initialize"; then
+		printf "Target directory initialized successfully.\n"
 	else
-		printf "Error: installation script failed.\n"
+		printf "Error: target directory initialization failed.\n"
 		return 4
 	fi
+
+	printf "Installing all mandatory profiles...\n"
+	MANDATORY_PROFILES="$("$DOTFILES_DIR/scripts/profiles.sh" list_mandatory)"
+	for profile in $MANDATORY_PROFILES; do
+		if sh "$DOTFILES_DIR/scripts/target.sh" install_profile "$profile"; then
+			printf "Installed mandatory profile: %s\n" "$profile"
+		else
+			printf "Error: failed to install mandatory profile '%s'.\n" "$profile"
+			return 5
+		fi
+	done
+
+	OPTIONAL_PROFILES="$("$DOTFILES_DIR/scripts/profiles.sh" list_optional)"
+	for profile in $OPTIONAL_PROFILES; do
+		printf "Optional profile available: %s\n" "$profile"
+		printf "Would you like to install '%s'? [y/N]: " "$profile"
+		if ! IFS= read -r ans; then
+			ans=""
+		fi
+		case "$(printf '%s' "$ans" | tr '[:upper:]' '[:lower:]')" in
+		y | yes)
+			if sh "$DOTFILES_DIR/scripts/profiles.sh" run_prompt "$profile"; then
+				printf "Prompt for optional profile '%s' completed.\n" "$profile"
+			else
+				printf "Warning: prompt for optional profile '%s' failed or was skipped.\n" "$profile"
+				return 6
+			fi
+			if sh "$DOTFILES_DIR/scripts/target.sh" install_profile "$profile"; then
+				printf "Installed optional profile: %s\n" "$profile"
+			else
+				printf "Error: failed to install optional profile '%s'.\n" "$profile"
+				return 7
+			fi
+			;;
+		*)
+			printf "Skipped optional profile: %s\n" "$profile"
+			;;
+		esac
+	done
+
+	# TODO: Show final state of the target with diff command
+	# TODO: Ask for approval and apply the target if approved
 }
 
 case "${1:-}" in

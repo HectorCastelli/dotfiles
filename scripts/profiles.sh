@@ -56,10 +56,7 @@ list_mandatory() {
 	done | sort
 }
 
-list() {
-	# Print mandatory profiles first (sorted), then the rest (sorted)
-	list_mandatory
-
+list_optional() {
 	for d in "$PROFILES_DIR"/*; do
 		[ -d "$d" ] || continue
 		base=$(basename "$d")
@@ -68,6 +65,46 @@ list() {
 			printf '%s\n' "$base"
 		fi
 	done | sort
+}
+
+list() {
+	# Print mandatory profiles first (sorted), then the rest (sorted)
+	list_mandatory
+	list_optional
+}
+
+run_prompt() {
+	profile="${1:-}"
+	if [ -z "$profile" ]; then
+		printf 'Profile name required\n' >&2
+		return 1
+	fi
+
+	d="$PROFILES_DIR/$profile"
+	[ -d "$d" ] || {
+		printf 'Profile "%s" not found\n' "$profile" >&2
+		return 2
+	}
+
+	prompt="$d/prompt.sh"
+	answers="$d/answers.env"
+	[ -f "$prompt" ] || {
+		printf 'No prompt.sh found for profile "%s"\n' "$profile" >&2
+		return 0
+	}
+
+	# Load existing answers.env if present
+	# shellcheck source=/dev/null
+	if [ -f "$answers" ]; then
+		. "$answers"
+	fi
+
+	# Run prompt.sh and save output to answers.env
+	if output="$(sh "$prompt")"; then
+		printf '%s\n' "$output" >"$answers"
+	else
+		printf 'Prompt for profile "%s" failed\n' "$profile" >&2
+	fi
 }
 
 case "${1:-}" in
@@ -80,6 +117,13 @@ list)
 list_mandatory)
 	list_mandatory
 	;;
+list_optional)
+	list_optional
+	;;
+run_prompt)
+	shift
+	run_prompts "$@"
+	;;
 help)
 	USAGE="Usage:
 $(basename "$0") <command>
@@ -88,6 +132,8 @@ Available commands:
 	create	Create a new profile
 	list	List all profiles
 	list_mandatory	List all mandatory profiles
+	list_optional	List all optional profiles
+	run_prompt	Run prompts for a profile and stores their answers
 	help	Show this help message"
 
 	printf "%s\n" "$USAGE"
