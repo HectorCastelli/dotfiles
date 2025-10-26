@@ -1,9 +1,6 @@
 #!/usr/bin/env sh
 set -eu
 
-# Profile 0 specific tests
-# These tests verify that brew is installed and zsh is set as default shell
-
 # Test: Verify brew is in PATH
 test_brew_in_path() {
 	assert "Homebrew is present in PATH" \
