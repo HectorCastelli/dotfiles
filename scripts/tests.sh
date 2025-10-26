@@ -15,7 +15,6 @@ fi
 IMAGE_NAME="dotfiles-test"
 REPORT_FILE="${REPORT_FILE:-test_report.txt}"
 REPO_DIR="$(git rev-parse --show-toplevel)"
-REPORT_LOCK="${REPORT_FILE}.lock"
 
 # Build the test image
 build_image() {
@@ -29,54 +28,46 @@ run_test_case() {
 	description="$1"
 	shift
 	command="$*"
-	
+
 	# Start a container for this test
 	container=$("$CONTAINER_RUNTIME" run -d \
-		-v "$REPO_DIR:/dotfiles:ro" \
+		-v "$REPO_DIR:/dotfiles:Z" \
 		"$IMAGE_NAME" \
 		sleep infinity 2>&1)
-	
+
 	# Run the command in the container and capture output and exit code
 	if output=$("$CONTAINER_RUNTIME" exec "$container" sh -c "$command" 2>&1); then
 		exit_code=0
 	else
 		exit_code=$?
 	fi
-	
+
 	# Clean up the container
 	"$CONTAINER_RUNTIME" rm -f "$container" >/dev/null 2>&1 || true
-	
-	# Write results to report (with locking for parallel safety)
-	(
-		# Simple file-based locking mechanism
-		while ! mkdir "$REPORT_LOCK" 2>/dev/null; do
-			sleep 0.1
-		done
-		trap 'rmdir "$REPORT_LOCK" 2>/dev/null || true' EXIT
-		
-		{
-			printf "\n[TEST] %s\n" "$description"
-			printf "Command: %s\n" "$command"
-			
-			if [ -n "$output" ]; then
-				printf "Output:\n%s\n" "$output"
-			fi
-			
-			if [ $exit_code -eq 0 ]; then
-				printf "[PASS] %s\n" "$description"
-			else
-				printf "[FAIL] %s (exit code: %d)\n" "$description" "$exit_code"
-			fi
-		} >> "$REPORT_FILE"
-	)
-	
+
+	# Write results to report
+	{
+		printf "\n[TEST] %s\n" "$description"
+		printf "Command: %s\n" "$command"
+
+		if [ -n "$output" ]; then
+			printf "Output:\n%s\n" "$output"
+		fi
+
+		if [ $exit_code -eq 0 ]; then
+			printf "[PASS] %s\n" "$description"
+		else
+			printf "[FAIL] %s (exit code: %d)\n" "$description" "$exit_code"
+		fi
+	} >>"$REPORT_FILE"
+
 	# Also print to stdout
 	if [ $exit_code -eq 0 ]; then
 		printf "[PASS] %s\n" "$description"
 	else
 		printf "[FAIL] %s (exit code: %d)\n" "$description" "$exit_code"
 	fi
-	
+
 	return $exit_code
 }
 
@@ -90,85 +81,43 @@ assert() {
 run_common_tests() {
 	profile_name="$1"
 	profile_dir="$REPO_DIR/profiles/$profile_name"
-	
+
 	printf "\n--- Common Tests ---\n" | tee -a "$REPORT_FILE"
-	
-	# Collect test commands to run in parallel
-	test_pids=""
-	
+
 	# Test 1: Check for syntax errors in install script
 	if [ -f "$profile_dir/install.sh" ]; then
 		run_test_case "Install script has no syntax errors" \
-			"sh -n /dotfiles/profiles/$profile_name/install.sh" &
-		test_pids="$test_pids $!"
+			"sh -n /dotfiles/profiles/$profile_name/install.sh"
 	fi
-	
+
 	# Test 2: Check for syntax errors in uninstall script
 	if [ -f "$profile_dir/uninstall.sh" ]; then
 		run_test_case "Uninstall script has no syntax errors" \
-			"sh -n /dotfiles/profiles/$profile_name/uninstall.sh" &
-		test_pids="$test_pids $!"
+			"sh -n /dotfiles/profiles/$profile_name/uninstall.sh"
 	fi
-	
-	# Wait for syntax checks to complete before running install tests
-	for pid in $test_pids; do
-		wait "$pid" || true
-	done
-	test_pids=""
-	
+
 	# Test 3: Install script exits successfully
 	if [ -f "$profile_dir/install.sh" ]; then
 		run_test_case "Install script exits successfully" \
-			"cd /dotfiles/profiles/$profile_name && sh install.sh" &
-		test_pids="$test_pids $!"
+			"cd /dotfiles/profiles/$profile_name && sh install.sh"
 	fi
-	
-	# Wait for first install to complete
-	for pid in $test_pids; do
-		wait "$pid" || true
-	done
-	test_pids=""
-	
+
 	# Test 4: Install script is idempotent (runs twice successfully)
 	if [ -f "$profile_dir/install.sh" ]; then
 		run_test_case "Install script exits successfully on second run (idempotent)" \
-			"cd /dotfiles/profiles/$profile_name && sh install.sh" &
-		test_pids="$test_pids $!"
+			"cd /dotfiles/profiles/$profile_name && sh install.sh && sh install.sh"
 	fi
-	
-	# Test 5: Uninstall script exits successfully (can run in parallel with idempotent test)
+
+	# Test 5: Uninstall script exits successfully
 	if [ -f "$profile_dir/uninstall.sh" ]; then
 		run_test_case "Uninstall script exits successfully" \
-			"cd /dotfiles/profiles/$profile_name && sh uninstall.sh" &
-		test_pids="$test_pids $!"
+			"cd /dotfiles/profiles/$profile_name && sh uninstall.sh"
 	fi
-	
-	# Wait for those to complete
-	for pid in $test_pids; do
-		wait "$pid" || true
-	done
-	test_pids=""
-	
-	# Test 6: Install then uninstall works (sequential in same container handled by new approach)
+
+	# Test 6: Install then uninstall works
 	if [ -f "$profile_dir/install.sh" ] && [ -f "$profile_dir/uninstall.sh" ]; then
-		run_test_case "Install script exits successfully (before uninstall test)" \
-			"cd /dotfiles/profiles/$profile_name && sh install.sh" &
-		test_pids="$test_pids $!"
-		
-		# Wait for install to complete
-		for pid in $test_pids; do
-			wait "$pid" || true
-		done
-		test_pids=""
-		
-		run_test_case "Uninstall script exits successfully after install" \
-			"cd /dotfiles/profiles/$profile_name && sh uninstall.sh" &
-		test_pids="$test_pids $!"
-		
-		# Wait for uninstall to complete
-		for pid in $test_pids; do
-			wait "$pid" || true
-		done
+		run_test_case "Uninstall script exits successfully after an install" \
+			"cd /dotfiles/profiles/$profile_name && sh install.sh && sh uninstall.sh"
 	fi
 }
 
@@ -176,21 +125,21 @@ run_common_tests() {
 run_profile_tests() {
 	profile_name="$1"
 	profile_dir="$REPO_DIR/profiles/$profile_name"
-	
+
 	if [ ! -d "$profile_dir" ]; then
 		printf "Profile '%s' not found\n" "$profile_name" >&2
 		return 1
 	fi
-	
+
 	{
 		printf "\n========================================\n"
 		printf "Testing profile: %s\n" "$profile_name"
 		printf "========================================\n"
 	} | tee -a "$REPORT_FILE"
-	
+
 	# Run common tests for all profiles
 	run_common_tests "$profile_name"
-	
+
 	# Run profile-specific tests if they exist
 	if [ -f "$profile_dir/tests.sh" ]; then
 		printf "\n--- Profile-Specific Tests ---\n" | tee -a "$REPORT_FILE"
@@ -203,12 +152,12 @@ run_profile_tests() {
 # Main test runner
 run_tests() {
 	# Initialize report file
-	printf "Test Report - %s\n" "$(date)" > "$REPORT_FILE"
-	printf "========================================\n\n" >> "$REPORT_FILE"
-	
+	printf "Test Report - %s\n" "$(date)" >"$REPORT_FILE"
+	printf "========================================\n\n" >>"$REPORT_FILE"
+
 	# Build the image
 	build_image
-	
+
 	if [ $# -eq 0 ]; then
 		# Run tests for all profiles
 		for profile_dir in "$REPO_DIR/profiles"/*; do
@@ -225,7 +174,7 @@ run_tests() {
 		# Run tests for specified profile
 		run_profile_tests "$1"
 	fi
-	
+
 	printf "\n========================================\n" | tee -a "$REPORT_FILE"
 	printf "Test run complete. Report saved to: %s\n" "$REPORT_FILE"
 	printf "========================================\n"

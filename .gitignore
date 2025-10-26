@@ -2,4 +2,3 @@
 .target/
 # Test reports
 test_report.txt
-test_report.txt.lock
