@@ -10,7 +10,7 @@ test_brew_in_path() {
 # Test: Verify default shell is zsh
 test_default_shell_is_zsh() {
 	assert "Default user shell is zsh" \
-		"grep -q zsh /etc/passwd || echo 'zsh is the shell'"
+		"zsh -c 'echo \$SHELL | grep -q zsh'"
 }
 
 # Run profile-specific tests
