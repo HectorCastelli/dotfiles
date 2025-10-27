@@ -15,6 +15,7 @@ fi
 IMAGE_NAME="dotfiles-test"
 REPORT_FILE="${REPORT_FILE:-test_report.txt}"
 REPO_DIR="$(git rev-parse --show-toplevel)"
+PROFILE_TEST_CONTAINER=""  # Container for profile-specific tests
 
 # Build the test image
 build_image() {
@@ -71,11 +72,57 @@ run_test_case() {
 	return $exit_code
 }
 
+# Run a test case in an existing container (for profile-specific tests)
+# Usage: run_test_case_in_container <container_id> <description> <command>
+run_test_case_in_container() {
+	container="$1"
+	description="$2"
+	shift 2
+	command="$*"
+
+	# Run the command in the existing container and capture output and exit code
+	if output=$("$CONTAINER_RUNTIME" exec "$container" sh -c "$command" 2>&1); then
+		exit_code=0
+	else
+		exit_code=$?
+	fi
+
+	# Write results to report
+	{
+		printf "\n[TEST] %s\n" "$description"
+		printf "Command: %s\n" "$command"
+
+		if [ -n "$output" ]; then
+			printf "Output:\n%s\n" "$output"
+		fi
+
+		if [ $exit_code -eq 0 ]; then
+			printf "[PASS] %s\n" "$description"
+		else
+			printf "[FAIL] %s (exit code: %d)\n" "$description" "$exit_code"
+		fi
+	} >>"$REPORT_FILE"
+
+	# Also print to stdout
+	if [ $exit_code -eq 0 ]; then
+		printf "[PASS] %s\n" "$description"
+	else
+		printf "[FAIL] %s (exit code: %d)\n" "$description" "$exit_code"
+	fi
+
+	return $exit_code
+}
+
 # Assert function: wrapper for run_test_case for compatibility
 # Usage: assert <description> <command>
 # Always returns 0 to allow tests to continue even on failure
+# If PROFILE_TEST_CONTAINER is set, uses that container; otherwise creates a new one
 assert() {
-	run_test_case "$@" || true
+	if [ -n "$PROFILE_TEST_CONTAINER" ]; then
+		run_test_case_in_container "$PROFILE_TEST_CONTAINER" "$@" || true
+	else
+		run_test_case "$@" || true
+	fi
 }
 
 # Run common tests that apply to all profiles
@@ -138,15 +185,32 @@ run_profile_tests() {
 		printf "========================================\n"
 	} | tee -a "$REPORT_FILE"
 
-	# Run common tests for all profiles
+	# Run common tests for all profiles (each in their own container)
 	run_common_tests "$profile_name"
 
 	# Run profile-specific tests if they exist
 	if [ -f "$profile_dir/tests.sh" ]; then
 		printf "\n--- Profile-Specific Tests ---\n" | tee -a "$REPORT_FILE"
-		# Source the profile's test file and run tests
+		
+		# Start a container for profile-specific tests
+		PROFILE_TEST_CONTAINER=$("$CONTAINER_RUNTIME" run -d \
+			-v "$REPO_DIR:/dotfiles:Z" \
+			"$IMAGE_NAME" \
+			sleep infinity 2>&1)
+		
+		# Run the install script in the container first
+		if [ -f "$profile_dir/install.sh" ]; then
+			printf "Running install script in profile test container...\n"
+			"$CONTAINER_RUNTIME" exec "$PROFILE_TEST_CONTAINER" sh -c "cd /dotfiles/profiles/$profile_name && sh install.sh" >/dev/null 2>&1 || true
+		fi
+		
+		# Source the profile's test file and run tests (using the shared container)
 		# shellcheck disable=SC1090
 		. "$profile_dir/tests.sh" || true
+		
+		# Clean up the profile test container
+		"$CONTAINER_RUNTIME" rm -f "$PROFILE_TEST_CONTAINER" >/dev/null 2>&1 || true
+		PROFILE_TEST_CONTAINER=""
 	fi
 }
 
