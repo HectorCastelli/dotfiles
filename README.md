@@ -149,35 +149,5 @@ The `assert` function takes a description and a command:
 assert "Description of what is being tested" "command to run"
 ```
 
-Example test file structure:
-
-```shell
-#!/usr/bin/env sh
-set -eu
-
-test_install_once() {
-    assert "Install script exits successfully on first run" \
-        "cd /dotfiles/profiles/myprofile && sh install.sh"
-}
-
-test_install_idempotent() {
-    assert "Install script exits successfully on first run" \
-        "cd /dotfiles/profiles/myprofile && sh install.sh"
-    assert "Install script exits successfully on second run (idempotent)" \
-        "cd /dotfiles/profiles/myprofile && sh install.sh"
-}
-
-test_install_uninstall() {
-    assert "Install script exits successfully" \
-        "cd /dotfiles/profiles/myprofile && sh install.sh"
-    assert "Uninstall script exits successfully" \
-        "cd /dotfiles/profiles/myprofile && sh uninstall.sh"
-}
-
-# Run all tests
-test_install_once
-test_install_idempotent
-test_install_uninstall
-```
 
 The template profile at `profiles/_template/tests.sh` provides a starting point for new profile tests.
