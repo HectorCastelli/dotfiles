@@ -4,9 +4,10 @@ set -eu
 # === Configuration ===
 CONTAINER_RUNTIME=""
 IMAGE_NAME="dotfiles-test"
-REPORT_FILE="${REPORT_FILE:-test_report.txt}"
+REPORT_FILE="${REPORT_FILE:-test_report.tap}"
 REPO_DIR="$(git rev-parse --show-toplevel)"
 PROFILE_TEST_CONTAINER=""
+TEST_COUNTER=0
 
 # === Helper Functions ===
 
@@ -38,33 +39,36 @@ exec_in_container() {
 	fi
 }
 
-# Write test result to report
+# Write test result to report in TAP format
 # Args: <description> <command> <output> <exit_code> [type]
 write_test_result() {
 	description="$1"
 	command="$2"
 	output="$3"
 	exit_code="$4"
-	test_type="${5:-TEST}"
+	test_type="${5:-}"
 	
-	{
-		printf "\n[%s] %s\n" "$test_type" "$description"
-		printf "Command: %s\n" "$command"
-		[ -n "$output" ] && printf "Output:\n%s\n" "$output"
-		
-		if [ "$exit_code" -eq 0 ]; then
-			printf "[PASS] %s\n" "$description"
-		else
-			printf "[FAIL] %s (exit code: %d)\n" "$description" "$exit_code"
-		fi
-	} >>"$REPORT_FILE"
+	TEST_COUNTER=$((TEST_COUNTER + 1))
 	
-	# Print to stdout
+	# TAP output format
 	if [ "$exit_code" -eq 0 ]; then
-		printf "[PASS] %s\n" "$description"
+		printf "ok %d - %s\n" "$TEST_COUNTER" "$description" >>"$REPORT_FILE"
+		printf "ok %d - %s\n" "$TEST_COUNTER" "$description"
 	else
-		printf "[FAIL] %s (exit code: %d)\n" "$description" "$exit_code"
+		printf "not ok %d - %s\n" "$TEST_COUNTER" "$description" >>"$REPORT_FILE"
+		printf "not ok %d - %s\n" "$TEST_COUNTER" "$description"
 	fi
+	
+	# Add diagnostic information
+	{
+		[ -n "$test_type" ] && printf "  # %s\n" "$test_type"
+		printf "  # Command: %s\n" "$command"
+		if [ -n "$output" ]; then
+			# Indent output lines for TAP diagnostic format
+			printf "%s\n" "$output" | sed 's/^/  # /'
+		fi
+		[ "$exit_code" -ne 0 ] && printf "  # Exit code: %d\n" "$exit_code"
+	} >>"$REPORT_FILE"
 }
 
 # Run a test case with automatic container management
@@ -110,7 +114,7 @@ run_common_tests() {
 	profile_name="$1"
 	profile_dir="$REPO_DIR/profiles/$profile_name"
 	
-	printf "\n--- Common Tests ---\n" | tee -a "$REPORT_FILE"
+	printf "\n# --- Common Tests for profile %s ---\n" "$profile_name" | tee -a "$REPORT_FILE"
 	
 	# Syntax checks
 	[ -f "$profile_dir/install.sh" ] && \
@@ -146,7 +150,7 @@ run_profile_specific_tests() {
 	
 	[ ! -f "$profile_dir/tests.sh" ] && return 0
 	
-	printf "\n--- Profile-Specific Tests ---\n" | tee -a "$REPORT_FILE"
+	printf "\n# --- Profile-Specific Tests for profile %s ---\n" "$profile_name" | tee -a "$REPORT_FILE"
 	
 	# Start container for profile tests
 	PROFILE_TEST_CONTAINER=$("$CONTAINER_RUNTIME" run -d \
@@ -156,10 +160,10 @@ run_profile_specific_tests() {
 	
 	# Run install as setup
 	if [ -f "$profile_dir/install.sh" ]; then
-		printf "Running install script in profile test container...\n"
+		printf "# Running install script in profile test container...\n" | tee -a "$REPORT_FILE"
 		command="cd /dotfiles/profiles/$profile_name && sh install.sh"
 		exec_in_container "$PROFILE_TEST_CONTAINER" "$command"
-		write_test_result "Install script for profile-specific tests" "$command" "$output" "$exit_code" "SETUP"
+		write_test_result "Install script for profile-specific tests (SETUP)" "$command" "$output" "$exit_code" "SETUP"
 	fi
 	
 	# Run profile-specific tests
@@ -180,11 +184,9 @@ run_profile_tests() {
 		return 1
 	}
 	
-	{
-		printf "\n========================================\n"
-		printf "Testing profile: %s\n" "$profile_name"
-		printf "========================================\n"
-	} | tee -a "$REPORT_FILE"
+	printf "\n# ========================================\n" | tee -a "$REPORT_FILE"
+	printf "# Testing profile: %s\n" "$profile_name" | tee -a "$REPORT_FILE"
+	printf "# ========================================\n" | tee -a "$REPORT_FILE"
 	
 	run_common_tests "$profile_name"
 	run_profile_specific_tests "$profile_name"
@@ -200,9 +202,11 @@ run_all_profiles() {
 }
 
 run_tests() {
-	# Initialize report
-	printf "Test Report - %s\n" "$(date)" >"$REPORT_FILE"
-	printf "========================================\n\n" >>"$REPORT_FILE"
+	# Initialize TAP report
+	{
+		printf "TAP version 13\n"
+		printf "# Test Report - %s\n" "$(date)"
+	} >"$REPORT_FILE"
 	
 	build_image
 	
@@ -213,13 +217,17 @@ run_tests() {
 		run_profile_tests "$1" || true
 	fi
 	
-	# Report summary
-	failed_count=$(grep -c "^\[FAIL\]" "$REPORT_FILE" 2>/dev/null || echo "0")
+	# Write TAP plan at the end
+	printf "1..%d\n" "$TEST_COUNTER" >>"$REPORT_FILE"
 	
-	printf "\n========================================\n" | tee -a "$REPORT_FILE"
-	printf "Test run complete. Report saved to: %s\n" "$REPORT_FILE"
-	printf "Failed tests: %s\n" "$failed_count"
-	printf "========================================\n"
+	# Report summary
+	failed_count=$(grep -c "^not ok" "$REPORT_FILE" 2>/dev/null || echo "0")
+	
+	printf "\n# ========================================\n" | tee -a "$REPORT_FILE"
+	printf "# Test run complete. Report saved to: %s\n" "$REPORT_FILE"
+	printf "# Total tests: %d\n" "$TEST_COUNTER"
+	printf "# Failed tests: %d\n" "$failed_count"
+	printf "# ========================================\n"
 	
 	exit "$failed_count"
 }

@@ -134,7 +134,7 @@ sh scripts/tests.sh <profile-name>
 - `podman` must be installed on your system
 - Tests run in isolated Fedora containers
 - Each test creates a fresh container and cleans up after completion
-- Test results are saved to `test_report.txt` in human-readable format
+- Test results are saved to `test_report.tap` in TAP (Test Anything Protocol) format
 
 ### Writing Tests for Profiles
 
