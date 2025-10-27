@@ -175,9 +175,16 @@ run_tests() {
 		run_profile_tests "$1" || true
 	fi
 
+	# Count failed tests
+	failed_count=$(grep -c "^\[FAIL\]" "$REPORT_FILE" 2>/dev/null || echo "0")
+
 	printf "\n========================================\n" | tee -a "$REPORT_FILE"
 	printf "Test run complete. Report saved to: %s\n" "$REPORT_FILE"
+	printf "Failed tests: %s\n" "$failed_count"
 	printf "========================================\n"
+	
+	# Exit with the number of failed tests as the status code
+	exit "$failed_count"
 }
 
 case "${1:-}" in
