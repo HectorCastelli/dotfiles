@@ -23,18 +23,57 @@ build_image() {
 	"$CONTAINER_RUNTIME" build -t "$IMAGE_NAME" -f "$REPO_DIR/Containerfile" "$REPO_DIR"
 }
 
-# Run a single test case in its own container
-# Usage: run_test_case <description> <command>
+# Run a test case (optionally in an existing container)
+# Usage: run_test_case <description> <command> [container_id]
 run_test_case() {
 	description="$1"
 	shift
-	command="$*"
-
-	# Start a container for this test
-	container=$("$CONTAINER_RUNTIME" run -d \
-		-v "$REPO_DIR:/dotfiles:Z" \
-		"$IMAGE_NAME" \
-		sleep infinity 2>&1)
+	
+	# Check if last argument looks like a container ID (starts with alphanumeric)
+	# We need to parse all args to find if the last one is a container ID
+	args=""
+	container_id=""
+	
+	# Collect all arguments
+	while [ $# -gt 0 ]; do
+		if [ $# -eq 1 ]; then
+			# Last argument - could be container_id or part of command
+			# Check if it looks like a container ID (40+ hex chars or short container name)
+			case "$1" in
+				*\ *) 
+					# Has space, definitely part of command
+					args="$args $1"
+					;;
+				*)
+					# No space - could be container ID or single-word command
+					# If it's 12+ chars and alphanumeric, treat as container ID
+					if [ ${#1} -ge 12 ]; then
+						container_id="$1"
+					else
+						args="$args $1"
+					fi
+					;;
+			esac
+		else
+			args="$args $1"
+		fi
+		shift
+	done
+	
+	command="$args"
+	
+	# If container_id is provided, use existing container; otherwise create new one
+	if [ -n "$container_id" ]; then
+		container="$container_id"
+		cleanup_after=false
+	else
+		# Start a container for this test
+		container=$("$CONTAINER_RUNTIME" run -d \
+			-v "$REPO_DIR:/dotfiles:Z" \
+			"$IMAGE_NAME" \
+			sleep infinity 2>&1)
+		cleanup_after=true
+	fi
 
 	# Run the command in the container and capture output and exit code
 	if output=$("$CONTAINER_RUNTIME" exec "$container" sh -c "$command" 2>&1); then
@@ -43,48 +82,9 @@ run_test_case() {
 		exit_code=$?
 	fi
 
-	# Clean up the container
-	"$CONTAINER_RUNTIME" rm -f "$container" >/dev/null 2>&1 || true
-
-	# Write results to report
-	{
-		printf "\n[TEST] %s\n" "$description"
-		printf "Command: %s\n" "$command"
-
-		if [ -n "$output" ]; then
-			printf "Output:\n%s\n" "$output"
-		fi
-
-		if [ $exit_code -eq 0 ]; then
-			printf "[PASS] %s\n" "$description"
-		else
-			printf "[FAIL] %s (exit code: %d)\n" "$description" "$exit_code"
-		fi
-	} >>"$REPORT_FILE"
-
-	# Also print to stdout
-	if [ $exit_code -eq 0 ]; then
-		printf "[PASS] %s\n" "$description"
-	else
-		printf "[FAIL] %s (exit code: %d)\n" "$description" "$exit_code"
-	fi
-
-	return $exit_code
-}
-
-# Run a test case in an existing container (for profile-specific tests)
-# Usage: run_test_case_in_container <container_id> <description> <command>
-run_test_case_in_container() {
-	container="$1"
-	description="$2"
-	shift 2
-	command="$*"
-
-	# Run the command in the existing container and capture output and exit code
-	if output=$("$CONTAINER_RUNTIME" exec "$container" sh -c "$command" 2>&1); then
-		exit_code=0
-	else
-		exit_code=$?
+	# Clean up the container if we created it
+	if [ "$cleanup_after" = true ]; then
+		"$CONTAINER_RUNTIME" rm -f "$container" >/dev/null 2>&1 || true
 	fi
 
 	# Write results to report
@@ -119,7 +119,7 @@ run_test_case_in_container() {
 # If PROFILE_TEST_CONTAINER is set, uses that container; otherwise creates a new one
 assert() {
 	if [ -n "$PROFILE_TEST_CONTAINER" ]; then
-		run_test_case_in_container "$PROFILE_TEST_CONTAINER" "$@" || true
+		run_test_case "$@" "$PROFILE_TEST_CONTAINER" || true
 	else
 		run_test_case "$@" || true
 	fi
@@ -201,7 +201,29 @@ run_profile_tests() {
 		# Run the install script in the container first
 		if [ -f "$profile_dir/install.sh" ]; then
 			printf "Running install script in profile test container...\n"
-			"$CONTAINER_RUNTIME" exec "$PROFILE_TEST_CONTAINER" sh -c "cd /dotfiles/profiles/$profile_name && sh install.sh" >/dev/null 2>&1 || true
+			
+			# Capture install output for the report
+			if install_output=$("$CONTAINER_RUNTIME" exec "$PROFILE_TEST_CONTAINER" sh -c "cd /dotfiles/profiles/$profile_name && sh install.sh" 2>&1); then
+				install_exit_code=0
+			else
+				install_exit_code=$?
+			fi
+			
+			# Log the setup step to the report
+			{
+				printf "\n[SETUP] Install script for profile-specific tests\n"
+				printf "Command: cd /dotfiles/profiles/%s && sh install.sh\n" "$profile_name"
+				
+				if [ -n "$install_output" ]; then
+					printf "Output:\n%s\n" "$install_output"
+				fi
+				
+				if [ $install_exit_code -eq 0 ]; then
+					printf "[PASS] Setup completed successfully\n"
+				else
+					printf "[FAIL] Setup failed (exit code: %d)\n" "$install_exit_code"
+				fi
+			} >>"$REPORT_FILE"
 		fi
 		
 		# Source the profile's test file and run tests (using the shared container)
