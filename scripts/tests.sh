@@ -1,15 +1,12 @@
 #!/usr/bin/env sh
 set -eu
 
-# === Configuration ===
 CONTAINER_RUNTIME=""
 IMAGE_NAME="dotfiles-test"
 REPORT_FILE="${REPORT_FILE:-test_report.tap}"
 REPO_DIR="$(git rev-parse --show-toplevel)"
 PROFILE_TEST_CONTAINER=""
 TEST_COUNTER=0
-
-# === Helper Functions ===
 
 detect_container_runtime() {
 	if command -v podman >/dev/null 2>&1; then
@@ -108,8 +105,6 @@ assert() {
 	run_test_case "$1" "$2" "$PROFILE_TEST_CONTAINER" || true
 }
 
-# === Test Runners ===
-
 run_common_tests() {
 	profile_name="$1"
 	profile_dir="$REPO_DIR/profiles/$profile_name"
@@ -184,9 +179,7 @@ run_profile_tests() {
 		return 1
 	}
 	
-	printf "\n# ========================================\n" | tee -a "$REPORT_FILE"
-	printf "# Testing profile: %s\n" "$profile_name" | tee -a "$REPORT_FILE"
-	printf "# ========================================\n" | tee -a "$REPORT_FILE"
+	printf "\n# Testing profile: %s\n" "$profile_name" | tee -a "$REPORT_FILE"
 	
 	run_common_tests "$profile_name"
 	run_profile_specific_tests "$profile_name"
@@ -223,16 +216,12 @@ run_tests() {
 	# Report summary
 	failed_count=$(grep -c "^not ok" "$REPORT_FILE" 2>/dev/null || echo "0")
 	
-	printf "\n# ========================================\n" | tee -a "$REPORT_FILE"
-	printf "# Test run complete. Report saved to: %s\n" "$REPORT_FILE"
+	printf "\n# Test run complete. Report saved to: %s\n" "$REPORT_FILE"
 	printf "# Total tests: %d\n" "$TEST_COUNTER"
 	printf "# Failed tests: %d\n" "$failed_count"
-	printf "# ========================================\n"
 	
 	exit "$failed_count"
 }
-
-# === Main Entry Point ===
 
 detect_container_runtime
 
