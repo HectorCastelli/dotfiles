@@ -73,8 +73,9 @@ run_test_case() {
 
 # Assert function: wrapper for run_test_case for compatibility
 # Usage: assert <description> <command>
+# Always returns 0 to allow tests to continue even on failure
 assert() {
-	run_test_case "$@"
+	run_test_case "$@" || true
 }
 
 # Run common tests that apply to all profiles
@@ -86,38 +87,38 @@ run_common_tests() {
 
 	# Test 1: Check for syntax errors in install script
 	if [ -f "$profile_dir/install.sh" ]; then
-		run_test_case "Install script has no syntax errors" \
-			"sh -n /dotfiles/profiles/$profile_name/install.sh" || true
+		assert "Install script has no syntax errors" \
+			"sh -n /dotfiles/profiles/$profile_name/install.sh"
 	fi
 
 	# Test 2: Check for syntax errors in uninstall script
 	if [ -f "$profile_dir/uninstall.sh" ]; then
-		run_test_case "Uninstall script has no syntax errors" \
-			"sh -n /dotfiles/profiles/$profile_name/uninstall.sh" || true
+		assert "Uninstall script has no syntax errors" \
+			"sh -n /dotfiles/profiles/$profile_name/uninstall.sh"
 	fi
 
 	# Test 3: Install script exits successfully
 	if [ -f "$profile_dir/install.sh" ]; then
-		run_test_case "Install script exits successfully" \
-			"cd /dotfiles/profiles/$profile_name && sh install.sh" || true
+		assert "Install script exits successfully" \
+			"cd /dotfiles/profiles/$profile_name && sh install.sh"
 	fi
 
 	# Test 4: Install script is idempotent (runs twice successfully)
 	if [ -f "$profile_dir/install.sh" ]; then
-		run_test_case "Install script exits successfully on second run (idempotent)" \
-			"cd /dotfiles/profiles/$profile_name && sh install.sh && sh install.sh" || true
+		assert "Install script exits successfully on second run (idempotent)" \
+			"cd /dotfiles/profiles/$profile_name && sh install.sh && sh install.sh"
 	fi
 
 	# Test 5: Uninstall script exits successfully
 	if [ -f "$profile_dir/uninstall.sh" ]; then
-		run_test_case "Uninstall script exits successfully" \
-			"cd /dotfiles/profiles/$profile_name && sh uninstall.sh" || true
+		assert "Uninstall script exits successfully" \
+			"cd /dotfiles/profiles/$profile_name && sh uninstall.sh"
 	fi
 
 	# Test 6: Install then uninstall works
 	if [ -f "$profile_dir/install.sh" ] && [ -f "$profile_dir/uninstall.sh" ]; then
-		run_test_case "Uninstall script exits successfully after an install" \
-			"cd /dotfiles/profiles/$profile_name && sh install.sh && sh uninstall.sh" || true
+		assert "Uninstall script exits successfully after an install" \
+			"cd /dotfiles/profiles/$profile_name && sh install.sh && sh uninstall.sh"
 	fi
 }
 
@@ -138,7 +139,7 @@ run_profile_tests() {
 	} | tee -a "$REPORT_FILE"
 
 	# Run common tests for all profiles
-	run_common_tests "$profile_name" || true
+	run_common_tests "$profile_name"
 
 	# Run profile-specific tests if they exist
 	if [ -f "$profile_dir/tests.sh" ]; then
