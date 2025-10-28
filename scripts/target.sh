@@ -161,9 +161,13 @@ apply() {
 				echo "It is a symlink to '$target'."
 			fi
 			printf "Delete and replace with symlink to '%s'? [y/N]: " "$src"
-			read -r ans
-			case "$ans" in
-			y | Y) rm -rf "$dest" ;;
+			if ! IFS= read -r ans; then
+				ans=""
+			fi
+			case "$(printf '%s' "$ans" | tr '[:upper:]' '[:lower:]')" in
+			y | yes)
+				rm -rf "$dest"
+				;;
 			*)
 				echo "Skipping '$dest'."
 				continue
