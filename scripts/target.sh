@@ -79,6 +79,18 @@ install_profile() {
 	profiles_file="$TARGET_DIR/.dotfiles_profiles"
 	grep -qxF "$profile" "$profiles_file" 2>/dev/null || echo "$profile" >>"$profiles_file"
 
+	# Launch profile's install prompt if it exists
+	if sh "$DOTFILES_DIR/scripts/profiles.sh" run_prompt "$profile"; then
+		printf "Prompt for optional profile '%s' completed.\n" "$profile"
+		if [ -f "$PROFILE_DIR/answers.env" ]; then
+			# shellcheck source=/dev/null
+			. "$PROFILE_DIR/answers.env"
+		fi
+	else
+		printf "Warning: prompt for optional profile '%s' failed or was skipped.\n" "$profile"
+		return 3
+	fi
+
 	# Copy install.sh
 	profile_install="$PROFILE_DIR/install.sh"
 	target_install="$TARGET_DIR/install.sh"

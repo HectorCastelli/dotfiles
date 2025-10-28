@@ -1,2 +1,4 @@
 # The generated target directory
 .target/
+# Prompt answers
+answers.env

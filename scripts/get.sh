@@ -69,12 +69,6 @@ install() {
 		fi
 		case "$(printf '%s' "$ans" | tr '[:upper:]' '[:lower:]')" in
 		y | yes)
-			if sh "$DOTFILES_DIR/scripts/profiles.sh" run_prompt "$profile"; then
-				printf "Prompt for optional profile '%s' completed.\n" "$profile"
-			else
-				printf "Warning: prompt for optional profile '%s' failed or was skipped.\n" "$profile"
-				return 6
-			fi
 			if sh "$DOTFILES_DIR/scripts/target.sh" install_profile "$profile"; then
 				printf "Installed optional profile: %s\n" "$profile"
 			else

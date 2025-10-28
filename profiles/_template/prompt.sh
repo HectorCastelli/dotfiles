@@ -6,9 +6,9 @@ set -u
 # The script should write to stdout the answers to the questions in the format: KEY=VALUE
 
 if [ "${ANSWER:-}" ]; then
-	printf 'ANSWER=%s\n' "$ANSWER"
+	printf 'ANSWER="%s"\n' "$ANSWER"
 else
 	printf '%s' "what is the color of the sky? " 1>&2
 	read -r ANSWER
-	printf 'ANSWER=%s\n' "$ANSWER"
+	printf 'ANSWER="%s"\n' "$ANSWER"
 fi

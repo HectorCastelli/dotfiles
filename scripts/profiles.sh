@@ -122,7 +122,7 @@ list_optional)
 	;;
 run_prompt)
 	shift
-	run_prompts "$@"
+	run_prompt "$@"
 	;;
 help)
 	USAGE="Usage:
