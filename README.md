@@ -109,3 +109,30 @@ This is a good starting point to ensure you
 If you´d like to mark a profile as mandatory, add a file named `.mandatory` to it's directory.
 
 This way, you will not be prompted to install it, and the profile will only be uninstalled with the [`--all` flag](#uninstalling-everything).
+
+### Testing
+
+To test the installation process without altering your machine, you can use a container.
+
+We support `podman` and `docker` for this.
+
+The process is simple, run the following command:
+
+```shell
+# Build a test image
+./scripts/tests.sh build
+# Enter into it
+./scripts/tests.sh launch
+```
+
+Then, from inside the running container you can do all commands you'd normally do:
+
+```shell
+./scripts/target.sh initialize
+./scripts/target.sh install_profile 0
+./scripts/target.sh apply
+# Source the .profile to simulate a new login shell
+. ~/.profile
+# enter the main shell
+zsh
+```
