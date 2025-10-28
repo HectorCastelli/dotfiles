@@ -182,9 +182,7 @@ apply() {
 				echo "It is a symlink to '$target'."
 			fi
 			printf "Delete and replace with symlink to '%s'? [y/N]: " "$src"
-			if ! IFS= read -r ans; then
-				ans=""
-			fi
+			read -r ans </dev/tty
 			case "$(printf '%s' "$ans" | tr '[:upper:]' '[:lower:]')" in
 			y | yes)
 				rm -rf "$dest"

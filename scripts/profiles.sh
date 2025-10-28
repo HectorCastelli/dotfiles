@@ -31,9 +31,7 @@ create() {
 	cp -R "$PROFILES_DIR/_template" "$target"
 
 	printf "Make profile mandatory? [y/N]: "
-	if ! IFS= read -r ans; then
-		ans=""
-	fi
+	read -r ans </dev/tty
 	case "$(printf '%s' "$ans" | tr '[:upper:]' '[:lower:]')" in
 	y | yes)
 		touch "$target/.mandatory"

@@ -64,9 +64,7 @@ install() {
 	for profile in $OPTIONAL_PROFILES; do
 		printf "Optional profile available: %s\n" "$profile"
 		printf "Would you like to install '%s'? [y/N]: " "$profile"
-		if ! IFS= read -r ans; then
-			ans=""
-		fi
+		read -r ans </dev/tty
 		case "$(printf '%s' "$ans" | tr '[:upper:]' '[:lower:]')" in
 		y | yes)
 			if sh "$DOTFILES_DIR/scripts/target.sh" install_profile "$profile"; then
