@@ -1,6 +1,15 @@
 #!/usr/bin/env sh
 set -u
 
+DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
+TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
+
+echo "Writting to $TARGET_DIR/home/.gitconfig"
+
+# Setup git based on the user information provided by the profile
+git config --file "$TARGET_DIR/home/.gitconfig" user.name "$USER_NAME"
+git config --file "$TARGET_DIR/home/.gitconfig" user.email "$USER_EMAIL"
+
 # Install homebrew
 # Must use bash for homebrew installation
 NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"

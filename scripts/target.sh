@@ -80,15 +80,19 @@ install_profile() {
 	grep -qxF "$profile" "$profiles_file" 2>/dev/null || echo "$profile" >>"$profiles_file"
 
 	# Launch profile's install prompt if it exists
-	if sh "$DOTFILES_DIR/scripts/profiles.sh" run_prompt "$profile"; then
-		printf "Prompt for optional profile '%s' completed.\n" "$profile"
-		if [ -f "$PROFILE_DIR/answers.env" ]; then
-			# shellcheck source=/dev/null
-			. "$PROFILE_DIR/answers.env"
+	if [ -f "$PROFILE_DIR/prompt.sh" ]; then
+		# Load existing answers.env if present
+		if [ ! -f "$TARGET_DIR/answers.env" ]; then
+			touch "$TARGET_DIR/answers.env"
 		fi
-	else
-		printf "Warning: prompt for optional profile '%s' failed or was skipped.\n" "$profile"
-		return 3
+		# shellcheck source=/dev/null
+		. "$TARGET_DIR/answers.env" || true
+		if output="$(sh "$PROFILE_DIR/prompt.sh")"; then
+			printf '%s\n' "$output" >>"$TARGET_DIR/answers.env"
+		else
+			echo "Error: prompt.sh for profile '$profile' failed." >&2
+			return 3
+		fi
 	fi
 
 	# Copy install.sh
@@ -145,7 +149,12 @@ apply() {
 
 	# Run install.sh from target dir if it exists
 	if [ -f "$TARGET_DIR/install.sh" ]; then
-		sh "$TARGET_DIR/install.sh"
+		if [ -f "$TARGET_DIR/answers.env" ]; then
+			# Source the answers before the script
+			sh -c ". \"$TARGET_DIR/answers.env\"; . \"$TARGET_DIR/install.sh\""
+		else
+			sh "$TARGET_DIR/install.sh"
+		fi
 	fi
 
 	# Recursively symlink files/dirs from target_dir/home into $HOME
