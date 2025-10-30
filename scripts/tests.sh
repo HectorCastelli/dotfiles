@@ -25,6 +25,8 @@ build() {
 launch() {
 	"$CONTAINER_RUNTIME" run -it --rm --entrypoint /bin/sh \
 		-v "$REPO_DIR":"/dotfiles":Z \
+		-v "$(mktemp -d)":"/home/testuser":Z \
+		-e HOME="/home/testuser" \
 		"$IMAGE_NAME"
 }
 
