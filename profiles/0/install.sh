@@ -52,3 +52,12 @@ fi
 # Setup password manager
 brew install --cask bitwarden
 brew install bitwarden-cli
+
+# Setup VSCode
+brew install --cask visual-studio-code
+
+# Setup cli utilities
+cli_utils="bat jq yq viddy glow tlrc"
+for util in $cli_utils; do
+	brew install "$util"
+done
