@@ -42,3 +42,6 @@ done
 
 # Update the PATH variable
 export PATH
+
+# Flag that the profile has been loaded
+export DOTFILES_PROFILE_LOADED=1
