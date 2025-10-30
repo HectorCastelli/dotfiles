@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 
+# Source the .profile to inherit global setup
 source "$HOME/.profile"
 
 # Load shell aliases recursively

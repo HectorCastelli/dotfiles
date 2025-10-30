@@ -28,5 +28,11 @@ if [ -d "$HOME/.local/bin" ]; then
 	PATH="$HOME/.local/bin:$PATH"
 fi
 
+# Run auto-load functions
+find "$HOME/.config/shell/functions" -type f | while IFS= read -r autoload_file; do
+	# shellcheck source=/dev/null
+	. "$autoload_file"
+done
+
 # Update the PATH variable
 export PATH
