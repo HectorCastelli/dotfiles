@@ -1,0 +1,37 @@
+[core]
+# Global git ignore file for all repositories
+excludesfile = ~/.gitignore
+# Enforce case sensitivity
+ignorecase = false
+[init]
+# Use inclusive language by default
+defaultBranch = main
+[status]
+# Show stash info in git status
+showStash = true
+# Show submodule info in git status
+submoduleSummary = true
+[fetch]
+# Remove local references that no longer exist on the remote
+prune = true
+[pull]
+# Rebase instead of merge when pulling changes
+rebase = true
+# Auto stash local changes before pulling
+rebaseAutoStash = true
+[push]
+# Setup a remote tracking branch on push
+autoSetupRemote = true
+[merge]
+# Use zdiff3 to get contextual hint when resolving conflicts
+conflictStyle = zdiff3
+[diff]
+# Handle moved blocks better
+algorithm = histogram
+# Show commits instead of sha when viewing diffs in submodules
+submodule = log
+# Show 8 lines of surrounding  context in diffs
+context=8
+[submodule]
+# Update submodules recursively
+recurse = true
