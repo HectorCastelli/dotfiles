@@ -35,3 +35,6 @@ context=8
 [submodule]
 # Update submodules recursively
 recurse = true
+[include]
+# Include exclusive file for extra settings to avoid changes on the main .gitconfig file
+path = ~/.gitconfig.extend

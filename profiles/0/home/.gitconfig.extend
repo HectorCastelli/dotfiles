@@ -1,0 +1,4 @@
+# This is a Git configuration extension file.
+# You can add additional Git configuration settings here.
+# Any settings defined here will be merged with those in the main .gitconfig file.
+# Contextual/file-specific settings can be added as needed.
