@@ -157,10 +157,16 @@ apply() {
 		fi
 	fi
 
-	# Recursively symlink files/dirs from target_dir/home into $HOME
+	# Recursively symlink files from target_dir/home into $HOME, create directories as needed
 	find "$TARGET_HOME" -mindepth 1 | while read -r src; do
 		rel_path="${src#"$TARGET_HOME"/}"
 		dest="$HOME/$rel_path"
+
+		if [ -d "$src" ]; then
+			# If it's a directory, just create the directory in $HOME
+			mkdir -p "$dest"
+			continue
+		fi
 
 		# Ensure parent directory exists
 		dest_dir="$(dirname "$dest")"
