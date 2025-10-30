@@ -1,0 +1,90 @@
+{
+    "workbench": {
+        "iconTheme": "seti",
+        "preferredLightColorTheme": "Default Light Modern",
+        "preferredDarkColorTheme": "Default Dark Modern",
+        "colorTheme": "Light Modern"
+    },
+    "window": {
+        "autoDetectColorScheme": true
+    },
+    "editor": {
+        "multiCursorModifier": "alt",
+        "stickyScroll": {
+            "enabled": true
+        },
+        "unicodeHighlight": {
+            "nonBasicASCII": false
+        },
+        "fontFamily": "'Monaspace Neon', monospace",
+        "fontLigatures": "'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'ss07', 'ss08', 'calt', 'dlig'",
+        "rulers": [
+            80,
+            120
+        ],
+        "formatOnSave": true
+    },
+    "terminal": {
+        "integrated": {
+            "scrollback": 1000000
+        }
+    },
+    "git": {
+        "autofetch": true,
+        "confirmSync": false,
+        "enableSmartCommit": true,
+        "mergeEditor": true,
+        "pruneOnFetch": true,
+        "rebaseWhenSync": true,
+        "allowNoVerifyCommit": true,
+        "blame": {
+            "editorDecoration": {
+                "enabled": false
+            }
+        }
+    },
+    "githubPullRequests": {
+        "pullBranch": "never"
+    },
+    "liveshare": {
+        "guestApprovalRequired": true,
+        "showInStatusBar": "whileCollaborating",
+        "accessibility": {
+            "soundsEnabled": false,
+            "voiceEnabled": false
+        },
+        "focusBehavior": "prompt",
+        "languages": {
+            "allowGuestCommandControl": true
+        },
+        "launcherClient": "visualStudioCode"
+    },
+    "cSpell": {
+        "diagnosticLevel": "Warning"
+    },
+    "errorLens": {
+        "delay": 1000,
+        "enabledDiagnosticLevels": [
+            "error",
+            "warning"
+        ],
+        "enabled": false
+    },
+    "search": {
+        "useIgnoreFiles": true,
+        "useGlobalIgnoreFiles": true
+    },
+    "diffEditor": {
+        "ignoreTrimWhitespace": false
+    },
+    "debug": {
+        "javascript": {
+            "autoAttachFilter": "disabled"
+        }
+    },
+    "typescript": {
+        "updateImportsOnFileMove": {
+            "enabled": "always"
+        }
+    }
+}
