@@ -23,5 +23,10 @@ if [ "$(uname)" = "Darwin" ]; then
 	PATH="${HOMEBREW_PREFIX}/opt/coreutils/libexec/gnubin:$PATH"
 fi
 
+# Add Home local bin to PATH
+if [ -d "$HOME/.local/bin" ]; then
+	PATH="$HOME/.local/bin:$PATH"
+fi
+
 # Update the PATH variable
 export PATH
