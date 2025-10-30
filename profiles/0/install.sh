@@ -37,3 +37,18 @@ brew install unzip
 
 # Install monaspace font (patched with NerdFonts glyphs)
 brew install --cask font-monaspace-nf
+
+# Setup basic SSH identities
+mkdir -p "$TARGET_DIR/home/.ssh"
+# ed25519 keys for general use
+if ! [ -e "$TARGET_DIR/home/.ssh/id_ed25519" ]; then
+	ssh-keygen -t ed25519 -f "$TARGET_DIR/home/.ssh/id_ed25519" -N "" -C "$USER_EMAIL"
+fi
+# ed25519 keys for signatures
+if ! [ -e "$TARGET_DIR/home/.ssh/id_ed25519_signing" ]; then
+	ssh-keygen -t ed25519 -f "$TARGET_DIR/home/.ssh/id_ed25519_signing" -N "" -C "$USER_EMAIL"
+fi
+
+# Setup password manager
+brew install --cask bitwarden
+brew install bitwarden-cli

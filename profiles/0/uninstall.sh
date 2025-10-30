@@ -7,6 +7,11 @@ if ! command -v brew >/dev/null 2>&1; then
 	exit 0
 fi
 
+# Remove password manager
+brew uninstall bitwarden-cli 2>/dev/null || true
+brew uninstall --cask bitwarden 2>/dev/null || true
+# Do not remove SSH Identities, since they may be in use
+
 # Remove monaspace font
 brew uninstall --cask font-monaspace-nf 2>/dev/null || true
 
