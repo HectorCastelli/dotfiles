@@ -160,6 +160,8 @@ build() {
 				if [ -f "$profile_install" ]; then
 					if [ -f "$target_install" ]; then
 						cat "$profile_install" >>"$target_install"
+						# Add a blank line to ensure badly formatted scripts dont break
+						echo "" >>"$target_install"
 					else
 						cp "$profile_install" "$target_install"
 					fi
