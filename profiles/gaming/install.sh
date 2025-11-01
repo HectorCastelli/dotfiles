@@ -17,6 +17,9 @@ if [ "$(uname)" = "Linux" ]; then
 	# Steam ROM Manager
 	flatpak install -y flathub com.steamgriddb.steam-rom-manager
 	
+	# Luanti (formerly Minetest)
+	flatpak install -y flathub net.minetest.Minetest
+	
 	# Note: webkit2gtk4 and winetricks are typically installed as dependencies
 	# or available through system package managers. Bottles includes winetricks functionality.
 	
@@ -35,6 +38,9 @@ elif [ "$(uname)" = "Darwin" ]; then
 	
 	# PPSSPP
 	brew install --cask ppsspp
+	
+	# Luanti (formerly Minetest)
+	brew install --cask minetest
 	
 	# Note: Steam ROM Manager and GOG Galaxy have limited macOS support
 	# webkit2gtk4 is not needed on macOS
