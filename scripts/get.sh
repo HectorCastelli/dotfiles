@@ -49,9 +49,22 @@ install() {
 		return 4
 	fi
 
-	printf "Installing all mandatory profiles...\n"
-	MANDATORY_PROFILES="$("$DOTFILES_DIR/scripts/profiles.sh" list_mandatory)"
-	for profile in $MANDATORY_PROFILES; do
+	PROFILES=$("$DOTFILES_DIR/scripts/profiles.sh" list)
+	for profile in $PROFILES; do
+		if [ ! -f "$DOTFILES_DIR/profiles/$profile/.mandatory" ]; then
+			printf "Optional profile available: %s\n" "$profile"
+			printf "Would you like to install '%s'? [y/N]: " "$profile"
+			read -r ans </dev/tty
+			case "$(printf '%s' "$ans" | tr '[:upper:]' '[:lower:]')" in
+			y | yes) ;;
+			*)
+				printf "Skipped optional profile: %s\n" "$profile"
+				continue
+				;;
+			esac
+		else
+			printf "Profile '%s' is mandatory.\n" "$profile"
+		fi
 		if sh "$DOTFILES_DIR/scripts/target.sh" install_profile "$profile"; then
 			printf "Installed mandatory profile: %s\n" "$profile"
 		else
@@ -60,28 +73,32 @@ install() {
 		fi
 	done
 
-	OPTIONAL_PROFILES="$("$DOTFILES_DIR/scripts/profiles.sh" list_optional)"
-	for profile in $OPTIONAL_PROFILES; do
-		printf "Optional profile available: %s\n" "$profile"
-		printf "Would you like to install '%s'? [y/N]: " "$profile"
-		read -r ans </dev/tty
-		case "$(printf '%s' "$ans" | tr '[:upper:]' '[:lower:]')" in
-		y | yes)
-			if sh "$DOTFILES_DIR/scripts/target.sh" install_profile "$profile"; then
-				printf "Installed optional profile: %s\n" "$profile"
-			else
-				printf "Error: failed to install optional profile '%s'.\n" "$profile"
-				return 7
-			fi
-			;;
-		*)
-			printf "Skipped optional profile: %s\n" "$profile"
-			;;
-		esac
-	done
+	printf "Building target configuration...\n"
+	if sh "$DOTFILES_DIR/scripts/target.sh" build; then
+		printf "Target configuration built successfully.\n"
+	else
+		printf "Error: failed to build target configuration.\n"
+		return 6
+	fi
 
-	# TODO: Show final state of the target with diff command
-	# TODO: Ask for approval and apply the target if approved
+	printf "If you would like to review the target first, please look into the 'link' directory.\n"
+	printf "Do you want to proceed with the installation? [y/N]: "
+	read -r apply_ans </dev/tty
+	case "$(printf '%s' "$apply_ans" | tr '[:upper:]' '[:lower:]')" in
+	y | yes)
+		printf "Applying target configuration...\n"
+		if sh "$DOTFILES_DIR/scripts/target.sh" apply; then
+			printf "Target configuration applied successfully.\n"
+		else
+			printf "Error: failed to apply target configuration.\n"
+			return 7
+		fi
+		;;
+	*)
+		printf "Installation skipped. You can apply the configuration later by running:\n"
+		printf "  sh %s/scripts/target.sh apply\n" "$DOTFILES_DIR"
+		;;
+	esac
 }
 
 case "${1:-}" in
