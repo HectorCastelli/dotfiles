@@ -13,6 +13,12 @@ check() {
 }
 
 extend_sudo_timeout() {
+	# Check if already running (prevent duplicate processes)
+	if [ -n "${SUDO_KEEPER_PID:-}" ] && kill -0 "$SUDO_KEEPER_PID" 2>/dev/null; then
+		# Sudo keeper already running, nothing to do
+		return 0
+	fi
+
 	# Check if sudo is available and we're on a system that uses it
 	if ! command -v sudo >/dev/null 2>&1; then
 		# sudo not available, nothing to do
@@ -25,15 +31,17 @@ extend_sudo_timeout() {
 	printf "Please enter your password to proceed (you won't be asked again for a while):\n"
 	if sudo -v; then
 		# Keep sudo session alive in background
-		# This updates the timestamp every 60 seconds
+		# This updates the timestamp every 60 seconds (configurable via SUDO_REFRESH_INTERVAL)
 		(
+			interval="${SUDO_REFRESH_INTERVAL:-60}"
 			while true; do
-				sleep 60
+				sleep "$interval"
 				sudo -n true 2>/dev/null || exit
 			done
 		) &
 		SUDO_KEEPER_PID=$!
-		# Store the PID so we can kill it later if needed
+		# Set up cleanup trap to kill the background process
+		trap 'kill "$SUDO_KEEPER_PID" 2>/dev/null || true' EXIT INT TERM
 		printf "Sudo session extended. (PID: %s)\n" "$SUDO_KEEPER_PID"
 	else
 		printf "Warning: Failed to authenticate with sudo. Installation may prompt for password multiple times.\n"
