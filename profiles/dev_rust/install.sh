@@ -15,4 +15,5 @@ brew install rustup
 rustup-init -y --default-toolchain stable
 
 # Source cargo environment
+# shellcheck source=/dev/null
 . "$HOME/.cargo/env"
