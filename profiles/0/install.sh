@@ -6,6 +6,12 @@ TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
 
 echo "Writting to $TARGET_DIR/home/.gitconfig"
 
+# Load brew optimizations
+if [ -x "$TARGET_DIR/home/.config/shell/autoload/homebrew-env.sh" ]; then
+	# shellcheck source=/dev/null
+	. "$TARGET_DIR/home/.config/shell/autoload/homebrew-env.sh"
+fi
+
 # Setup git based on the user information provided by the profile
 git config --file "$TARGET_DIR/home/.gitconfig" user.name "$USER_NAME"
 git config --file "$TARGET_DIR/home/.gitconfig" user.email "$USER_EMAIL"
