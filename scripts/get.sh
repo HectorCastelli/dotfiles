@@ -92,24 +92,28 @@ install() {
 
 	PROFILES=$("$DOTFILES_DIR/scripts/profiles.sh" list)
 	for profile in $PROFILES; do
-		if [ ! -f "$DOTFILES_DIR/profiles/$profile/.mandatory" ]; then
-			printf "Optional profile available: %s\n" "$profile"
-			printf "Would you like to install '%s'? [y/N]: " "$profile"
-			read -r ans </dev/tty
-			case "$(printf '%s' "$ans" | tr '[:upper:]' '[:lower:]')" in
-			y | yes) ;;
-			*)
-				printf "Skipped optional profile: %s\n" "$profile"
-				continue
-				;;
-			esac
+		if ! grep -qxF "$profile" "$TARGET_DIR/.dotfiles_profiles" 2>/dev/null; then
+			if [ ! -f "$DOTFILES_DIR/profiles/$profile/.mandatory" ]; then
+				printf "Optional profile available: %s\n" "$profile"
+				printf "Would you like to install '%s'? [y/N]: " "$profile"
+				read -r ans </dev/tty
+				case "$(printf '%s' "$ans" | tr '[:upper:]' '[:lower:]')" in
+				y | yes) ;;
+				*)
+					printf "Skipped optional profile: %s\n" "$profile"
+					continue
+					;;
+				esac
+			else
+				printf "Profile '%s' is mandatory.\n" "$profile"
+			fi
 		else
-			printf "Profile '%s' is mandatory.\n" "$profile"
+			printf "Profile '%s' is already installed.\n" "$profile"
 		fi
 		if sh "$DOTFILES_DIR/scripts/target.sh" install_profile "$profile"; then
-			printf "Installed mandatory profile: %s\n" "$profile"
+			printf "Installed profile: %s\n" "$profile"
 		else
-			printf "Error: failed to install mandatory profile '%s'.\n" "$profile"
+			printf "Error: failed to install profile '%s'.\n" "$profile"
 			return 2
 		fi
 	done
