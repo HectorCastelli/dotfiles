@@ -128,9 +128,7 @@ The process is simple, run the following command:
 Then, from inside the running container you can do all commands you'd normally do:
 
 ```shell
-./scripts/target.sh initialize
-./scripts/target.sh install_profile 0
-./scripts/target.sh apply
+./scripts/get.sh get
 # Source the .profile to simulate a new login shell
 . ~/.profile
 # enter the main shell

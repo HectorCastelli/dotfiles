@@ -128,17 +128,23 @@ uninstall_profile() {
 build() {
 	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
 	TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
-	profiles_file="$TARGET_DIR/.dotfiles_profiles"
+
+	# Clean target_dir contents except important files
+	find "$TARGET_DIR" -mindepth 1 \
+		! -name ".dotfiles_profiles" \
+		! -name "answers.env" \
+		! -name ".git" \
+		-exec rm -rf {} +
 
 	# Sort profiles by dependencies using profiles.sh sort_dependencies
-	if [ -f "$profiles_file" ]; then
-		profiles_input=$(tr '\n' ' ' <"$profiles_file")
+	sorted_profiles=""
+	if [ -f "$TARGET_DIR/.dotfiles_profiles" ]; then
+		profiles_input=$(tr '\n' ' ' <"$TARGET_DIR/.dotfiles_profiles")
 		sorted_profiles=$(sh "$DOTFILES_DIR/scripts/profiles.sh" sort_dependencies "$profiles_input")
-		printf '%s\n' "$sorted_profiles" >"$profiles_file"
 	fi
 
-	if [ -f "$profiles_file" ]; then
-		while read -r p; do
+	if [ -n "$sorted_profiles" ]; then
+		for p in $sorted_profiles; do
 			if [ -n "$p" ]; then
 				PROFILE_DIR="$DOTFILES_DIR/profiles/$p"
 				# Copy install.sh
@@ -160,7 +166,7 @@ build() {
 					cp -a "$profile_home/." "$target_home/"
 				fi
 			fi
-		done <"$profiles_file"
+		done
 	fi
 }
 
