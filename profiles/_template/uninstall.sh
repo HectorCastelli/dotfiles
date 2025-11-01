@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -u
+set -eu
 
 # This script is the base for uninstalling a new profile.
 # It is intended to be copied and modified for each new profile.
