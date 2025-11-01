@@ -1,25 +1,31 @@
 #!/usr/bin/env sh
 set -eu
 
+DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
+TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
+
 if [ "$(uname)" = "Linux" ]; then
 	# Fedora-based
 	if command -v dnf >/dev/null 2>&1; then
-		# Check Fedora version compatibility
-		fedora_version=$(rpm -E %fedora)
-		if [ "$fedora_version" -gt 41 ]; then
-			echo "Error: Fedora version $fedora_version is not supported. Maximum supported version is 41."
-			exit 2
-		fi
-		# Add terra repository
-		sudo dnf install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release-$(rpm -E %fedora).noarch.rpm -y
-		dnf check-update
+		# Install requeriments
+		sudo dnf install -y @development-tools gcc-c++ wl-clipboard libxkbcommon-devel dbus-devel wxGTK-devel.x86_64
+
+		# Build espanso from source
+		mkdir -p "$TARGET_DIR/build"
+		git clone https://github.com/espanso/espanso "$TARGET_DIR/build/espanso"
+
 		# Install espanso
+		cd "$TARGET_DIR/build/espanso" || exit 1
 		if [ "${XDG_SESSION_TYPE:-}" = "x11" ] || [ "${DISPLAY:-}" != "" ]; then
-			dnf install espanso-x11 -y
+			cargo build -p espanso --release --no-default-features --features vendored-tls,modulo
+			sudo mv "$TARGET_DIR/build/espanso/target/release/espanso" "$TARGET_DIR/home/.local/bin/espanso"
 		else
-			# Assume Wayland
-			dnf install espanso-wayland -y
+			cargo build -p espanso --release --no-default-features --features modulo,vendored-tls,wayland
+			sudo mv "$TARGET_DIR/build/espanso/target/release/espanso" "$TARGET_DIR/home/.local/bin/espanso"
+			sudo setcap "cap_dac_override+p" $(which espanso)
 		fi
+		cd -
+
 		# Register espanso as a systemd service (required only once)
 		espanso service register
 		# Start espanso
