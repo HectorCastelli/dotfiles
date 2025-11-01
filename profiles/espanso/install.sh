@@ -12,6 +12,9 @@ if [ "$(uname)" = "Linux" ]; then
 
 		# Build espanso from source
 		mkdir -p "$TARGET_DIR/build"
+		if [ -d "$TARGET_DIR/build/espanso" ]; then
+			rm -rf "$TARGET_DIR/build/espanso"
+		fi
 		git clone https://github.com/espanso/espanso "$TARGET_DIR/build/espanso"
 
 		# Install espanso
@@ -27,9 +30,9 @@ if [ "$(uname)" = "Linux" ]; then
 		cd -
 
 		# Register espanso as a systemd service (required only once)
-		espanso service register
+		"$TARGET_DIR/home/.local/bin/espanso" service register
 		# Start espanso
-		espanso start || echo "Failed to start espanso service. This may be fixed with a reboot."
+		"$TARGET_DIR/home/.local/bin/espanso" start || echo "Failed to start espanso service. This may be fixed with a reboot."
 	else
 		echo "Error: This Linux system is not supported"
 		exit 1
