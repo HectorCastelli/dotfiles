@@ -67,6 +67,14 @@ get() {
 		fi
 	fi
 
+	# Pull submodules
+	if git -C "$DOTFILES_DIR" submodule update --init --recursive --remote; then
+		printf "Submodules updated successfully.\n"
+	else
+		printf "Error: failed to update submodules.\n"
+		return 6
+	fi
+
 	install
 }
 
