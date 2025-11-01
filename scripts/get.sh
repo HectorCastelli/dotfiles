@@ -14,7 +14,7 @@ check() {
 
 extend_sudo_timeout() {
 	# Check if already running (prevent duplicate processes)
-	if [ -n "${SUDO_KEEPER_PID:-}" ] && kill -0 "$SUDO_KEEPER_PID" 2>/dev/null; then
+	if [ -n "${_DOTFILES_SUDO_KEEPER_PID:-}" ] && kill -0 "$_DOTFILES_SUDO_KEEPER_PID" 2>/dev/null; then
 		# Sudo keeper already running, nothing to do
 		return 0
 	fi
@@ -39,10 +39,10 @@ extend_sudo_timeout() {
 				sudo -n true 2>/dev/null || exit
 			done
 		) &
-		SUDO_KEEPER_PID=$!
+		_DOTFILES_SUDO_KEEPER_PID=$!
 		# Set up cleanup trap to kill the background process
-		trap 'kill "$SUDO_KEEPER_PID" 2>/dev/null || true' EXIT INT TERM
-		printf "Sudo session extended. (PID: %s)\n" "$SUDO_KEEPER_PID"
+		trap 'kill "$_DOTFILES_SUDO_KEEPER_PID" 2>/dev/null || true' EXIT INT TERM
+		printf "Sudo session extended. (PID: %s)\n" "$_DOTFILES_SUDO_KEEPER_PID"
 	else
 		printf "Warning: Failed to authenticate with sudo. Installation may prompt for password multiple times.\n"
 		return 1
