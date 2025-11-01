@@ -64,6 +64,7 @@ fi
 # Setup password manager
 if [ "$(uname)" = "Linux" ]; then
 	flatpak install -y flathub com.bitwarden.desktop
+	flatpak install flathub com.belmoussaoui.Authenticator # TODO: find macos alternative
 else
 	brew install --cask bitwarden
 fi
