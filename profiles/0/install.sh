@@ -42,7 +42,11 @@ fi
 # Install zsh
 brew install zsh
 # Switch the user default shell to zsh
-chsh -s "$(which zsh)"
+if [ "$(uname)" = "Linux" ]; then
+	sudo usermod -s "$(which zsh)" "$(whoami)"
+else
+	chsh -s "$(which zsh)"
+fi
 
 # Install starship prompt
 brew install starship
@@ -82,8 +86,8 @@ brew install bitwarden-cli
 if [ "$(uname)" = "Linux" ]; then
 	sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 	echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo >/dev/null
-	dnf check-update
-	sudo dnf install --assumeyes code
+	# dnf check-update
+	# sudo dnf install --assumeyes code
 else
 	brew install --cask visual-studio-code
 fi
