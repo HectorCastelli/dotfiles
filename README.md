@@ -13,7 +13,7 @@ The files inside the target are then [symlinked](https://rm-rf.es/diferencias-en
 To use this project, execute the [following script](./scripts/get.sh) in a terminal:
 
 ```shell
-curl -fsSL https://raw.githubusercontent.com/HectorCastelli/dotfiles/HEAD/scripts/get.sh | sh -s -- install
+curl -fsSL https://raw.githubusercontent.com/HectorCastelli/dotfiles/HEAD/scripts/get.sh | sh -s -- get
 ```
 
 You must have `sh` and `curl` available for this to work.

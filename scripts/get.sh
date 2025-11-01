@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -eu
 
-check_dependencies() {
+check() {
 	required_commands="git curl sh bash which chsh"
 
 	for cmd in $required_commands; do
@@ -10,11 +10,9 @@ check_dependencies() {
 			return 1
 		fi
 	done
-
-	return 0
 }
 
-install() {
+get() {
 	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
 	DOTFILES_REPO=${DOTFILES_REPO:-"https://github.com/HectorCastelli/dotfiles.git"}
 
@@ -22,6 +20,8 @@ install() {
 	if ! check_dependencies; then
 		printf "Error: missing required dependencies.\n"
 		return 1
+	else
+		printf "All required dependencies are installed.\n"
 	fi
 
 	printf "Target directory: %s\n" "$DOTFILES_DIR"
@@ -41,12 +41,18 @@ install() {
 		return 3
 	fi
 
+	install
+}
+
+install() {
+	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
+
 	printf "Initializing target directory...\n"
 	if sh "$DOTFILES_DIR/scripts/target.sh initialize"; then
 		printf "Target directory initialized successfully.\n"
 	else
 		printf "Error: target directory initialization failed.\n"
-		return 4
+		return 1
 	fi
 
 	PROFILES=$("$DOTFILES_DIR/scripts/profiles.sh" list)
@@ -69,7 +75,7 @@ install() {
 			printf "Installed mandatory profile: %s\n" "$profile"
 		else
 			printf "Error: failed to install mandatory profile '%s'.\n" "$profile"
-			return 5
+			return 2
 		fi
 	done
 
@@ -78,7 +84,7 @@ install() {
 		printf "Target configuration built successfully.\n"
 	else
 		printf "Error: failed to build target configuration.\n"
-		return 6
+		return 3
 	fi
 
 	printf "If you would like to review the target first, please look into the 'link' directory.\n"
@@ -91,7 +97,7 @@ install() {
 			printf "Target configuration applied successfully.\n"
 		else
 			printf "Error: failed to apply target configuration.\n"
-			return 7
+			return 4
 		fi
 		;;
 	*)
@@ -102,17 +108,21 @@ install() {
 }
 
 case "${1:-}" in
+get)
+	get
+	;;
 install)
 	install
 	;;
 check)
-	check_dependencies
+	check
 	;;
 help)
 	USAGE="Usage:
 $(basename "$0") <command>
 
 Available commands:
+	get		Download the dotfiles repository, then installs it
 	install	Installs the dotfiles repository
 	check	Checks for required dependencies
 	help	Show this help message"
