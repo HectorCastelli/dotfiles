@@ -3,8 +3,6 @@
 excludesfile = ~/.gitignore
 # Enforce case sensitivity
 ignorecase = false
-# Default editor for changes
-editor = code --wait
 # Better pager
 pager = bat
 [init]

@@ -7,12 +7,14 @@ if ! command -v brew >/dev/null 2>&1; then
 	exit 0
 fi
 
-# Remove VSCode
-brew uninstall --cask visual-studio-code 2>/dev/null || true
-
 # Remove password manager
 brew uninstall bitwarden-cli 2>/dev/null || true
-brew uninstall --cask bitwarden 2>/dev/null || true
+if [ "$(uname)" = "Linux" ]; then
+	flatpak uninstall -y flathub com.bitwarden.desktop
+	flatpak uninstall -y flathub com.belmoussaoui.Authenticator
+else
+	brew uninstall --cask bitwarden 2>/dev/null || true
+fi
 
 # Remove cli utilities
 cli_utils="bat jq yq viddy glow tlrc"
