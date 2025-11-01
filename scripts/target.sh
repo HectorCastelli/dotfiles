@@ -116,12 +116,17 @@ uninstall_profile() {
 	TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
 	profiles_file="$TARGET_DIR/.dotfiles_profiles"
 
-	# Clean target_dir contents except .dotfiles_profiles and .git
-	find "$TARGET_DIR" -mindepth 1 ! -name ".dotfiles_profiles" ! -name ".git" -exec rm -rf {} +
-
 	# Remove profile from .dotfiles_profiles
 	if [ -f "$profiles_file" ]; then
 		grep -vxF "$profile" "$profiles_file" >"$profiles_file.tmp" && mv "$profiles_file.tmp" "$profiles_file"
+	fi
+
+	# Run uninstall script if it exists
+	if [ -f "$DOTFILES_DIR/profiles/$profile/uninstall.sh" ]; then
+		if ! sh "$DOTFILES_DIR/profiles/$profile/uninstall.sh"; then
+			echo "Error: uninstall.sh for profile '$profile' failed." >&2
+			return 2
+		fi
 	fi
 }
 
