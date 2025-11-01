@@ -137,7 +137,7 @@ build() {
 	TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
 
 	# Clean target_dir contents except important files
-	find "$TARGET_DIR" -mindepth 1 \
+	find "$TARGET_DIR" -mindepth 1 -maxdepth 1 \
 		! -name ".dotfiles_profiles" \
 		! -name "answers.env" \
 		! -name ".git" \
