@@ -17,7 +17,7 @@ get() {
 	DOTFILES_REPO=${DOTFILES_REPO:-"https://github.com/HectorCastelli/dotfiles.git"}
 
 	printf "Checking mandatory dependencies...\n"
-	if ! check_dependencies; then
+	if ! check; then
 		printf "Error: missing required dependencies.\n"
 		return 1
 	else
