@@ -2,7 +2,7 @@
 set -eu
 
 if [ "$(uname)" = "Linux" ]; then
-	flatpak install -y flathub com.github.tchx84.Flatseal
+	flatpak install -y flathub io.github.flattool.Warehouse
 	flatpak install -y flathub org.gnome.baobab
 	flatpak install -y flathub org.gnome.tweaks
 	flatpak install -y flathub com.mattjakeman.ExtensionManager
