@@ -21,7 +21,7 @@ if [ "$(uname)" = "Linux" ]; then
 	# Fedora-based
 	if command -v dnf >/dev/null 2>&1; then
 		sudo dnf install -y flatpak
-		flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+		flatpak remote-add --if-not-exists --assumeyes flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 	else
 		echo "Error: This Linux system is not supported"
 		exit 1
@@ -76,7 +76,7 @@ fi
 # Setup password manager
 if [ "$(uname)" = "Linux" ]; then
 	flatpak install -y flathub com.bitwarden.desktop
-	flatpak install flathub com.belmoussaoui.Authenticator # TODO: find macos alternative
+	flatpak install -y flathub com.belmoussaoui.Authenticator # TODO: find macos alternative
 else
 	brew install --cask bitwarden
 fi

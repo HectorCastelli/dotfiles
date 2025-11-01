@@ -8,7 +8,7 @@ brew install shellcheck
 brew install shfmt
 
 if [ "$(uname)" = "Linux" ]; then
-	flatpak install flathub com.usebruno.Bruno
+	flatpak install -y flathub com.usebruno.Bruno
 elif [ "$(uname)" = "Darwin" ]; then
 	brew install --cask bruno
 fi
