@@ -9,7 +9,7 @@ This repo is a minimal, hackable dotfiles manager implemented as a set of shell 
   - `sh` and `curl` are required for the bootstrap step.
 
 ## Project-specific patterns & conventions
-  - `install.sh` — apply changes for that profile (idempotent). Example template is under `profiles/_template/install.sh` which begins with #!/usr/bin/env bash and `set -u`.
+  - `install.sh` — apply changes for that profile (idempotent). Example template is under `profiles/_template/install.sh` which begins with `#!/usr/bin/env sh` and `set -eu`.
   - `uninstall.sh` — undo what the profile installed.
   - `prompt.sh` — (optional) request interactive inputs required by `install.sh`.
   - `home/` — a directory whose files are symlinked into $HOME; treat it as the canonical declaration of desired home files.
