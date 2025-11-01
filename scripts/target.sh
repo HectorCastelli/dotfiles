@@ -42,6 +42,15 @@ save() {
 	timestamp="$(date +"%Y-%m-%d %H:%M:%S")"
 
 	cd "$TARGET_DIR"
+
+	# Ensure git user is configured for this repository
+	if [ -z "$(git config user.name 2>/dev/null || true)" ]; then
+		git config user.name "Dotfiles Manager"
+	fi
+	if [ -z "$(git config user.email 2>/dev/null || true)" ]; then
+		git config user.email "dotfiles@localhost"
+	fi
+
 	git add -A
 	git commit -m "Save $timestamp" || true
 
