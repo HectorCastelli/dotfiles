@@ -90,12 +90,14 @@ install_profile() {
 
 	# Launch profile's install prompt if it exists
 	if [ -f "$PROFILE_DIR/prompt.sh" ]; then
-		# Load existing answers.env if present
+		# Load existing answers.env or initialize it
 		if [ ! -f "$TARGET_DIR/answers.env" ]; then
 			touch "$TARGET_DIR/answers.env"
 		fi
+		set -a
 		# shellcheck source=/dev/null
 		. "$TARGET_DIR/answers.env" || true
+		set +a
 		if output="$(sh "$PROFILE_DIR/prompt.sh")"; then
 			printf '%s\n' "$output" >>"$TARGET_DIR/answers.env"
 		else
