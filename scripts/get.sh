@@ -12,6 +12,35 @@ check() {
 	done
 }
 
+extend_sudo_timeout() {
+	# Check if sudo is available and we're on a system that uses it
+	if ! command -v sudo >/dev/null 2>&1; then
+		# sudo not available, nothing to do
+		return 0
+	fi
+
+	# Prompt for sudo credentials once to extend the timeout
+	# This reduces password prompts during the installation process
+	printf "Some installation steps require administrative privileges.\n"
+	printf "Please enter your password to proceed (you won't be asked again for a while):\n"
+	if sudo -v; then
+		# Keep sudo session alive in background
+		# This updates the timestamp every 60 seconds
+		(
+			while true; do
+				sleep 60
+				sudo -n true 2>/dev/null || exit
+			done
+		) &
+		SUDO_KEEPER_PID=$!
+		# Store the PID so we can kill it later if needed
+		printf "Sudo session extended. (PID: %s)\n" "$SUDO_KEEPER_PID"
+	else
+		printf "Warning: Failed to authenticate with sudo. Installation may prompt for password multiple times.\n"
+		return 1
+	fi
+}
+
 get() {
 	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
 	DOTFILES_REPO=${DOTFILES_REPO:-"https://github.com/HectorCastelli/dotfiles.git"}
@@ -23,6 +52,9 @@ get() {
 	else
 		printf "All required dependencies are installed.\n"
 	fi
+
+	# Extend sudo timeout to reduce password prompts during installation
+	extend_sudo_timeout
 
 	if [ -d "$DOTFILES_DIR" ]; then
 		if [ -d "$DOTFILES_DIR/.git" ]; then
@@ -81,6 +113,9 @@ get() {
 install() {
 	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
 	TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
+
+	# Extend sudo timeout to reduce password prompts during installation
+	extend_sudo_timeout
 
 	printf "Initializing target directory...\n"
 	if sh "$DOTFILES_DIR/scripts/target.sh" initialize; then
