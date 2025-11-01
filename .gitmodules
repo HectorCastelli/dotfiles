@@ -1,0 +1,9 @@
+[submodule "profiles/0/home/.config/shell/plugins/alias-tips"]
+	path = profiles/0/home/.config/shell/plugins/alias-tips
+	url = https://github.com/djui/alias-tips.git
+[submodule "profiles/0/home/.config/shell/plugins/almostontop"]
+	path = profiles/0/home/.config/shell/plugins/almostontop
+	url = https://github.com/Valiev/almostontop.git
+[submodule "profiles/0/home/.config/shell/plugins/zsh-bd"]
+	path = profiles/0/home/.config/shell/plugins/zsh-bd
+	url = https://github.com/Tarrasch/zsh-bd.git

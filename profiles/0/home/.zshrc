@@ -58,5 +58,10 @@ zstyle ':completion::complete:*' gain-privileges 1 # Complete even with sudo
 setopt autopushd
 setopt pushdignoredups
 
+# Load plugins
+source "$HOME/.config/shell/plugins/alias-tips/alias-tips.plugin.zsh"
+source "$HOME/.config/shell/plugins/almostontop/almostontop.plugin.zsh"
+source "$HOME/.config/shell/plugins/zsh-bd/bd.zsh"
+
 # Starship prompt
 eval "$(starship init zsh)"
