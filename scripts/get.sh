@@ -12,6 +12,42 @@ check() {
 	done
 }
 
+extend_sudo_timeout() {
+	# Check if already running (prevent duplicate processes)
+	if [ -n "${_DOTFILES_SUDO_KEEPER_PID:-}" ] && kill -0 "$_DOTFILES_SUDO_KEEPER_PID" 2>/dev/null; then
+		# Sudo keeper already running, nothing to do
+		return 0
+	fi
+
+	# Check if sudo is available and we're on a system that uses it
+	if ! command -v sudo >/dev/null 2>&1; then
+		# sudo not available, nothing to do
+		return 0
+	fi
+
+	# Prompt for sudo credentials once to extend the timeout
+	# This reduces password prompts during the installation process
+	printf "Some installation steps require administrative privileges.\n"
+	printf "Please enter your password to proceed (you won't be asked again for a while):\n"
+	if sudo -v; then
+		# Keep sudo session alive in background
+		# This updates the timestamp every 60 seconds
+		(
+			while true; do
+				sleep 60
+				sudo -n true 2>/dev/null || exit
+			done
+		) &
+		_DOTFILES_SUDO_KEEPER_PID=$!
+		# Set up cleanup trap to kill the background process
+		trap 'kill "$_DOTFILES_SUDO_KEEPER_PID" 2>/dev/null || true' EXIT INT TERM
+		printf "Sudo session extended. (PID: %s)\n" "$_DOTFILES_SUDO_KEEPER_PID"
+	else
+		printf "Warning: Failed to authenticate with sudo. Installation may prompt for password multiple times.\n"
+		return 1
+	fi
+}
+
 get() {
 	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
 	DOTFILES_REPO=${DOTFILES_REPO:-"https://github.com/HectorCastelli/dotfiles.git"}
@@ -23,6 +59,9 @@ get() {
 	else
 		printf "All required dependencies are installed.\n"
 	fi
+
+	# Extend sudo timeout to reduce password prompts during installation
+	extend_sudo_timeout
 
 	if [ -d "$DOTFILES_DIR" ]; then
 		if [ -d "$DOTFILES_DIR/.git" ]; then
@@ -81,6 +120,9 @@ get() {
 install() {
 	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
 	TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
+
+	# Extend sudo timeout to reduce password prompts during installation
+	extend_sudo_timeout
 
 	printf "Initializing target directory...\n"
 	if sh "$DOTFILES_DIR/scripts/target.sh" initialize; then
