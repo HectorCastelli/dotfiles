@@ -10,6 +10,18 @@ echo "Writting to $TARGET_DIR/home/.gitconfig"
 git config --file "$TARGET_DIR/home/.gitconfig" user.name "$USER_NAME"
 git config --file "$TARGET_DIR/home/.gitconfig" user.email "$USER_EMAIL"
 
+# Install flatpak for linux
+if [ "$(uname)" = "Linux" ]; then
+	# Fedora-based
+	if command -v dnf >/dev/null 2>&1; then
+		sudo dnf install -y flatpak
+		flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+	else
+		echo "Error: This Linux system is not supported"
+		exit 1
+	fi
+fi
+
 # Install homebrew
 # Must use bash for homebrew installation
 NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -50,7 +62,11 @@ if ! [ -e "$TARGET_DIR/home/.ssh/id_ed25519_signing" ]; then
 fi
 
 # Setup password manager
-brew install --cask bitwarden
+if [ "$(uname)" = "Linux" ]; then
+	flatpak install -y flathub com.bitwarden.desktop
+else
+	brew install --cask bitwarden
+fi
 brew install bitwarden-cli
 
 # Setup VSCode
