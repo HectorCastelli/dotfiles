@@ -23,14 +23,16 @@ initialize() {
 	save
 }
 
-clean() {
+remove() {
 	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
 	TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
 
 	if [ ! -d "$TARGET_DIR" ]; then
-		printf "Target directory does not exist. Nothing to clean.\n"
+		printf "Target directory does not exist. Nothing to remove.\n"
 		return 0
 	fi
+
+	clean
 
 	rm -rf "$TARGET_DIR"
 	printf "Target directory '%s' has been removed.\n" "$TARGET_DIR"
@@ -136,13 +138,6 @@ build() {
 	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
 	TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
 
-	# Clean target_dir contents except important files
-	find "$TARGET_DIR" -mindepth 1 -maxdepth 1 \
-		! -name ".dotfiles_profiles" \
-		! -name "answers.env" \
-		! -name ".git" \
-		-exec rm -rf {} +
-
 	# Sort profiles by dependencies using profiles.sh sort_dependencies
 	sorted_profiles=""
 	if [ -f "$TARGET_DIR/.dotfiles_profiles" ]; then
@@ -177,6 +172,28 @@ build() {
 			fi
 		done
 	fi
+}
+
+clean() {
+	# Copy existing files from $HOME back to target directory before cleaning
+	TARGET_HOME="$TARGET_DIR/home"
+	if [ -d "$TARGET_HOME" ]; then
+		find "$TARGET_HOME" -mindepth 1 | while read -r target_file; do
+			rel_path="${target_file#"$TARGET_HOME"/}"
+			home_file="$HOME/$rel_path"
+			
+			if [ -f "$home_file" ] && [ -f "$target_file" ]; then
+				cp "$home_file" "$target_file"
+			fi
+		done
+	fi
+
+	# Clean target_dir contents except important files
+	find "$TARGET_DIR" -mindepth 1 -maxdepth 1 \
+		! -name ".dotfiles_profiles" \
+		! -name "answers.env" \
+		! -name ".git" \
+		-exec rm -rf {} +
 }
 
 apply() {
@@ -224,17 +241,28 @@ apply() {
 				fi
 				echo "It is a symlink to '$target'."
 			fi
-			printf "Delete and replace with symlink to '%s'? [y/N]: " "$src"
-			read -r ans </dev/tty
-			case "$(printf '%s' "$ans" | tr '[:upper:]' '[:lower:]')" in
-			y | yes)
-				rm -rf "$dest"
-				;;
-			*)
-				echo "Skipping '$dest'."
-				continue
-				;;
-			esac
+
+			# Check if files are identical by comparing their hashes
+			if [ -f "$dest" ] && [ -f "$src" ]; then
+				src_hash="$(sha256sum "$src" | cut -d' ' -f1)"
+				dest_hash="$(sha256sum "$dest" | cut -d' ' -f1)"
+				if [ "$src_hash" = "$dest_hash" ]; then
+					echo "Files have identical contents, will replace with a symlink."
+					rm -f "$dest"
+				else
+					printf "Delete and replace with symlink to '%s'? [y/N]: " "$src"
+					read -r ans </dev/tty
+					case "$(printf '%s' "$ans" | tr '[:upper:]' '[:lower:]')" in
+					y | yes)
+						rm -rf "$dest"
+						;;
+					*)
+						echo "Skipping '$dest'."
+						continue
+						;;
+					esac
+				fi
+			fi
 		fi
 
 		ln -s "$src" "$dest"
@@ -245,8 +273,8 @@ case "${1:-}" in
 initialize)
 	initialize
 	;;
-clean)
-	clean
+remove)
+	remove
 	;;
 save)
 	save
@@ -268,17 +296,21 @@ build)
 apply)
 	apply
 	;;
+clean)
+	clean
+	;;
 help)
 	USAGE="Usage:
 $(basename "$0") <command>
 
 Available commands:
     initialize	Initializes the target directory for the first time if needed
-	clean		Removes the target directory entirely
+	remove		Removes the target directory entirely
     save		Save the current state of the target directory as a commit
 	discard		Discard uncommitted changes in the target directory
     install_profile	Marks a profile for installation into the target directory
 	uninstall_profile	Unmarks/removes a profile from the target directory
+	clean		Removes non-mandatory files from the target directory
 	build		Builds the target directory contents based on selected profiles
 	apply		Applies the target directory to the home directory
 	help		Show this help message"
