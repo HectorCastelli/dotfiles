@@ -108,7 +108,7 @@ sort_dependencies() {
 					;;
 				*)
 					printf 'Error: Profile "%s" requires "%s" which is not in the input list\n' "$profile" "$needed_profile" >&2
-					return 1
+					return 2
 					;;
 				esac
 			done <"$needs_file"
@@ -136,14 +136,33 @@ sort_dependencies() {
 }
 
 list_mandatory() {
+	mandatory_profiles=""
 	for d in "$PROFILES_DIR"/*; do
 		[ -d "$d" ] || continue
 		base=$(basename "$d")
 		[ "$base" = "_template" ] && continue
 		if [ -f "$d/.mandatory" ]; then
-			printf '%s\n' "$base"
+			mandatory_profiles="$mandatory_profiles $base"
 		fi
-	done | sort
+	done
+
+	# Clean up leading space
+	mandatory_profiles="${mandatory_profiles# }"
+
+	if [ -n "$mandatory_profiles" ]; then
+		if sorted_profiles=$(sort_dependencies "$mandatory_profiles" 2>/dev/null); then
+			printf '%s ' "$sorted_profiles"
+		else
+			exit_code=$?
+			if [ "$exit_code" = "2" ]; then
+				printf 'Unable to sort mandatory profiles: a mandatory profile requires a non-mandatory profile and this is not supported\n' >&2
+				return 2
+			else
+				printf 'Error sorting mandatory profiles\n' >&2
+				return "$exit_code"
+			fi
+		fi
+	fi
 }
 
 list_optional() {
@@ -152,15 +171,21 @@ list_optional() {
 		base=$(basename "$d")
 		[ "$base" = "_template" ] && continue
 		if [ ! -f "$d/.mandatory" ]; then
-			printf '%s\n' "$base"
+			printf '%s ' "$base"
 		fi
 	done | sort
 }
 
 list() {
-	# Print mandatory profiles first (sorted), then the rest (sorted)
-	list_mandatory
-	list_optional
+	mandatory_profiles=$(list_mandatory)
+	optional_profiles=$(list_optional)
+
+	all_profiles="$mandatory_profiles $optional_profiles"
+	all_profiles="${all_profiles# }"
+
+	if [ -n "$all_profiles" ]; then
+		sort_dependencies "$all_profiles"
+	fi
 }
 
 case "${1:-}" in
@@ -186,9 +211,9 @@ $(basename "$0") <command>
 
 Available commands:
 	create	Create a new profile
-	list	List all profiles
-	list_mandatory	List all mandatory profiles
-	list_optional	List all optional profiles
+	list	List all profiles sorted by their dependencies
+	list_mandatory	List all mandatory profiles sorted by their dependencies
+	list_optional	List all optional profiles sorted alphabetically
 	sort_dependencies	Sort a list of profiles by their dependencies
 	help	Show this help message"
 
