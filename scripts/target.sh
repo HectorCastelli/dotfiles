@@ -140,6 +140,7 @@ build() {
 	if [ -f "$profiles_file" ]; then
 		while read -r p; do
 			if [ -n "$p" ]; then
+				PROFILE_DIR="$DOTFILES_DIR/profiles/$p"
 				# Copy install.sh
 				profile_install="$PROFILE_DIR/install.sh"
 				target_install="$TARGET_DIR/install.sh"
@@ -245,6 +246,9 @@ install_profile)
 uninstall_profile)
 	shift
 	uninstall_profile "$@"
+	;;
+build)
+	build
 	;;
 apply)
 	apply

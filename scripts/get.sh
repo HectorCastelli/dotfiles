@@ -24,21 +24,47 @@ get() {
 		printf "All required dependencies are installed.\n"
 	fi
 
-	printf "Target directory: %s\n" "$DOTFILES_DIR"
-
-	if [ -e "$DOTFILES_DIR" ]; then
-		printf "Error: target '%s' already exists.\n" "$DOTFILES_DIR"
-		printf "If you intended to update an existing clone, run:\n  git -C %s pull\n" "$DOTFILES_DIR"
-		return 2
-	fi
-
-	printf "Cloning %s into %s ...\n" "$DOTFILES_REPO" "$DOTFILES_DIR"
-
-	if git clone "$DOTFILES_REPO" "$DOTFILES_DIR"; then
-		printf "Clone successful.\n"
+	if [ -d "$DOTFILES_DIR" ]; then
+		if [ -d "$DOTFILES_DIR/.git" ]; then
+			CURRENT_REMOTE=$(git -C "$DOTFILES_DIR" remote get-url origin 2>/dev/null || echo "")
+			if [ "$CURRENT_REMOTE" = "$DOTFILES_REPO" ]; then
+				printf "Directory '%s' is already a git repository pointing to the correct remote.\n" "$DOTFILES_DIR"
+				printf "Would you like to update it instead? [y/N]: "
+				read -r update_ans </dev/tty
+				case "$(printf '%s' "$update_ans" | tr '[:upper:]' '[:lower:]')" in
+				y | yes)
+					printf "Updating existing repository...\n"
+					if git -C "$DOTFILES_DIR" pull; then
+						printf "Update successful.\n"
+					else
+						printf "Error: git pull failed.\n"
+						return 2
+					fi
+					;;
+				*)
+					printf "Update skipped.\n"
+					;;
+				esac
+			else
+				printf "Error: '%s' is a git repository but points to a different remote.\n" "$DOTFILES_DIR"
+				printf "Current remote: %s\n" "$CURRENT_REMOTE"
+				printf "Expected remote: %s\n" "$DOTFILES_REPO"
+				return 3
+			fi
+		else
+			printf "Error: '%s' exists but is not a git repository.\n" "$DOTFILES_DIR"
+			return 4
+		fi
 	else
-		printf "Error: git clone failed.\n"
-		return 3
+
+		printf "Cloning %s into %s ...\n" "$DOTFILES_REPO" "$DOTFILES_DIR"
+
+		if git clone "$DOTFILES_REPO" "$DOTFILES_DIR"; then
+			printf "Clone successful.\n"
+		else
+			printf "Error: git clone failed.\n"
+			return 5
+		fi
 	fi
 
 	install
@@ -46,9 +72,10 @@ get() {
 
 install() {
 	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
+	TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
 
 	printf "Initializing target directory...\n"
-	if sh "$DOTFILES_DIR/scripts/target.sh initialize"; then
+	if sh "$DOTFILES_DIR/scripts/target.sh" initialize; then
 		printf "Target directory initialized successfully.\n"
 	else
 		printf "Error: target directory initialization failed.\n"
@@ -87,7 +114,7 @@ install() {
 		return 3
 	fi
 
-	printf "If you would like to review the target first, please look into the 'link' directory.\n"
+	printf "If you would like to review the target first, please look into the '%s' directory.\n" "$TARGET_DIR"
 	printf "Do you want to proceed with the installation? [y/N]: "
 	read -r apply_ans </dev/tty
 	case "$(printf '%s' "$apply_ans" | tr '[:upper:]' '[:lower:]')" in

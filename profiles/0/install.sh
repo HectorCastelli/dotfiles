@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -u
+set -eu
 
 DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
 TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"

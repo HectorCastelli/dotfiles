@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -u
+set -eu
 
 # Check if brew is installed before attempting uninstall
 if ! command -v brew >/dev/null 2>&1; then
