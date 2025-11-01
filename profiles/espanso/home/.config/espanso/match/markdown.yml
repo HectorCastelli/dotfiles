@@ -1,0 +1,8 @@
+ matches:
+  - trigger: ":md:collapse"
+    replace: |-
+      <details>
+        <summary>Click to expand!</summary>
+
+        ## Content      
+      </details>
