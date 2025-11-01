@@ -59,6 +59,8 @@ fi
 # ed25519 keys for signatures
 if ! [ -e "$TARGET_DIR/home/.ssh/id_ed25519_signing" ]; then
 	ssh-keygen -t ed25519 -f "$TARGET_DIR/home/.ssh/id_ed25519_signing" -N "" -C "$USER_EMAIL"
+	git config --file "$TARGET_DIR/home/.gitconfig" user.signingkey "$TARGET_DIR/home/.ssh/id_ed25519_signing"
+	git config --file "$TARGET_DIR/home/.gitconfig" gpg.format "ssh"
 fi
 
 # Setup password manager
