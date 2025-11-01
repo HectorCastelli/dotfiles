@@ -31,11 +31,10 @@ extend_sudo_timeout() {
 	printf "Please enter your password to proceed (you won't be asked again for a while):\n"
 	if sudo -v; then
 		# Keep sudo session alive in background
-		# This updates the timestamp every 60 seconds (configurable via SUDO_REFRESH_INTERVAL)
+		# This updates the timestamp every 60 seconds
 		(
-			interval="${SUDO_REFRESH_INTERVAL:-60}"
 			while true; do
-				sleep "$interval"
+				sleep 60
 				sudo -n true 2>/dev/null || exit
 			done
 		) &
