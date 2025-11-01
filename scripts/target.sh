@@ -138,6 +138,8 @@ build() {
 	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
 	TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
 
+	clean
+
 	# Sort profiles by dependencies using profiles.sh sort_dependencies
 	sorted_profiles=""
 	if [ -f "$TARGET_DIR/.dotfiles_profiles" ]; then
@@ -175,15 +177,19 @@ build() {
 }
 
 clean() {
-	# Copy existing files from $HOME back to target directory before cleaning
+	# Copy existing files from target directory to $HOME before cleaning
 	TARGET_HOME="$TARGET_DIR/home"
 	if [ -d "$TARGET_HOME" ]; then
 		find "$TARGET_HOME" -mindepth 1 | while read -r target_file; do
 			rel_path="${target_file#"$TARGET_HOME"/}"
 			home_file="$HOME/$rel_path"
-			
-			if [ -f "$home_file" ] && [ -f "$target_file" ]; then
-				cp "$home_file" "$target_file"
+
+			if [ -f "$target_file" ] && [ -f "$home_file" ]; then
+				# If home_file is a symlink to target_file, remove it first
+				if [ -L "$home_file" ] && [ "$(readlink "$home_file")" = "$target_file" ]; then
+					rm "$home_file"
+				fi
+				cp "$target_file" "$home_file"
 			fi
 		done
 	fi
