@@ -92,6 +92,12 @@ install() {
 
 	PROFILES=$("$DOTFILES_DIR/scripts/profiles.sh" list)
 	for profile in $PROFILES; do
+		# Check if profile is already installed
+		if grep -qxF "$profile" "$TARGET_DIR/.dotfiles_profiles" 2>/dev/null; then
+			printf "Profile '%s' is already installed.\n" "$profile"
+			continue
+		fi
+		
 		if [ ! -f "$DOTFILES_DIR/profiles/$profile/.mandatory" ]; then
 			printf "Optional profile available: %s\n" "$profile"
 			printf "Would you like to install '%s'? [y/N]: " "$profile"
