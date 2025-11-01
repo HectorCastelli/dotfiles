@@ -21,7 +21,7 @@ if [ "$(uname)" = "Linux" ]; then
 	# Fedora-based
 	if command -v dnf >/dev/null 2>&1; then
 		sudo dnf install -y flatpak
-		flatpak remote-add --if-not-exists --assumeyes flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+		flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 	else
 		echo "Error: This Linux system is not supported"
 		exit 1
