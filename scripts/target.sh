@@ -126,6 +126,17 @@ uninstall_profile() {
 }
 
 build() {
+	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
+	TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
+	profiles_file="$TARGET_DIR/.dotfiles_profiles"
+
+	# Sort profiles by dependencies using profiles.sh sort_dependencies
+	if [ -f "$profiles_file" ]; then
+		profiles_input=$(tr '\n' ' ' <"$profiles_file")
+		sorted_profiles=$(sh "$DOTFILES_DIR/scripts/profiles.sh" sort_dependencies "$profiles_input")
+		printf '%s\n' "$sorted_profiles" >"$profiles_file"
+	fi
+
 	if [ -f "$profiles_file" ]; then
 		while read -r p; do
 			if [ -n "$p" ]; then
