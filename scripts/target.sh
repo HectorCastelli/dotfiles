@@ -103,25 +103,6 @@ install_profile() {
 			return 3
 		fi
 	fi
-
-	# Copy install.sh
-	profile_install="$PROFILE_DIR/install.sh"
-	target_install="$TARGET_DIR/install.sh"
-	if [ -f "$profile_install" ]; then
-		if [ -f "$target_install" ]; then
-			cat "$profile_install" >>"$target_install"
-		else
-			cp "$profile_install" "$target_install"
-		fi
-	fi
-
-	# Copy home directory recursively
-	profile_home="$PROFILE_DIR/home"
-	target_home="$TARGET_DIR/home"
-	if [ -d "$profile_home" ]; then
-		mkdir -p "$target_home"
-		cp -a "$profile_home/." "$target_home/"
-	fi
 }
 
 uninstall_profile() {
@@ -142,11 +123,31 @@ uninstall_profile() {
 	if [ -f "$profiles_file" ]; then
 		grep -vxF "$profile" "$profiles_file" >"$profiles_file.tmp" && mv "$profiles_file.tmp" "$profiles_file"
 	fi
+}
 
-	# Re-install all remaining profiles
+build() {
 	if [ -f "$profiles_file" ]; then
 		while read -r p; do
-			[ -n "$p" ] && install_profile "$p"
+			if [ -n "$p" ]; then
+				# Copy install.sh
+				profile_install="$PROFILE_DIR/install.sh"
+				target_install="$TARGET_DIR/install.sh"
+				if [ -f "$profile_install" ]; then
+					if [ -f "$target_install" ]; then
+						cat "$profile_install" >>"$target_install"
+					else
+						cp "$profile_install" "$target_install"
+					fi
+				fi
+
+				# Copy home directory recursively
+				profile_home="$PROFILE_DIR/home"
+				target_home="$TARGET_DIR/home"
+				if [ -d "$profile_home" ]; then
+					mkdir -p "$target_home"
+					cp -a "$profile_home/." "$target_home/"
+				fi
+			fi
 		done <"$profiles_file"
 	fi
 }
@@ -246,10 +247,11 @@ Available commands:
 	clean		Removes the target directory entirely
     save		Save the current state of the target directory as a commit
 	discard		Discard uncommitted changes in the target directory
-    install_profile	Install a profile into the target directory
-	uninstall_profile	Uninstall a profile from the target directory
-	apply		Apply the target directory to the home directory
-    help		Show this help message"
+    install_profile	Marks a profile for installation into the target directory
+	uninstall_profile	Unmarks/removes a profile from the target directory
+	build		Builds the target directory contents based on selected profiles
+	apply		Applies the target directory to the home directory
+	help		Show this help message"
 
 	printf "%s\n" "$USAGE"
 	;;
