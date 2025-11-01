@@ -23,7 +23,4 @@ if [ "$(uname)" = "Linux" ]; then
 	fi
 elif [ "$(uname)" = "Darwin" ]; then
 	brew install --cask espanso
-else
-	echo "Error: unsupported operating system" >&2
-	exit 1
 fi

@@ -11,9 +11,6 @@ if [ "$(uname)" = "Linux" ]; then
 	flatpak install flathub com.usebruno.Bruno
 elif [ "$(uname)" = "Darwin" ]; then
 	brew install --cask bruno
-else
-	echo "Error: unsupported operating system" >&2
-	exit 1
 fi
 
 brew install gh
