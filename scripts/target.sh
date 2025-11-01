@@ -18,7 +18,7 @@ initialize() {
 		fi
 	fi
 
-	git init -b main "$TARGET_DIR"
+	git init --initial-branch main "$TARGET_DIR"
 	touch "$TARGET_DIR/.dotfiles_profiles"
 	save
 }
