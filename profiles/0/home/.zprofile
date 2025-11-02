@@ -3,7 +3,6 @@
 # Source the .profile to inherit global setup
 if [[ -f "$HOME/.profile" ]]; then
 	function load_profile {
-		emulate -L sh
 		source "$HOME/.profile"
 	}
 	load_profile
