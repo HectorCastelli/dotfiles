@@ -194,15 +194,14 @@ clean() {
 		done
 	fi
 
-	# Clean target_dir contents except important files
-	find "$TARGET_DIR" -mindepth 1 \
-		! -name ".dotfiles_profiles" \
-		! -name "answers.env" \
-		! -name ".git" \
-		! -path "*/.git/*" \
-		! -path "$TARGET_DIR/home/.ssh" \
-		! -path "$TARGET_DIR/home/.ssh/*" \
-		-exec rm -rf {} +
+	# Use git to remove tracked files except the ones we want to keep
+	cd "$TARGET_DIR"
+	git rm -rf --cached .
+	git reset HEAD .dotfiles_profiles answers.env
+	git reset HEAD .git
+	git reset HEAD home/.ssh
+	rm "$TARGET_DIR/install.sh"
+	git add .
 }
 
 apply() {
@@ -276,6 +275,8 @@ apply() {
 
 		ln -s "$src" "$dest"
 	done
+
+	save
 }
 
 case "${1:-}" in
