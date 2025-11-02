@@ -1,6 +1,13 @@
 #!/usr/bin/env sh
 set -eu
 
+# Install Calibre
+if [ "$(uname)" = "Linux" ]; then
+	flatpak install -y flathub com.calibre_ebook.calibre
+elif [ "$(uname)" = "Darwin" ]; then
+	brew install --cask calibre
+fi
+
 # Install Spotify
 if [ "$(uname)" = "Linux" ]; then
 	flatpak install -y flathub com.spotify.Client

@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 set -eu
 
+# Uninstall Calibre
+if [ "$(uname)" = "Linux" ]; then
+	flatpak uninstall -y flathub com.calibre_ebook.calibre 2>/dev/null || true
+elif [ "$(uname)" = "Darwin" ]; then
+	brew uninstall --cask calibre 2>/dev/null || true
+fi
+
 # Uninstall Spotify
 if [ "$(uname)" = "Linux" ]; then
 	flatpak uninstall -y flathub com.spotify.Client 2>/dev/null || true
