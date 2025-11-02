@@ -169,6 +169,12 @@ install() {
 	fi
 
 	printf "If you would like to review the target first, please look into the '%s' directory.\n" "$TARGET_DIR"
+	# Open target directory in VS Code if available
+	if command -v code >/dev/null 2>&1; then
+		printf "Opening target directory in VS Code...\n"
+		code "$TARGET_DIR"
+	fi
+
 	printf "Do you want to proceed with the installation? [y/N]: "
 	read -r apply_ans </dev/tty
 	case "$(printf '%s' "$apply_ans" | tr '[:upper:]' '[:lower:]')" in
