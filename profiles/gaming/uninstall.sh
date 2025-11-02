@@ -7,7 +7,7 @@ if [ "$(uname)" = "Linux" ]; then
 	flatpak uninstall -y flathub org.ppsspp.PPSSPP 2>/dev/null || true
 	flatpak uninstall -y flathub com.heroicgameslauncher.hgl 2>/dev/null || true
 	flatpak uninstall -y flathub com.usebottles.bottles 2>/dev/null || true
-	flatpak uninstall -y flathub com.valvesoftware.Steam 2>/dev/null || true
+	sudo dnf remove --assumeyes steam webkit2gtk4.0-devel wine winetricks steam-devices
 elif [ "$(uname)" = "Darwin" ]; then
 	brew uninstall --cask minetest 2>/dev/null || true
 	brew uninstall --cask ppsspp 2>/dev/null || true

@@ -3,9 +3,10 @@ set -eu
 
 if [ "$(uname)" = "Linux" ]; then
 	# Steam
-	flatpak install -y flathub com.valvesoftware.Steam
-
-	sudo dnf install -y steam-devices
+	sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+	sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1
+	sudo dnf install -y steam steam-devices
+	sudo dnf install -y webkit2gtk4.1-devel wine winetricks
 
 	# Wine (via Bottles which includes Wine)
 	flatpak install -y flathub com.usebottles.bottles
@@ -21,9 +22,6 @@ if [ "$(uname)" = "Linux" ]; then
 
 	# Luanti (formerly Minetest)
 	flatpak install -y flathub net.minetest.Minetest
-
-	# Note: webkit2gtk4 and winetricks are typically installed as dependencies
-	# or available through system package managers. Bottles includes winetricks functionality.
 
 elif [ "$(uname)" = "Darwin" ]; then
 	# Steam
@@ -43,7 +41,4 @@ elif [ "$(uname)" = "Darwin" ]; then
 
 	# Luanti (formerly Minetest)
 	brew install --cask minetest
-
-	# Note: Steam ROM Manager and GOG Galaxy have limited macOS support
-	# webkit2gtk4 is not needed on macOS
 fi
