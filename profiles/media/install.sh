@@ -21,3 +21,10 @@ if [ "$(uname)" = "Linux" ]; then
 elif [ "$(uname)" = "Darwin" ]; then
 	brew install --cask obs
 fi
+
+# Motrix
+if [ "$(uname)" = "Linux" ]; then
+	flatpak install flathub net.agalwood.Motrix
+elif [ "$(uname)" = "Darwin" ]; then
+	brew install --cask motrix
+fi
