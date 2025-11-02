@@ -195,10 +195,13 @@ clean() {
 	fi
 
 	# Clean target_dir contents except important files
-	find "$TARGET_DIR" -mindepth 1 -maxdepth 1 \
+	find "$TARGET_DIR" -mindepth 1 \
 		! -name ".dotfiles_profiles" \
 		! -name "answers.env" \
 		! -name ".git" \
+		! -path "*/.git/*" \
+		! -path "$TARGET_DIR/home/.ssh" \
+		! -path "$TARGET_DIR/home/.ssh/*" \
 		-exec rm -rf {} +
 }
 
