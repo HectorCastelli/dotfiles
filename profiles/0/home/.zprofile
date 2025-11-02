@@ -10,7 +10,7 @@ if [[ -f "$HOME/.profile" ]]; then
 fi
 
 # Load shell aliases recursively
-for alias_file in $(find "$HOME/.config/shell/aliases" -type f); do
+for alias_file in $(find "$HOME/.config/shell/aliases" -type f -o -type l); do
 	source "$alias_file"
 done
 

@@ -29,13 +29,13 @@ if [ -d "$HOME/.local/bin" ]; then
 fi
 
 # Load functions
-find "$HOME/.config/shell/functions" -type f | while IFS= read -r functions_file; do
+find "$HOME/.config/shell/functions" -type f -o -type l | while IFS= read -r functions_file; do
 	# shellcheck source=/dev/null
 	. "$functions_file"
 done
 
 # Execute autoload scripts
-find "$HOME/.config/shell/autoload" -type f | while IFS= read -r autoload_file; do
+find "$HOME/.config/shell/autoload" -type f -o -type l | while IFS= read -r autoload_file; do
 	# shellcheck source=/dev/null
 	. "$autoload_file"
 done
