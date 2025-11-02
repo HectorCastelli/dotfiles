@@ -14,7 +14,7 @@ elif [ "$(uname)" = "Darwin" ]; then
 fi
 
 if [ "$(uname)" = "Linux" ]; then
-	flatpak install flathub org.telegram.desktop
+	flatpak install -y flathub org.telegram.desktop
 elif [ "$(uname)" = "Darwin" ]; then
 	brew install --cask telegram
 fi

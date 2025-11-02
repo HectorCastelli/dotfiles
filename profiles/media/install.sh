@@ -24,7 +24,7 @@ fi
 
 # Motrix
 if [ "$(uname)" = "Linux" ]; then
-	flatpak install flathub net.agalwood.Motrix
+	flatpak install -y flathub net.agalwood.Motrix
 elif [ "$(uname)" = "Darwin" ]; then
 	brew install --cask motrix
 fi

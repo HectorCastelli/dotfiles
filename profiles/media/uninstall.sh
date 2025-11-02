@@ -24,7 +24,7 @@ fi
 
 # Motrix
 if [ "$(uname)" = "Linux" ]; then
-	flatpak uninstall flathub net.agalwood.Motrix 2>/dev/null || true
+	flatpak uninstall -y flathub net.agalwood.Motrix 2>/dev/null || true
 elif [ "$(uname)" = "Darwin" ]; then
 	brew uninstall --cask motrix 2>/dev/null || true
 fi
