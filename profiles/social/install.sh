@@ -12,3 +12,9 @@ if [ "$(uname)" = "Linux" ]; then
 elif [ "$(uname)" = "Darwin" ]; then
 	brew install --cask whatsapp
 fi
+
+if [ "$(uname)" = "Linux" ]; then
+	flatpak install flathub org.telegram.desktop
+elif [ "$(uname)" = "Darwin" ]; then
+	brew install --cask telegram
+fi
