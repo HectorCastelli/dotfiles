@@ -6,11 +6,6 @@ TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
 
 brew install fnm
 
-# Setup fnm autoload
-mkdir -p "$TARGET_DIR/home/.config/shell/autoload"
-fnm env --use-on-cd --shell=zsh >"$TARGET_DIR/home/.config/shell/autoload/fnm.sh"
-chmod +x "$TARGET_DIR/home/.config/shell/autoload/fnm.sh"
-
 # Install and use latest LTS version of Node.js
 zsh -c "eval \"\$(fnm env --use-on-cd --shell=zsh)\" && \
     fnm install --lts && \
