@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 export EDITOR="code --wait"
 export EDITOR_NON_BLOCKING="code --new-window"

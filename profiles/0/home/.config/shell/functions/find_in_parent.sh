@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 find_in_parent() {
 	filename=$1

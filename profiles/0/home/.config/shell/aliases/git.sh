@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 alias g='git'
 alias ga='git add'

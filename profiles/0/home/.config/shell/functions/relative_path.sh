@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 get_relative_path() {
 	if [ "$#" -ne 2 ]; then

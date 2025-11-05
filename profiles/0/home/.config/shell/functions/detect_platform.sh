@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 is_linux() {
 	[ "$(uname -s)" = "Linux" ]
