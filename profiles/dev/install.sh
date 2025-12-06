@@ -18,7 +18,8 @@ brew install gh
 if ! gh auth status --hostname github.com >/dev/null 2>&1; then
 	gh auth login --hostname github.com --scopes admin:ssh_signing_key
 	gh auth refresh --hostname github.com --scopes admin:public_key
+	gh ssh-key add "$TARGET_DIR/home/.ssh/id_ed25519.pub" --title "$(hostname) authentication" --type authentication
+	gh ssh-key add "$TARGET_DIR/home/.ssh/id_ed25519_signing.pub" --title "$(hostname) signing" --type signing
 fi
 
-gh ssh-key add "$TARGET_DIR/home/.ssh/id_ed25519.pub" --title "$(hostname) authentication" --type authentication
-gh ssh-key add "$TARGET_DIR/home/.ssh/id_ed25519_signing.pub" --title "$(hostname) signing" --type signing
+gh auth setup-git
