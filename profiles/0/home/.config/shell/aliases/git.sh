@@ -22,7 +22,7 @@ gcwip() {
 	fi
 	gcm "revert-me: $*"
 }
-gcundo='git reset HEAD~1 --soft'
+alias gcundo='git reset HEAD~1 --soft'
 gcl() {
 	git fetch --all
 	info "Deleting local branches that no longer have a remote"
