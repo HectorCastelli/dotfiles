@@ -219,6 +219,16 @@ apply() {
 		fi
 	fi
 
+	relink
+
+	save
+}
+
+relink() {
+	DOTFILES_DIR=${DOTFILES_DIR:-"$HOME/dotfiles"}
+	TARGET_DIR="${TARGET_DIR:-$DOTFILES_DIR/.target}"
+	TARGET_HOME="$TARGET_DIR/home"
+
 	# Recursively symlink files from target_dir/home into $HOME, create directories as needed
 	find "$TARGET_HOME" -mindepth 1 | while read -r src; do
 		rel_path="${src#"$TARGET_HOME"/}"
@@ -275,8 +285,6 @@ apply() {
 
 		ln -s "$src" "$dest"
 	done
-
-	save
 }
 
 case "${1:-}" in
@@ -306,6 +314,9 @@ build)
 apply)
 	apply
 	;;
+relink)
+	relink
+	;;
 clean)
 	clean
 	;;
@@ -323,6 +334,7 @@ Available commands:
 	clean		Removes non-mandatory files from the target directory
 	build		Builds the target directory contents based on selected profiles
 	apply		Applies the target directory to the home directory
+	relink		Recreates symlinks in the home directory based on the target directory
 	help		Show this help message"
 
 	printf "%s\n" "$USAGE"
