@@ -1,17 +1,13 @@
 #!/usr/bin/env zsh
 
-# Load profile if it wasn't already
-if [[ -z "$DOTFILES_ZPROFILE_LOADED" ]]; then
-	source "$HOME/.zprofile"
-fi
+# Load profile
+source "$HOME/.zprofile"
 
-if [[ -z "$DOTFILES_PROFILE_LOADED" ]]; then
-	function load_profile {
-		emulate -L sh
-		source "$HOME/.profile"
-	}
-	load_profile
-fi
+function load_profile {
+	emulate -L sh
+	source "$HOME/.profile"
+}
+load_profile
 
 # History configuration
 # Set the number of history entries to save to the history file
